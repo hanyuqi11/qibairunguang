@@ -154,10 +154,26 @@
 
     .slide-1 {
       background: linear-gradient(135deg, #3D1C0E 0%, #7B3A24 40%, #C4836A 70%, #E8B89A 100%);
+      position: relative;
+    }
+    .slide-1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegvOFP.jpg') center/cover no-repeat;
+      opacity: 0.5;
     }
 
     .slide-2 {
       background: linear-gradient(135deg, #1A0A05 0%, #4A1E12 35%, #8B4E3A 60%, #C4836A 85%, #D4A574 100%);
+      position: relative;
+    }
+    .slide-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=1200&h=800&fit=crop') center/cover no-repeat;
+      opacity: 0.4;
     }
 
     .slide-3 {
@@ -476,12 +492,79 @@
       overflow: hidden;
     }
 
-    .product-img-bg-1 { background: linear-gradient(135deg, #FDEEE8, #F5CBBF); }
-    .product-img-bg-2 { background: linear-gradient(135deg, #F8E8F2, #ECC8DC); }
-    .product-img-bg-3 { background: linear-gradient(135deg, #FFF5E8, #F5DCBA); }
-    .product-img-bg-4 { background: linear-gradient(135deg, #E8F5EE, #BCDFCC); }
-    .product-img-bg-5 { background: linear-gradient(135deg, #F0E8F8, #D4BFEA); }
-    .product-img-bg-6 { background: linear-gradient(135deg, #FEF0E8, #F0CBAF); }
+    .product-img-bg-1 { 
+      background: linear-gradient(135deg, #FDEEE8, #F5CBBF);
+      position: relative;
+    }
+    .product-img-bg-1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegvOFP.jpg') center/cover no-repeat;
+      opacity: 0.95;
+    }
+    .product-img-real {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .product-img-bg-2 {
+      background: linear-gradient(135deg, #F8E8F2, #ECC8DC);
+      position: relative;
+    }
+    .product-img-bg-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxAYV.png') center/cover no-repeat;
+      opacity: 0.95;
+    }
+    .product-img-bg-3 {
+      background: linear-gradient(135deg, #FFF5E8, #F5DCBA);
+      position: relative;
+    }
+    .product-img-bg-3::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxkF0.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-4 {
+      background: linear-gradient(135deg, #E8F5EE, #BCDFCC);
+      position: relative;
+    }
+    .product-img-bg-4::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxMwR.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-5 {
+      background: linear-gradient(135deg, #F0E8F8, #D4BFEA);
+      position: relative;
+    }
+    .product-img-bg-5::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxQT1.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-6 {
+      background: linear-gradient(135deg, #FEF0E8, #F0CBAF);
+      position: relative;
+    }
+    .product-img-bg-6::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegx1Fx.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
 
     .product-badge {
       position: absolute;
@@ -493,6 +576,13 @@
       padding: 4px 10px;
       border-radius: 20px;
       letter-spacing: 1px;
+      z-index: 2;
+    }
+    .product-img .product-img-real {
+      z-index: 1;
+    }
+    .product-hover-mask {
+      z-index: 3;
     }
 
     .product-hover-mask {
@@ -1467,7 +1557,7 @@
     <div class="product-card" data-cat="classic" data-id="1">
       <div class="product-img product-img-bg-1">
         <span class="product-badge">热销 NO.1</span>
-        🌹
+        <img src="https://s41.ax1x.com/2026/04/21/pegvOFP.jpg" alt="七白润光软糖" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(1)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(1)">加入购物车</button>
@@ -1490,7 +1580,7 @@
     <div class="product-card" data-cat="limited" data-id="2">
       <div class="product-img product-img-bg-2">
         <span class="product-badge">限定新品</span>
-        🌸
+        <img src="https://s41.ax1x.com/2026/04/21/pegxAYV.png" alt="春日限定雪梨玫瑰软糖" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(2)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(2)">加入购物车</button>
@@ -1513,7 +1603,7 @@
     <div class="product-card" data-cat="gift" data-id="3">
       <div class="product-img product-img-bg-3">
         <span class="product-badge">送礼首选</span>
-        🎁
+        <img src="https://s41.ax1x.com/2026/04/21/pegxkF0.png" alt="七白礼盒" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(3)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(3)">加入购物车</button>
@@ -1536,7 +1626,7 @@
     <div class="product-card" data-cat="classic" data-id="4">
       <div class="product-img product-img-bg-4">
         <span class="product-badge">养肤新选</span>
-        🌿
+        <img src="https://s41.ax1x.com/2026/04/21/pegxMwR.png" alt="薏仁淡斑软糖" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(4)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(4)">加入购物车</button>
@@ -1559,7 +1649,7 @@
     <div class="product-card" data-cat="trial" data-id="5">
       <div class="product-img product-img-bg-5">
         <span class="product-badge">新客特价</span>
-        ✨
+        <img src="https://s41.ax1x.com/2026/04/21/pegxQT1.png" alt="初见体验装" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(5)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(5)">加入购物车</button>
@@ -1582,7 +1672,7 @@
     <div class="product-card" data-cat="limited" data-id="6">
       <div class="product-img product-img-bg-6">
         <span class="product-badge">加量版</span>
-        💛
+        <img src="https://s41.ax1x.com/2026/04/21/pegx1Fx.png" alt="加量臻选" class="product-img-real" />
         <div class="product-hover-mask">
           <button class="hover-btn" onclick="openModal(6)">查看详情</button>
           <button class="hover-btn" onclick="addToCart(6)">加入购物车</button>
@@ -1699,10 +1789,10 @@
         </div>
       </div>
       <div class="about-text">
-        <div class="sub">七白饮的当代重生</div>
+        <div class="sub">文化原点：七白饮的当代重生</div>
         <h2>让养肤成为<br/>日常的小确幸</h2>
-        <p>传统药食同源产品往往<strong>不好吃、难坚持</strong>，与当代年轻人的生活方式渐行渐远。我们回到经典的"杏仁七白饮"这一中医古方，用现代年轻人喜欢的方式——功能性软糖，让它重新走进日常生活。</p>
-        <p>它保留了药食同源的<strong>文化根脉</strong>，却拥有零食般的美味口感；它遵循东方"内调"逻辑，又融合了现代营养科学。我们坚信：<strong>养肤不该是苦口的负担，而应成为日常的小确幸。</strong></p>
+        <p>"以内养外"是东方传承千年的养肤智慧。但传统药食同源产品往往<strong>不好吃、难坚持</strong>，与当代年轻人的生活方式渐行渐远。我们回到经典的"杏仁七白饮"这一中医古方，用现代年轻人喜欢的方式——功能性软糖，让它重新走进日常生活。</p>
+        <p>本项目保留了药食同源的文化根脉，却拥有零食般的美味口感；它遵循东方"内调"逻辑，又融合了现代营养科学。我们坚信：<strong>养肤不该是苦口的负担，而应成为日常的小确幸。</strong></p>
         <div class="ingredient-tags">
           <span class="ing-tag">茯苓</span>
           <span class="ing-tag">杏仁</span>
@@ -1722,7 +1812,7 @@
         <div class="about-card-num">01</div>
         <div class="about-card-icon">🏛️</div>
         <h4>国家政策支持</h4>
-        <p>本项目积极响应《"健康中国2030"规划纲要》"鼓励开发药食同源产品"的国家号召，结合《十四五中医药发展规划》高质量发展目标，与长春医学高等专科学校"理论与实践相融合，推进职教改革"人才培养理念深度契合。</p>
+        <p>本项目积极响应《"健康中国2030"规划纲要》中"鼓励开发药食同源产品"的国家号召，结合《十四五中医药发展规划》中提出的中医药高质量发展目标和任务以及提升中医药产业整体水平和竞争力等国家政策，与长春医学高等专科学校的人才培养观念"理论与实践相融合，推进职教改革"深度契合。项目团队吸纳多专业学生以中药学、食品检验检测技术、医学营养等专业学生为首，实现跨学科融合。</p>
         <p style="margin-top:10px;color:var(--rose-gold);font-size:13px;">💡 跨学科团队 · 中药学 · 食品检验 · 医学营养</p>
       </div>
 
@@ -1731,7 +1821,7 @@
         <div class="about-card-num">02</div>
         <div class="about-card-icon">⚗️</div>
         <h4>配方创新与工艺改良</h4>
-        <p>以中医传统杏仁七白饮为启发，按《药食同源目录》优化配方为茯苓、杏仁、雪梨汁、玫瑰花、薏仁，并加入谷胱甘肽与VC。利用中药提取罐最大化浓缩成分，加入异麦芽酮糖醇与赤藓糖醇改善口感，最终采用防潮抗氧化双层密封技术。</p>
+        <p>产品以中医传统杏仁七白饮为启发，将其配方按《药食同源目录》更改为茯苓、杏仁、雪梨汁、玫瑰花、薏仁，加入谷胱甘肽与VC，利用中药提取罐将其成分进行最大化的浓缩利用。为保证感官性状良好，加入异麦芽酮糖醇，利用其口味温和、吸湿性低、对肠胃影响较小的特点，同时结合赤藓糖醇掩盖药材的不良风味，最后采用防潮抗氧化透明胶囊的双层密封胶囊技术进行密封，做成软糖，进一步保障成分的稳定性。</p>
         <div class="ingredient-tags" style="margin-top:12px;">
           <span class="ing-tag">中药提取</span>
           <span class="ing-tag">低GI甜味剂</span>
@@ -1753,7 +1843,7 @@
         <div class="about-card-num">04</div>
         <div class="about-card-icon">📋</div>
         <h4>知识产权赋能</h4>
-        <p>目前本项目已立项一项<strong style="color:var(--rose-gold-dark)">实用新型专利</strong>，后续将持续推进对产品配方的知识产权保护，并完成商标注册，以法律手段保障品牌独特性与市场竞争力，为消费者提供有品质保障的正品产品。</p>
+        <p>目前本项目已立项一项<strong style="color:var(--rose-gold-dark)">实用新型专利</strong>，后续会持续推进对产品配方的保护并完成商标的注册，以法律手段保障品牌独特性与市场竞争力，为消费者提供有品质保障的正品产品。</p>
         <p style="margin-top:10px;color:var(--rose-gold);font-size:13px;">🔒 专利立项 · 商标注册 · 品质保障</p>
       </div>
     </div>
