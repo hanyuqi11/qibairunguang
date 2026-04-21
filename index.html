@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>七白润光 · 古法养肤玫瑰软糖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ====== CSS变量：东方雅致色系 ====== */
+    :root {
+      --rose-gold: #C4836A;
+      --rose-gold-light: #D9A08A;
+      --rose-gold-dark: #A5624A;
+      --cream: #FDF8F5;
+      --warm-white: #FAF4EF;
+      --soft-pink: #F2D5C8;
+      --deep-rose: #8B4E3A;
+      --gold: #C9A96E;
+      --text-dark: #2C1810;
+      --text-mid: #5C3D2E;
+      --text-light: #9B7B6A;
+      --border: #EDD9CC;
+      --shadow: rgba(196,131,106,0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    /* ====== 导航栏 ====== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(253,248,245,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--rose-gold-dark);
+      letter-spacing: 4px;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 14px;
+      color: var(--text-mid);
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--rose-gold); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cart-btn {
+      position: relative;
+      background: none;
+      border: 1.5px solid var(--rose-gold);
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--rose-gold);
+    }
+
+    .cart-btn:hover {
+      background: var(--rose-gold);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: var(--deep-rose);
+      color: white;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* ====== 轮播图 ====== */
+    .banner {
+      margin-top: 64px;
+      position: relative;
+      height: 580px;
+      overflow: hidden;
+    }
+
+    .slides-wrapper {
+      display: flex;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .slide-1 {
+      background: linear-gradient(135deg, #3D1C0E 0%, #7B3A24 40%, #C4836A 70%, #E8B89A 100%);
+      position: relative;
+    }
+    .slide-1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegvOFP.jpg') center/cover no-repeat;
+      opacity: 0.5;
+    }
+
+    .slide-2 {
+      background: linear-gradient(135deg, #1A0A05 0%, #4A1E12 35%, #8B4E3A 60%, #C4836A 85%, #D4A574 100%);
+      position: relative;
+    }
+    .slide-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=1200&h=800&fit=crop') center/cover no-repeat;
+      opacity: 0.4;
+    }
+
+    .slide-3 {
+      background: linear-gradient(135deg, #2C1008 0%, #6B2E1A 40%, #B5734C 65%, #DEB08A 90%, #F0D4BC 100%);
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 10%;
+      max-width: 600px;
+      animation: slideIn 0.8s ease forwards;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.9);
+      font-size: 12px;
+      letter-spacing: 3px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .slide-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: white;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .slide-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+    }
+
+    .slide-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: var(--rose-gold-dark);
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      text-decoration: none;
+    }
+
+    .slide-cta:hover {
+      background: var(--cream);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    /* 轮播图装饰圆 */
+    .slide-deco {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 70%);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .slide-deco-inner {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(255,230,210,0.25) 0%, rgba(180,100,70,0.15) 100%);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+    }
+
+    /* 轮播控制 */
+    .banner-dots {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .dot.active {
+      width: 24px;
+      background: white;
+    }
+
+    .banner-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+      font-size: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .banner-arrow:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .banner-arrow.prev { left: 24px; }
+    .banner-arrow.next { right: 24px; }
+
+    /* ====== 品牌公告栏 ====== */
+    .marquee-bar {
+      background: linear-gradient(90deg, var(--rose-gold-dark), var(--rose-gold), var(--gold), var(--rose-gold), var(--rose-gold-dark));
+      background-size: 200% 100%;
+      animation: gradientShift 4s ease infinite;
+      padding: 10px 0;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      color: white;
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 0 40px;
+    }
+
+    .marquee-sep {
+      color: rgba(255,255,255,0.5);
+      padding: 0 8px;
+    }
+
+    /* ====== 通用区块 ====== */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: var(--rose-gold);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose-gold), var(--gold));
+      margin: 16px auto 0;
+      border-radius: 1px;
+    }
+
+    /* ====== 商品分类 ====== */
+    .category-wrap {
+      background: var(--warm-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-inner::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      flex-shrink: 0;
+      padding: 20px 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 15px;
+      color: var(--text-light);
+      letter-spacing: 2px;
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    .cat-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; right: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose-gold), var(--gold));
+      transition: all 0.3s;
+    }
+
+    .cat-btn.active, .cat-btn:hover {
+      color: var(--rose-gold-dark);
+    }
+
+    .cat-btn.active::after {
+      left: 20%; right: 20%;
+    }
+
+    /* ====== 商品网格 ====== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px var(--shadow);
+      border-color: var(--rose-gold-light);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-img-bg-1 { 
+      background: linear-gradient(135deg, #FDEEE8, #F5CBBF);
+      position: relative;
+    }
+    .product-img-bg-1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegvOFP.jpg') center/cover no-repeat;
+      opacity: 0.95;
+    }
+    .product-img-real {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .product-img-bg-2 {
+      background: linear-gradient(135deg, #F8E8F2, #ECC8DC);
+      position: relative;
+    }
+    .product-img-bg-2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxAYV.png') center/cover no-repeat;
+      opacity: 0.95;
+    }
+    .product-img-bg-3 {
+      background: linear-gradient(135deg, #FFF5E8, #F5DCBA);
+      position: relative;
+    }
+    .product-img-bg-3::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxkF0.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-4 {
+      background: linear-gradient(135deg, #E8F5EE, #BCDFCC);
+      position: relative;
+    }
+    .product-img-bg-4::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxMwR.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-5 {
+      background: linear-gradient(135deg, #F0E8F8, #D4BFEA);
+      position: relative;
+    }
+    .product-img-bg-5::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegxQT1.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+    .product-img-bg-6 {
+      background: linear-gradient(135deg, #FEF0E8, #F0CBAF);
+      position: relative;
+    }
+    .product-img-bg-6::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://s41.ax1x.com/2026/04/21/pegx1Fx.png') center/cover no-repeat;
+      opacity: 0.9;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: linear-gradient(135deg, var(--rose-gold), var(--gold));
+      color: white;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      z-index: 2;
+    }
+    .product-img .product-img-real {
+      z-index: 1;
+    }
+    .product-hover-mask {
+      z-index: 3;
+    }
+
+    .product-hover-mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(61,28,14,0.6);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .product-card:hover .product-hover-mask { opacity: 1; }
+
+    .hover-btn {
+      background: white;
+      border: none;
+      border-radius: 40px;
+      padding: 10px 20px;
+      font-size: 13px;
+      color: var(--rose-gold-dark);
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .hover-btn:hover {
+      background: var(--rose-gold);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .product-info {
+      padding: 20px;
+    }
+
+    .product-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 17px;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .product-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .product-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--rose-gold-dark);
+    }
+
+    .product-price-orig {
+      font-size: 13px;
+      color: var(--text-light);
+      text-decoration: line-through;
+      margin-left: 6px;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    /* ====== 促销活动 ====== */
+    .promo-section {
+      background: linear-gradient(160deg, #2C1008 0%, #5C2A18 50%, #8B4E3A 100%);
+      padding: 80px 0;
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .promo-card {
+      border-radius: 16px;
+      padding: 28px 22px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .promo-card:hover { transform: translateY(-6px); }
+
+    .promo-card-1 { background: linear-gradient(135deg, #C4836A, #E8B89A); }
+    .promo-card-2 { background: linear-gradient(135deg, #8B4E3A, #C4836A); }
+    .promo-card-3 { background: linear-gradient(135deg, #C9A96E, #E8D5A8); }
+    .promo-card-4 { background: linear-gradient(135deg, #D4736A, #E8B5AC); }
+
+    .promo-deco {
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .promo-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .promo-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .promo-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.7;
+    }
+
+    .promo-cta {
+      margin-top: 18px;
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .promo-cta:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    /* ====== 品牌理念 ====== */
+    .brand-points {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .brand-card {
+      background: white;
+      border-radius: 16px;
+      padding: 36px 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose-gold), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .brand-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+
+    .brand-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .brand-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FEF0E8, #F5D0BC);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 18px;
+    }
+
+    .brand-card-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .brand-card-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* ====== 产品介绍 ====== */
+    .about-section {
+      background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 100px 0;
+    }
+
+    .about-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-visual-main {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #5C2A18, #C4836A, #E8B89A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual-main::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 60%);
+    }
+
+    .about-visual-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 120px; height: 120px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px var(--shadow);
+      border: 2px solid var(--border);
+    }
+
+    .about-visual-badge .num {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--rose-gold-dark);
+      line-height: 1;
+    }
+
+    .about-visual-badge .lab {
+      font-size: 11px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+    }
+
+    .about-text h2 {
+      font-size: 36px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .about-text .sub {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      color: var(--rose-gold);
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 2;
+      margin-bottom: 20px;
+    }
+
+    .about-text p strong {
+      color: var(--rose-gold-dark);
+      font-weight: 600;
+    }
+
+    /* 产品介绍时间线/卡片 */
+    .about-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .about-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .about-card:hover {
+      box-shadow: 0 12px 40px var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .about-card-num {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--border);
+      position: absolute;
+      top: 16px; right: 20px;
+      line-height: 1;
+    }
+
+    .about-card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #FEF0E8, #F5D0BC);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .about-card h4 {
+      font-size: 18px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .about-card p {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* 成分标签 */
+    .ingredient-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .ing-tag {
+      background: var(--soft-pink);
+      color: var(--rose-gold-dark);
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      border: 1px solid var(--border);
+    }
+
+    /* ====== 购物车侧边栏 ====== */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(4px);
+    }
+
+    .cart-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .cart-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 380px;
+      background: var(--cream);
+      z-index: 2001;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+    }
+
+    .cart-panel.open { transform: translateX(0); }
+
+    .cart-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+    }
+
+    .cart-header h3 {
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: var(--text-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-light);
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover { background: var(--soft-pink); color: var(--rose-gold); }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .cart-item {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .cart-item-img {
+      width: 70px; height: 70px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; }
+
+    .cart-item-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 15px;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 16px;
+      color: var(--rose-gold-dark);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-btn {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text-mid);
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover { border-color: var(--rose-gold); color: var(--rose-gold); }
+    .qty-num { font-size: 14px; color: var(--text-dark); min-width: 20px; text-align: center; }
+
+    .del-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: 16px;
+      transition: color 0.2s;
+      padding: 4px;
+    }
+
+    .del-btn:hover { color: #E53935; }
+
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+
+    .cart-empty .icon { font-size: 48px; margin-bottom: 16px; }
+    .cart-empty p { font-size: 15px; }
+
+    .cart-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .cart-total-label { font-size: 14px; color: var(--text-light); }
+    .cart-total-price { font-size: 24px; font-weight: 700; color: var(--rose-gold-dark); }
+
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold));
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 15px;
+      font-size: 15px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .checkout-btn:hover {
+      background: linear-gradient(135deg, #8B3C28, #B5624A);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(138,78,58,0.4);
+    }
+
+    /* ====== 商品详情弹窗 ====== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 20px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .modal-img {
+      height: 100%;
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 96px;
+      border-radius: 20px 0 0 20px;
+    }
+
+    .modal-detail {
+      padding: 36px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(0,0,0,0.1);
+      border: none;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      color: white;
+    }
+
+    .modal-close:hover { background: rgba(0,0,0,0.25); }
+    .modal-wrap { position: relative; }
+
+    .modal-tag {
+      display: inline-block;
+      background: var(--soft-pink);
+      color: var(--rose-gold-dark);
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .modal-name {
+      font-size: 26px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .modal-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--rose-gold-dark);
+      margin-bottom: 20px;
+    }
+
+    .modal-orig {
+      font-size: 14px;
+      color: var(--text-light);
+      text-decoration: line-through;
+      margin-left: 8px;
+    }
+
+    .modal-desc-text {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .modal-ingredients {
+      background: var(--warm-white);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 24px;
+    }
+
+    .modal-ingredients h5 {
+      font-size: 13px;
+      color: var(--text-mid);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .modal-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .modal-qty-label { font-size: 14px; color: var(--text-mid); }
+
+    .modal-qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--warm-white);
+      border-radius: 40px;
+      padding: 6px 16px;
+    }
+
+    .modal-add-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold));
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 14px;
+      font-size: 15px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .modal-add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(138,78,58,0.4);
+    }
+
+    /* ====== Toast通知 ====== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold));
+      color: white;
+      padding: 13px 28px;
+      border-radius: 40px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      box-shadow: 0 8px 25px rgba(138,78,58,0.4);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ====== 页脚 ====== */
+    footer {
+      background: #1A0A05;
+      color: rgba(255,255,255,0.6);
+      padding: 60px 0 30px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      color: white;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .footer-col h4 {
+      font-size: 14px;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      font-size: 13px;
+      padding: 5px 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul li:hover { color: var(--rose-gold-light); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ====== 滚动动画 ====== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ====== 响应式 ====== */
+    @media (max-width: 768px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .promo-grid { grid-template-columns: repeat(2, 1fr); }
+      .brand-points { grid-template-columns: repeat(2, 1fr); }
+      .about-hero { grid-template-columns: 1fr; gap: 32px; }
+      .about-cards { grid-template-columns: 1fr; }
+      .slide-title { font-size: 32px; }
+      .banner { height: 420px; }
+      .cart-panel { width: 100%; }
+      .modal-body { grid-template-columns: 1fr; }
+      .modal-img { min-height: 220px; border-radius: 20px 20px 0 0; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== 导航栏 ====== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">七白<span>润光</span></a>
+    <ul class="nav-links">
+      <li><a href="#products">产品</a></li>
+      <li><a href="#about">品牌故事</a></li>
+      <li><a href="#promo">优惠活动</a></li>
+      <li><a href="#brand">养肤理念</a></li>
+      <li><a href="#story">古法文化</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="cart-btn" onclick="toggleCart()" aria-label="购物车">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ====== 轮播图 ====== -->
+<section class="banner" id="banner">
+  <div class="slides-wrapper" id="slides">
+    <!-- Slide 1 -->
+    <div class="slide slide-1">
+      <div class="slide-content">
+        <span class="slide-tag">✦ 古法今用 · 药食同源 ✦</span>
+        <h1 class="slide-title">七白润光<br/>玫瑰软糖</h1>
+        <p class="slide-sub">以内养外，东方千年传承的养肤智慧<br/>让养肤成为日常的小确幸</p>
+        <a href="#products" class="slide-cta">立即探索 →</a>
+      </div>
+      <div class="slide-deco">
+        <div class="slide-deco-inner">🌹</div>
+      </div>
+    </div>
+    <!-- Slide 2 -->
+    <div class="slide slide-2">
+      <div class="slide-content">
+        <span class="slide-tag">✦ 限时体验装 · 新品上市 ✦</span>
+        <h1 class="slide-title">杏仁七白饮<br/>当代重生</h1>
+        <p class="slide-sub">茯苓 · 杏仁 · 玫瑰花 · 薏仁 · 谷胱甘肽<br/>五重焕亮，低GI软糖新体验</p>
+        <a href="#products" class="slide-cta">查看详情 →</a>
+      </div>
+      <div class="slide-deco">
+        <div class="slide-deco-inner">🍬</div>
+      </div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="slide slide-3">
+      <div class="slide-content">
+        <span class="slide-tag">✦ 健康中国 · 专利技术 ✦</span>
+        <h1 class="slide-title">好吃不怕甜<br/>养肤不将就</h1>
+        <p class="slide-sub">低GI配方 · 防潮抗氧化双层密封技术<br/>吃出好气色，养出东方美肌</p>
+        <a href="#about" class="slide-cta">品牌故事 →</a>
+      </div>
+      <div class="slide-deco">
+        <div class="slide-deco-inner">🌿</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="banner-arrow prev" onclick="slidePrev()">‹</button>
+  <button class="banner-arrow next" onclick="slideNext()">›</button>
+
+  <div class="banner-dots">
+    <button class="dot active" onclick="goSlide(0)"></button>
+    <button class="dot" onclick="goSlide(1)"></button>
+    <button class="dot" onclick="goSlide(2)"></button>
+  </div>
+</section>
+
+<!-- ====== 滚动公告 ====== -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span class="marquee-item">🌹 药食同源 · 千年古方</span>
+    <span class="marquee-item">✨ 新客立减20元</span>
+    <span class="marquee-item">🍬 低GI配方 · 甜而不腻</span>
+    <span class="marquee-item">🔬 实用新型专利技术</span>
+    <span class="marquee-item">🎁 买3赠1 限时活动</span>
+    <span class="marquee-item">🌿 五重焕亮 · 内调养肤</span>
+    <span class="marquee-item">💫 响应健康中国2030</span>
+    <span class="marquee-item">🌹 药食同源 · 千年古方</span>
+    <span class="marquee-item">✨ 新客立减20元</span>
+    <span class="marquee-item">🍬 低GI配方 · 甜而不腻</span>
+    <span class="marquee-item">🔬 实用新型专利技术</span>
+    <span class="marquee-item">🎁 买3赠1 限时活动</span>
+    <span class="marquee-item">🌿 五重焕亮 · 内调养肤</span>
+    <span class="marquee-item">💫 响应健康中国2030</span>
+  </div>
+</div>
+
+<!-- ====== 商品分类 ====== -->
+<div class="category-wrap" id="products">
+  <div class="category-inner">
+    <button class="cat-btn active" onclick="filterCat(this,'all')">全部产品</button>
+    <button class="cat-btn" onclick="filterCat(this,'classic')">经典款</button>
+    <button class="cat-btn" onclick="filterCat(this,'limited')">限定款</button>
+    <button class="cat-btn" onclick="filterCat(this,'gift')">礼盒装</button>
+    <button class="cat-btn" onclick="filterCat(this,'trial')">体验装</button>
+  </div>
+</div>
+
+<!-- ====== 热门商品 ====== -->
+<div class="section fade-in">
+  <div class="section-header">
+    <span class="section-label">POPULAR PRODUCTS</span>
+    <h2 class="section-title">热门精选</h2>
+    <p class="section-sub">精选六款明星产品，每一颗都是东方养肤智慧的结晶</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="products-grid" id="products-grid">
+    <!-- 商品1 -->
+    <div class="product-card" data-cat="classic" data-id="1">
+      <div class="product-img product-img-bg-1">
+        <span class="product-badge">热销 NO.1</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegvOFP.jpg" alt="七白润光软糖" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(1)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(1)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">七白润光 · 经典玫瑰软糖</div>
+        <div class="product-desc">茯苓+杏仁+玫瑰花，五重焕亮成分，每日一粒焕发光彩</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥88</span>
+            <span class="product-price-orig">¥128</span>
+          </div>
+          <div class="product-rating">★★★★★ <span style="color:var(--text-light)">4.9</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品2 -->
+    <div class="product-card" data-cat="limited" data-id="2">
+      <div class="product-img product-img-bg-2">
+        <span class="product-badge">限定新品</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegxAYV.png" alt="春日限定雪梨玫瑰软糖" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(2)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(2)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">春日限定 · 雪梨玫瑰软糖</div>
+        <div class="product-desc">雪梨汁+玫瑰花+薏仁，清润保湿，春季限定滋养配方</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥98</span>
+            <span class="product-price-orig">¥138</span>
+          </div>
+          <div class="product-rating">★★★★★ <span style="color:var(--text-light)">4.8</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品3 -->
+    <div class="product-card" data-cat="gift" data-id="3">
+      <div class="product-img product-img-bg-3">
+        <span class="product-badge">送礼首选</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegxkF0.png" alt="七白礼盒" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(3)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(3)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">七白礼盒 · 东方美肌套装</div>
+        <div class="product-desc">精美礼盒装，含经典款+限定款各一盒，送礼养肤两不误</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥168</span>
+            <span class="product-price-orig">¥238</span>
+          </div>
+          <div class="product-rating">★★★★★ <span style="color:var(--text-light)">5.0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品4 -->
+    <div class="product-card" data-cat="classic" data-id="4">
+      <div class="product-img product-img-bg-4">
+        <span class="product-badge">养肤新选</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegxMwR.png" alt="薏仁淡斑软糖" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(4)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(4)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">薏仁淡斑 · 美白焕肤软糖</div>
+        <div class="product-desc">薏仁+谷胱甘肽+VC协同作用，专注淡斑亮肤，坚持见成效</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥92</span>
+            <span class="product-price-orig">¥132</span>
+          </div>
+          <div class="product-rating">★★★★☆ <span style="color:var(--text-light)">4.7</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品5 -->
+    <div class="product-card" data-cat="trial" data-id="5">
+      <div class="product-img product-img-bg-5">
+        <span class="product-badge">新客特价</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegxQT1.png" alt="初见体验装" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(5)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(5)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">初见体验装 · 7日尝鲜套</div>
+        <div class="product-desc">7粒装尝鲜体验，新客专享，低门槛感受七白润光的养肤魔力</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥28</span>
+            <span class="product-price-orig">¥48</span>
+          </div>
+          <div class="product-rating">★★★★★ <span style="color:var(--text-light)">4.9</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商品6 -->
+    <div class="product-card" data-cat="limited" data-id="6">
+      <div class="product-img product-img-bg-6">
+        <span class="product-badge">加量版</span>
+        <img src="https://s41.ax1x.com/2026/04/21/pegx1Fx.png" alt="加量臻选" class="product-img-real" />
+        <div class="product-hover-mask">
+          <button class="hover-btn" onclick="openModal(6)">查看详情</button>
+          <button class="hover-btn" onclick="addToCart(6)">加入购物车</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">加量臻选 · 90粒月供装</div>
+        <div class="product-desc">90粒超值月供，双层密封胶囊锁鲜，坚持三个月看见焕变</div>
+        <div class="product-price-row">
+          <div>
+            <span class="product-price">¥228</span>
+            <span class="product-price-orig">¥320</span>
+          </div>
+          <div class="product-rating">★★★★★ <span style="color:var(--text-light)">4.8</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 促销活动 ====== -->
+<section class="promo-section" id="promo">
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="section-header" style="margin-bottom:40px;">
+      <span class="section-label" style="color:rgba(255,255,255,0.6)">PROMOTIONS</span>
+      <h2 class="section-title" style="color:white">限时优惠</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.6)">多重福利叠加，养肤更划算</p>
+      <div class="divider"></div>
+    </div>
+    <div class="promo-grid fade-in">
+      <div class="promo-card promo-card-1">
+        <div class="promo-deco"></div>
+        <span class="promo-icon">🎉</span>
+        <div class="promo-title">新客立减</div>
+        <div class="promo-desc">首次下单立减20元<br/>专属新人福利码 QBG20</div>
+        <div class="promo-cta">立即领取</div>
+      </div>
+      <div class="promo-card promo-card-2">
+        <div class="promo-deco"></div>
+        <span class="promo-icon">🔔</span>
+        <div class="promo-title">订阅优惠</div>
+        <div class="promo-desc">开通月订阅享85折<br/>每月准时送达，省心又省钱</div>
+        <div class="promo-cta">开通订阅</div>
+      </div>
+      <div class="promo-card promo-card-3">
+        <div class="promo-deco"></div>
+        <span class="promo-icon">🎁</span>
+        <div class="promo-title">买三赠一</div>
+        <div class="promo-desc">任意购买3盒，赠送体验装一份<br/>闺蜜同行，共享养肤好物</div>
+        <div class="promo-cta">查看活动</div>
+      </div>
+      <div class="promo-card promo-card-4">
+        <div class="promo-deco"></div>
+        <span class="promo-icon">⭐</span>
+        <div class="promo-title">积分福利</div>
+        <div class="promo-desc">每消费1元积1分<br/>100分可兑换10元优惠券</div>
+        <div class="promo-cta">查看积分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 品牌理念 ====== -->
+<section id="brand">
+  <div class="section fade-in">
+    <div class="section-header">
+      <span class="section-label">BRAND VALUES</span>
+      <h2 class="section-title">养肤四大核心</h2>
+      <p class="section-sub">每一颗软糖背后，是对东方养肤智慧的深度诠释</p>
+      <div class="divider"></div>
+    </div>
+    <div class="brand-points">
+      <div class="brand-card">
+        <div class="brand-icon">🌿</div>
+        <div class="brand-card-title">药食同源</div>
+        <div class="brand-card-desc">以《药食同源目录》为依据，茯苓、薏仁等经典草本，温和安全，可食可养</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-icon">✨</div>
+        <div class="brand-card-title">五重焕亮</div>
+        <div class="brand-card-desc">茯苓+杏仁+薏仁+谷胱甘肽+VC，五维协同作用，内调养肤焕亮气色</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-icon">💚</div>
+        <div class="brand-card-title">低GI配方</div>
+        <div class="brand-card-desc">采用异麦芽酮糖醇+赤藓糖醇，口感温和甜蜜，不影响血糖，甜而不腻</div>
+      </div>
+      <div class="brand-card">
+        <div class="brand-icon">🔬</div>
+        <div class="brand-card-title">专利技术</div>
+        <div class="brand-card-desc">防潮抗氧化透明胶囊双层密封技术，专利立项保障，稳定有效成分不流失</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 产品介绍 ====== -->
+<section class="about-section" id="story">
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="section-header fade-in">
+      <span class="section-label">BRAND STORY</span>
+      <h2 class="section-title">文化原点 · 古法重生</h2>
+      <p class="section-sub">"以内养外"是东方传承千年的养肤智慧</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- 主视觉+文字 -->
+    <div class="about-hero fade-in">
+      <div class="about-visual">
+        <div class="about-visual-main">🌹</div>
+        <div class="about-visual-badge">
+          <div class="num">千年</div>
+          <div class="lab">东方传承</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="sub">文化原点：七白饮的当代重生</div>
+        <h2>让养肤成为<br/>日常的小确幸</h2>
+        <p>"以内养外"是东方传承千年的养肤智慧。但传统药食同源产品往往<strong>不好吃、难坚持</strong>，与当代年轻人的生活方式渐行渐远。我们回到经典的"杏仁七白饮"这一中医古方，用现代年轻人喜欢的方式——功能性软糖，让它重新走进日常生活。</p>
+        <p>本项目保留了药食同源的文化根脉，却拥有零食般的美味口感；它遵循东方"内调"逻辑，又融合了现代营养科学。我们坚信：<strong>养肤不该是苦口的负担，而应成为日常的小确幸。</strong></p>
+        <div class="ingredient-tags">
+          <span class="ing-tag">茯苓</span>
+          <span class="ing-tag">杏仁</span>
+          <span class="ing-tag">雪梨汁</span>
+          <span class="ing-tag">玫瑰花</span>
+          <span class="ing-tag">薏仁</span>
+          <span class="ing-tag">谷胱甘肽</span>
+          <span class="ing-tag">维生素C</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 四大模块卡片 -->
+    <div class="about-cards fade-in">
+      <!-- 国家政策 -->
+      <div class="about-card">
+        <div class="about-card-num">01</div>
+        <div class="about-card-icon">🏛️</div>
+        <h4>国家政策支持</h4>
+        <p>本项目积极响应《"健康中国2030"规划纲要》中"鼓励开发药食同源产品"的国家号召，结合《十四五中医药发展规划》中提出的中医药高质量发展目标和任务以及提升中医药产业整体水平和竞争力等国家政策，与长春医学高等专科学校的人才培养观念"理论与实践相融合，推进职教改革"深度契合。项目团队吸纳多专业学生以中药学、食品检验检测技术、医学营养等专业学生为首，实现跨学科融合。</p>
+        <p style="margin-top:10px;color:var(--rose-gold);font-size:13px;">💡 跨学科团队 · 中药学 · 食品检验 · 医学营养</p>
+      </div>
+
+      <!-- 配方创新 -->
+      <div class="about-card">
+        <div class="about-card-num">02</div>
+        <div class="about-card-icon">⚗️</div>
+        <h4>配方创新与工艺改良</h4>
+        <p>产品以中医传统杏仁七白饮为启发，将其配方按《药食同源目录》更改为茯苓、杏仁、雪梨汁、玫瑰花、薏仁，加入谷胱甘肽与VC，利用中药提取罐将其成分进行最大化的浓缩利用。为保证感官性状良好，加入异麦芽酮糖醇，利用其口味温和、吸湿性低、对肠胃影响较小的特点，同时结合赤藓糖醇掩盖药材的不良风味，最后采用防潮抗氧化透明胶囊的双层密封胶囊技术进行密封，做成软糖，进一步保障成分的稳定性。</p>
+        <div class="ingredient-tags" style="margin-top:12px;">
+          <span class="ing-tag">中药提取</span>
+          <span class="ing-tag">低GI甜味剂</span>
+          <span class="ing-tag">双层密封</span>
+        </div>
+      </div>
+
+      <!-- 东方理念 -->
+      <div class="about-card">
+        <div class="about-card-num">03</div>
+        <div class="about-card-icon">🏯</div>
+        <h4>东方养肤哲学</h4>
+        <p>"以内养外"是东方传承千年的养肤智慧。七白润光将古法中医与现代食品科学融合，让年轻人在享用美味软糖的同时，以东方内调的方式温柔呵护肌肤，重拾对传统文化的热爱与认同。</p>
+        <p style="margin-top:10px;color:var(--rose-gold);font-size:13px;">🌸 古法 · 今用 · 好吃 · 好看</p>
+      </div>
+
+      <!-- 知识产权 -->
+      <div class="about-card">
+        <div class="about-card-num">04</div>
+        <div class="about-card-icon">📋</div>
+        <h4>知识产权赋能</h4>
+        <p>目前本项目已立项一项<strong style="color:var(--rose-gold-dark)">实用新型专利</strong>，后续会持续推进对产品配方的保护并完成商标的注册，以法律手段保障品牌独特性与市场竞争力，为消费者提供有品质保障的正品产品。</p>
+        <p style="margin-top:10px;color:var(--rose-gold);font-size:13px;">🔒 专利立项 · 商标注册 · 品质保障</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 页脚 ====== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>七白润光</h3>
+        <p>以内养外，东方千年养肤智慧的当代传承。<br/>每一颗软糖，都是对美好生活的小小承诺。</p>
+      </div>
+      <div class="footer-col">
+        <h4>产品系列</h4>
+        <ul>
+          <li>经典玫瑰软糖</li>
+          <li>春日限定款</li>
+          <li>东方礼盒装</li>
+          <li>新客体验装</li>
+          <li>月供臻选装</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>关于我们</h4>
+        <ul>
+          <li>品牌故事</li>
+          <li>配方溯源</li>
+          <li>专利技术</li>
+          <li>合作院校</li>
+          <li>媒体报道</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>客户服务</h4>
+        <ul>
+          <li>购买须知</li>
+          <li>退换货政策</li>
+          <li>积分说明</li>
+          <li>联系客服</li>
+          <li>常见问题</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 七白润光 · 古法养肤玫瑰软糖 | 本项目响应《健康中国2030》规划纲要 | 合作院校：长春医学高等专科学校</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ====== 购物车侧边栏 ====== -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <h3>购物车</h3>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">
+      <div class="icon">🛒</div>
+      <p>购物车空空如也<br/>快去挑选心仪的软糖吧~</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-total-row">
+      <span class="cart-total-label">合计</span>
+      <span class="cart-total-price" id="cart-total">¥0</span>
+    </div>
+    <button class="checkout-btn">立即结算</button>
+  </div>
+</div>
+
+<!-- ====== 商品详情弹窗 ====== -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleModalClick(event)">
+  <div class="modal modal-wrap" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-body">
+      <div class="modal-img" id="modal-img"></div>
+      <div class="modal-detail">
+        <div class="modal-tag" id="modal-tag"></div>
+        <div class="modal-name" id="modal-name"></div>
+        <div class="modal-price">
+          <span id="modal-price"></span>
+          <span class="modal-orig" id="modal-orig"></span>
+        </div>
+        <div class="modal-desc-text" id="modal-desc"></div>
+        <div class="modal-ingredients">
+          <h5>✦ 核心成分</h5>
+          <div class="ingredient-tags" id="modal-ings"></div>
+        </div>
+        <div class="modal-qty-row">
+          <span class="modal-qty-label">数量</span>
+          <div class="modal-qty-ctrl">
+            <button class="qty-btn" onclick="changeModalQty(-1)">−</button>
+            <span class="qty-num" id="modal-qty">1</span>
+            <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+          </div>
+        </div>
+        <button class="modal-add-btn" onclick="addModalToCart()">加入购物车</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== Toast ====== -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========= 数据 =========
+const products = {
+  1: {
+    name: '七白润光 · 经典玫瑰软糖',
+    tag: '经典款',
+    price: 88, origPrice: 128,
+    emoji: '🌹',
+    bg: 'linear-gradient(135deg, #FDEEE8, #F5CBBF)',
+    desc: '以中医经典"杏仁七白饮"为灵感，融合茯苓、杏仁、玫瑰花等药食同源成分，辅以谷胱甘肽与VC，五重焕亮协同作用。口感温和甜蜜，每日一粒，轻松开启东方内调养肤之旅。',
+    ingredients: ['茯苓', '杏仁', '玫瑰花', '谷胱甘肽', '维生素C', '薏仁']
+  },
+  2: {
+    name: '春日限定 · 雪梨玫瑰软糖',
+    tag: '限定款',
+    price: 98, origPrice: 138,
+    emoji: '🌸',
+    bg: 'linear-gradient(135deg, #F8E8F2, #ECC8DC)',
+    desc: '春季限定配方，加入新鲜雪梨汁精华，清润保湿，搭配玫瑰花与薏仁的经典组合，为肌肤注入春日活力。限量发售，错过再等一年。',
+    ingredients: ['雪梨汁', '玫瑰花', '薏仁', '茯苓', '谷胱甘肽']
+  },
+  3: {
+    name: '七白礼盒 · 东方美肌套装',
+    tag: '礼盒装',
+    price: 168, origPrice: 238,
+    emoji: '🎁',
+    bg: 'linear-gradient(135deg, #FFF5E8, #F5DCBA)',
+    desc: '精美东方风格礼盒包装，内含经典玫瑰软糖+春日限定款各一盒，附赠品牌定制香氛卡片。送礼自用皆宜，让健康美丽传递给最重要的人。',
+    ingredients: ['经典款全成分', '限定款全成分', '赠品香氛卡']
+  },
+  4: {
+    name: '薏仁淡斑 · 美白焕肤软糖',
+    tag: '经典款',
+    price: 92, origPrice: 132,
+    emoji: '🌿',
+    bg: 'linear-gradient(135deg, #E8F5EE, #BCDFCC)',
+    desc: '专注淡斑亮肤配方，以薏仁为主力成分，联合谷胱甘肽（GSH）与大剂量VC三重协同，从源头抑制黑色素生成，坚持28天即可见明显焕亮效果。',
+    ingredients: ['薏仁', '谷胱甘肽', '维生素C', '茯苓', '异麦芽酮糖醇']
+  },
+  5: {
+    name: '初见体验装 · 7日尝鲜套',
+    tag: '体验装',
+    price: 28, origPrice: 48,
+    emoji: '✨',
+    bg: 'linear-gradient(135deg, #F0E8F8, #D4BFEA)',
+    desc: '专为初次尝试七白润光的新朋友设计，7粒装轻量体验，覆盖完整一周的养肤周期。低门槛感受药食同源的养肤魔力，体验好再购入正装，放心无风险。',
+    ingredients: ['茯苓', '杏仁', '玫瑰花', '谷胱甘肽', 'VC']
+  },
+  6: {
+    name: '加量臻选 · 90粒月供装',
+    tag: '限定款',
+    price: 228, origPrice: 320,
+    emoji: '💛',
+    bg: 'linear-gradient(135deg, #FEF0E8, #F0CBAF)',
+    desc: '三个月系统养肤方案，90粒超值月供装，平均每粒仅2.5元。双层防潮抗氧化密封技术确保成分稳定不流失，坚持三个月，肉眼可见的肌肤焕变。',
+    ingredients: ['全配方加量版', '双层密封胶囊', '抗氧化技术', '茯苓', '薏仁', '谷胱甘肽']
+  }
+};
+
+// ========= 轮播图 =========
+let currentSlide = 0;
+const totalSlides = 3;
+let autoSlideTimer;
+
+function goSlide(index) {
+  currentSlide = index;
+  document.getElementById('slides').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function slideNext() {
+  goSlide((currentSlide + 1) % totalSlides);
+  resetAutoSlide();
+}
+
+function slidePrev() {
+  goSlide((currentSlide - 1 + totalSlides) % totalSlides);
+  resetAutoSlide();
+}
+
+function resetAutoSlide() {
+  clearInterval(autoSlideTimer);
+  autoSlideTimer = setInterval(slideNext, 4500);
+}
+
+autoSlideTimer = setInterval(slideNext, 4500);
+
+// ========= 商品分类 =========
+function filterCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = '';
+      card.style.animation = 'fadeInCard 0.4s ease forwards';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ========= 购物车 =========
+let cart = [];
+
+function toggleCart() {
+  const overlay = document.getElementById('cart-overlay');
+  const panel = document.getElementById('cart-panel');
+  overlay.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+function addToCart(id) {
+  const p = products[id];
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id, qty: 1 });
+  }
+  updateCartBadge();
+  renderCart();
+  showToast(`🛒 已加入购物车：${p.name}`);
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cart-badge').textContent = total;
+}
+
+function renderCart() {
+  const el = document.getElementById('cart-items');
+  const footer = document.getElementById('cart-footer');
+  if (cart.length === 0) {
+    el.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div><p>购物车空空如也<br/>快去挑选心仪的软糖吧~</p></div>`;
+    footer.style.display = 'none';
+    return;
+  }
+  footer.style.display = 'block';
+  let html = '';
+  let total = 0;
+  cart.forEach(item => {
+    const p = products[item.id];
+    total += p.price * item.qty;
+    html += `
+      <div class="cart-item">
+        <div class="cart-item-img" style="background:${p.bg}">${p.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-price">¥${p.price}</div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+            <button class="del-btn" onclick="removeFromCart(${item.id})">🗑</button>
+          </div>
+        </div>
+      </div>`;
+  });
+  el.innerHTML = html;
+  document.getElementById('cart-total').textContent = `¥${total}`;
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else { updateCartBadge(); renderCart(); }
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartBadge();
+  renderCart();
+}
+
+// ========= 商品详情弹窗 =========
+let modalCurrentId = null;
+let modalQty = 1;
+
+function openModal(id) {
+  modalCurrentId = id;
+  modalQty = 1;
+  const p = products[id];
+  document.getElementById('modal-img').style.background = p.bg;
+  document.getElementById('modal-img').innerHTML = `<span style="font-size:96px">${p.emoji}</span>`;
+  document.getElementById('modal-tag').textContent = p.tag;
+  document.getElementById('modal-name').textContent = p.name;
+  document.getElementById('modal-price').textContent = `¥${p.price}`;
+  document.getElementById('modal-orig').textContent = `¥${p.origPrice}`;
+  document.getElementById('modal-desc').textContent = p.desc;
+  document.getElementById('modal-qty').textContent = 1;
+  document.getElementById('modal-ings').innerHTML = p.ingredients.map(i => `<span class="ing-tag">${i}</span>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function handleModalClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function changeModalQty(delta) {
+  modalQty = Math.max(1, modalQty + delta);
+  document.getElementById('modal-qty').textContent = modalQty;
+}
+
+function addModalToCart() {
+  if (!modalCurrentId) return;
+  const p = products[modalCurrentId];
+  const existing = cart.find(i => i.id === modalCurrentId);
+  if (existing) existing.qty += modalQty;
+  else cart.push({ id: modalCurrentId, qty: modalQty });
+  updateCartBadge();
+  renderCart();
+  closeModal();
+  showToast(`🛒 已加入购物车：${p.name} × ${modalQty}`);
+}
+
+// ========= Toast =========
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ========= 滚动动画 =========
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
