@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>研发工艺 · 七白润光</title>
+  <style>
+    :root {
+      --color-primary: #E8B4C5; --color-primary-light: #F5D5E0; --color-primary-dark: #C985A0;
+      --color-gold: #C9A84C; --color-gold-light: #F0D080; --color-gold-dark: #A07830;
+      --color-ivory: #FDFAF5; --color-cream: #FEF6EC;
+      --color-warm-brown: #6B4226; --color-warm-brown-light: #A0704A;
+      --color-dark-bg: #1A1208; --color-dark-card: #231A0F;
+      --font-serif: 'Noto Serif SC','SimSun',Georgia,serif;
+      --font-sans: 'PingFang SC','Microsoft YaHei',sans-serif;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-full:9999px;
+      --shadow-sm: 0 2px 8px rgba(200,130,100,0.1);
+      --shadow-md: 0 8px 32px rgba(200,130,100,0.15);
+      --shadow-lg: 0 20px 60px rgba(200,130,100,0.2);
+      --transition: 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);overflow-x:hidden;line-height:1.7;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;}
+
+    /* Navbar */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,245,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.12);box-shadow:0 2px 20px rgba(107,66,38,0.06);}
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-back{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border:1.5px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.85rem;color:var(--color-warm-brown-light);background:transparent;transition:all var(--transition);}
+    .nav-back:hover{background:rgba(201,168,76,0.08);border-color:var(--color-gold);}
+
+    /* Page */
+    .page-wrap{max-width:1100px;margin:0 auto;padding:88px 2rem 4rem;}
+
+    /* Hero Banner */
+    .tech-hero{background:linear-gradient(135deg,var(--color-dark-bg) 0%,#2A1A10 50%,#1E1510 100%);color:var(--color-ivory);padding:6rem 2rem;margin:-88px -2rem 3rem;position:relative;overflow:hidden;text-align:center;}
+    .tech-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(201,168,76,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(232,180,197,0.06) 0%,transparent 50%);}
+    .tech-hero-content{position:relative;z-index:1;max-width:700px;margin:0 auto;}
+    .tech-hero-badge{display:inline-flex;align-items:center;gap:0.4rem;padding:0.4rem 1rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.8rem;color:var(--color-gold-light);font-weight:500;margin-bottom:1.5rem;letter-spacing:0.05em;}
+    .tech-hero h1{font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:1rem;line-height:1.3;}
+    .tech-hero h1 span{background:linear-gradient(135deg,var(--color-gold-light),var(--color-primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .tech-hero p{font-size:1rem;color:rgba(253,250,245,0.6);max-width:520px;margin:0 auto;line-height:1.8;}
+    .tech-hero-stats{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+    .tech-stat{text-align:center;}
+    .tech-stat-num{font-family:var(--font-serif);font-size:2rem;font-weight:700;color:var(--color-gold-light);}
+    .tech-stat-label{font-size:0.78rem;color:rgba(253,250,245,0.5);margin-top:0.2rem;}
+
+    /* Section */
+    section{margin-bottom:4rem;}
+    .section-title{font-family:var(--font-serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;text-align:center;margin-bottom:0.5rem;color:var(--color-warm-brown);}
+    .section-sub{text-align:center;color:var(--color-warm-brown-light);font-size:0.95rem;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;}
+    .gold-divider{width:50px;height:2px;background:linear-gradient(90deg,var(--color-primary),var(--color-gold));margin:0.8rem auto 2.5rem;border-radius:var(--radius-full);}
+
+    /* Process Flow */
+    .process-timeline{max-width:900px;margin:0 auto 2rem;position:relative;}
+    .process-timeline::before{content:'';position:absolute;top:44px;left:60px;right:60px;height:3px;background:linear-gradient(90deg,var(--color-primary-light),var(--color-gold-light),var(--color-primary-light));border-radius:2px;z-index:0;}
+    .process-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;margin-bottom:0;}
+    .step-circle{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:0.8rem;position:relative;transition:all 0.4s ease;border:2.5px solid var(--color-primary-light);background:white;cursor:default;}
+    .step-circle::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1.5px dashed rgba(201,168,76,0.2);transition:all 0.4s ease;}
+    .step-circle:hover{transform:scale(1.1);border-color:var(--color-gold);box-shadow:0 8px 30px rgba(201,168,76,0.2);}
+    .step-circle:hover::after{border-color:rgba(201,168,76,0.4);transform:scale(1.15);}
+    .step-num{position:absolute;top:-8px;right:-4px;width:24px;height:24px;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;border-radius:50%;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+    .step-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;color:var(--color-warm-brown);margin-bottom:0.3rem;}
+    .step-desc{font-size:0.8rem;color:var(--color-warm-brown-light);line-height:1.6;max-width:140px;}
+    .step-detail{background:linear-gradient(145deg,var(--color-ivory),var(--color-cream));border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius-md);padding:1rem 1.2rem;margin-top:0.6rem;font-size:0.82rem;color:var(--color-warm-brown);line-height:1.7;text-align:left;max-width:260px;display:none;}
+    .process-step:hover .step-detail{display:block;animation:fadeIn 0.3s ease;}
+    .process-steps-grid{display:flex;justify-content:space-between;gap:0.5rem;}
+    @media(max-width:768px){.process-timeline::before{display:none;}.process-steps-grid{flex-direction:column;align-items:center;}.step-detail{display:block;}}
+
+    /* Compare Table */
+    .compare-section{background:white;border-radius:var(--radius-lg);padding:2rem;border:1px solid rgba(201,168,76,0.12);box-shadow:var(--shadow-sm);}
+    .compare-table{width:100%;border-collapse:collapse;border-radius:var(--radius-md);overflow:hidden;}
+    .compare-table th{padding:1rem 1.2rem;font-size:0.88rem;font-weight:600;text-align:center;border-bottom:2px solid rgba(201,168,76,0.2);}
+    .compare-table th:nth-child(1){background:var(--color-cream);color:var(--color-warm-brown);}
+    .compare-table th:nth-child(2){background:rgba(224,128,96,0.1);color:#B06040;}
+    .compare-table th:nth-child(3){background:linear-gradient(135deg,rgba(232,180,197,0.2),rgba(201,168,76,0.1));color:var(--color-primary-dark);}
+    .compare-table td{padding:0.9rem 1.2rem;font-size:0.88rem;text-align:center;border-bottom:1px solid rgba(201,168,76,0.08);}
+    .compare-table tr:last-child td{border-bottom:none;}
+    .compare-table tr:hover td{background:rgba(201,168,76,0.03);}
+    .compare-table td:nth-child(1){font-weight:600;color:var(--color-warm-brown);text-align:left;background:var(--color-ivory);}
+    .compare-table td:nth-child(2){color:#C07050;}
+    .compare-table td:nth-child(3){color:#408060;font-weight:500;}
+
+    /* Patent & Certification */
+    .cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+    @media(max-width:768px){.cert-grid{grid-template-columns:1fr;}}
+    .cert-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;border:1px solid rgba(201,168,76,0.12);box-shadow:var(--shadow-sm);text-align:center;transition:all var(--transition);cursor:default;}
+    .cert-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+    .cert-icon{width:64px;height:64px;margin:0 auto 1rem;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:2rem;}
+    .cert-icon.gold-bg{background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));border:1px solid rgba(201,168,76,0.2);}
+    .cert-icon.pink-bg{background:linear-gradient(135deg,rgba(232,180,197,0.2),rgba(232,180,197,0.05));border:1px solid rgba(232,180,197,0.2);}
+    .cert-icon.green-bg{background:linear-gradient(135deg,rgba(180,220,200,0.3),rgba(180,220,200,0.05));border:1px solid rgba(180,220,200,0.3);}
+    .cert-title{font-family:var(--font-serif);font-size:1.05rem;font-weight:700;color:var(--color-warm-brown);margin-bottom:0.5rem;}
+    .cert-desc{font-size:0.82rem;color:var(--color-warm-brown-light);line-height:1.7;}
+    .cert-tag{display:inline-block;padding:0.2rem 0.6rem;background:rgba(201,168,76,0.1);border-radius:var(--radius-full);font-size:0.72rem;color:var(--color-gold-dark);margin-top:0.6rem;font-weight:500;}
+
+    /* Lab Gallery */
+    .lab-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+    @media(max-width:768px){.lab-gallery{grid-template-columns:repeat(2,1fr);}}
+    .lab-item{aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;position:relative;cursor:pointer;border:1px solid rgba(201,168,76,0.1);transition:all var(--transition);}
+    .lab-item:hover{transform:scale(1.03);box-shadow:var(--shadow-md);border-color:var(--color-gold);}
+    .lab-item-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;transition:transform 0.4s ease;}
+    .lab-item:hover .lab-item-bg{transform:scale(1.1);}
+    .lab-item-label{position:absolute;bottom:0;left:0;right:0;padding:0.6rem;background:linear-gradient(transparent,rgba(26,18,8,0.85));color:white;font-size:0.78rem;font-weight:500;text-align:center;}
+
+    /* R&D Team */
+    .rd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+    @media(max-width:768px){.rd-grid{grid-template-columns:1fr;}}
+    .rd-card{display:flex;gap:1.2rem;padding:1.5rem;background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.12);box-shadow:var(--shadow-sm);transition:all var(--transition);}
+    .rd-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .rd-avatar{width:56px;height:56px;border-radius:var(--radius-md);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:linear-gradient(135deg,var(--color-primary-light),var(--color-gold-light));}
+    .rd-info{flex:1;}
+    .rd-name{font-weight:700;font-size:0.95rem;color:var(--color-warm-brown);margin-bottom:0.2rem;}
+    .rd-role{font-size:0.78rem;color:var(--color-gold-dark);font-weight:500;margin-bottom:0.4rem;}
+    .rd-bio{font-size:0.82rem;color:var(--color-warm-brown-light);line-height:1.6;}
+
+    /* Quality Standards */
+    .quality-list{display:flex;flex-direction:column;gap:1rem;max-width:700px;margin:0 auto;}
+    .quality-item{display:flex;align-items:flex-start;gap:1rem;padding:1.2rem 1.5rem;background:white;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);transition:all var(--transition);}
+    .quality-item:hover{box-shadow:var(--shadow-sm);border-color:rgba(201,168,76,0.25);}
+    .quality-icon{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;background:linear-gradient(135deg,rgba(232,180,197,0.2),rgba(201,168,76,0.1));}
+    .quality-text h4{font-size:0.95rem;font-weight:700;color:var(--color-warm-brown);margin-bottom:0.2rem;}
+    .quality-text p{font-size:0.82rem;color:var(--color-warm-brown-light);line-height:1.6;}
+
+    /* CTA */
+    .cta-section{background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:var(--radius-lg);padding:3rem 2rem;text-align:center;color:white;margin-top:2rem;}
+    .cta-section h2{font-family:var(--font-serif);font-size:1.6rem;font-weight:700;margin-bottom:0.8rem;}
+    .cta-section p{font-size:0.95rem;opacity:0.9;margin-bottom:1.5rem;max-width:400px;margin-left:auto;margin-right:auto;}
+    .cta-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;background:white;color:var(--color-warm-brown);border:none;border-radius:var(--radius-full);font-size:1rem;font-weight:600;transition:all var(--transition);box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+    .cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.2);}
+
+    /* Animations */
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .animate-fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+    .animate-fade-in.visible{opacity:1;transform:translateY(0);}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand" style="text-decoration:none;">
+      <div class="brand-icon">🌸</div>
+      <span class="brand-name">七白润光</span>
+    </a>
+    <button class="nav-back" onclick="history.back()">← 返回首页</button>
+  </nav>
+
+  <!-- Hero -->
+  <div class="tech-hero">
+    <div class="tech-hero-content">
+      <div class="tech-hero-badge">🔬 研发中心</div>
+      <h1>医研共创 · <span>循证驱动</span>的复方研发</h1>
+      <p>每一颗软糖背后，是严苛的工艺标准和对活性品质的极致追求。从原料筛选到独立包装，6道核心工序层层把关。</p>
+      <div class="tech-hero-stats">
+        <div class="tech-stat"><div class="tech-stat-num">6</div><div class="tech-stat-label">核心工艺工序</div></div>
+        <div class="tech-stat"><div class="tech-stat-num">80℃</div><div class="tech-stat-label">低温提取温度</div></div>
+        <div class="tech-stat"><div class="tech-stat-num">7</div><div class="tech-stat-label">药食同源原料</div></div>
+        <div class="tech-stat"><div class="tech-stat-num">0</div><div class="tech-stat-label">蔗糖添加</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+    <!-- 工艺流程 -->
+    <section>
+      <h2 class="section-title">核心工艺流程</h2>
+      <p class="section-sub">从原料到成品，每一步都经过严格把控</p>
+      <div class="gold-divider"></div>
+      <div class="process-timeline">
+        <div class="process-steps-grid">
+          <div class="process-step">
+            <div class="step-circle">🌿<span class="step-num">1</span></div>
+            <div class="step-title">原料筛选</div>
+            <div class="step-desc">药食同源<br>道地原料</div>
+            <div class="step-detail">
+              <strong>🌱 道地选材</strong><br>
+              严格甄选药食同源目录内原料，产地溯源，确保每一批原料的安全性与可追溯性。所有原料均通过第三方检测机构认证。
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">🌡️<span class="step-num">2</span></div>
+            <div class="step-title">低温提取</div>
+            <div class="step-desc">80℃温和<br>活性保留</div>
+            <div class="step-detail">
+              <strong>🌡️ 80℃低温提取</strong><br>
+              采用低温减压提取工艺，温度控制在80℃以下，最大限度保留原料中的热敏性活性成分，避免高温导致的营养损失。
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">⚗️<span class="step-num">3</span></div>
+            <div class="step-title">活性浓缩</div>
+            <div class="step-desc">精准配比<br>高效浓缩</div>
+            <div class="step-detail">
+              <strong>⚗️ 活性浓缩技术</strong><br>
+              通过膜分离与减压浓缩技术，精准控制有效成分浓度，确保每颗软糖含有标准化的活性成分含量。
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">🔬<span class="step-num">4</span></div>
+            <div class="step-title">低GI复配</div>
+            <div class="step-desc">糖醇替代<br>低GI配方</div>
+            <div class="step-detail">
+              <strong>🧬 低GI糖醇复配</strong><br>
+              采用木糖醇、赤藓糖醇等低GI糖醇替代蔗糖，兼顾口感与健康，GI值控制在合理范围内，适合控糖人群日常食用。
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">💊<span class="step-num">5</span></div>
+            <div class="step-title">锁鲜成型</div>
+            <div class="step-desc">双层保护<br>锁住活性</div>
+            <div class="step-detail">
+              <strong>🛡️ 双层锁鲜技术</strong><br>
+              内层软糖基质锁住活性成分，外层防潮膜隔绝空气与湿气，双保险确保产品在保质期内的活性稳定。
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">📦<span class="step-num">6</span></div>
+            <div class="step-title">独立包装</div>
+            <div class="step-desc">单颗独立<br>便携卫生</div>
+            <div class="step-detail">
+              <strong>📦 独立密封包装</strong><br>
+              单颗独立铝箔密封包装，防潮防氧化，方便随身携带。每包标注生产日期与保质期，品质可追溯。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 传统 vs 现代 对比 -->
+    <section>
+      <h2 class="section-title">传统工艺 vs 七白润光工艺</h2>
+      <p class="section-sub">每一项升级，都源于对品质的执着追求</p>
+      <div class="gold-divider"></div>
+      <div class="compare-section">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>对比维度</th>
+              <th>传统食养产品</th>
+              <th>✨ 七白润光</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>剂型体验</td>
+              <td>药片 / 粉剂 / 煎煮</td>
+              <td>🍬 软糖剂型，好吃好坚持</td>
+            </tr>
+            <tr>
+              <td>提取工艺</td>
+              <td>高温煎煮，活性损失大</td>
+              <td>🌡️ 80℃低温提取，活性保留</td>
+            </tr>
+            <tr>
+              <td>糖分设计</td>
+              <td>高糖 / 蜂蜜 / 冰糖</td>
+              <td>✅ 低GI糖醇，无蔗糖添加</td>
+            </tr>
+            <tr>
+              <td>配方理念</td>
+              <td>单一成分或简单复方</td>
+              <td>🔬 古方灵感 × 现代科学复配</td>
+            </tr>
+            <tr>
+              <td>活性保护</td>
+              <td>无特殊保护措施</td>
+              <td>🛡️ 双层锁鲜技术</td>
+            </tr>
+            <tr>
+              <td>便携性</td>
+              <td>需冲泡/煎煮，不便携</td>
+              <td>📦 独立包装，随身携带</td>
+            </tr>
+            <tr>
+              <td>习惯养成</td>
+              <td>无辅助支持</td>
+              <td>📅 21天计划 + 打卡提醒</td>
+            </tr>
+            <tr>
+              <td>质量追溯</td>
+              <td>批次管理不完善</td>
+              <td>📋 全程可追溯 + 第三方检测</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 专利 & 认证 -->
+    <section>
+      <h2 class="section-title">专利与资质认证</h2>
+      <p class="section-sub">以严苛标准守护每一份品质承诺</p>
+      <div class="gold-divider"></div>
+      <div class="cert-grid">
+        <div class="cert-card animate-fade-in">
+          <div class="cert-icon gold-bg">📜</div>
+          <div class="cert-title">SC食品生产许可证</div>
+          <div class="cert-desc">通过国家市场监督管理总局审批，取得食品生产许可（SC编号），生产流程符合食品安全国家标准。</div>
+          <div class="cert-tag">食品安全合规</div>
+        </div>
+        <div class="cert-card animate-fade-in" style="transition-delay:0.1s">
+          <div class="cert-icon pink-bg">🔬</div>
+          <div class="cert-title">第三方检测报告</div>
+          <div class="cert-desc">每批次产品均送检第三方权威检测机构，覆盖微生物、重金属、农残等核心安全指标，报告可查可验。</div>
+          <div class="cert-tag">批次检测</div>
+        </div>
+        <div class="cert-card animate-fade-in" style="transition-delay:0.2s">
+          <div class="cert-icon green-bg">🌱</div>
+          <div class="cert-title">药食同源原料认证</div>
+          <div class="cert-desc">所有草本原料均来自国家卫健委公布的《药食同源目录》，原料供应商资质齐全，溯源体系完善。</div>
+          <div class="cert-tag">原料合规</div>
+        </div>
+        <div class="cert-card animate-fade-in" style="transition-delay:0.15s">
+          <div class="cert-icon gold-bg">💡</div>
+          <div class="cert-title">配方发明专利（申请中）</div>
+          <div class="cert-desc">独创低GI糖醇软糖基质配方，兼顾口感与营养保留，相关专利申请已提交国家知识产权局。</div>
+          <div class="cert-tag">知识产权</div>
+        </div>
+        <div class="cert-card animate-fade-in" style="transition-delay:0.25s">
+          <div class="cert-icon pink-bg">🧪</div>
+          <div class="cert-title">ISO质量管理体系</div>
+          <div class="cert-desc">生产环境通过ISO 22000食品安全管理体系认证，从原料入库到成品出库全流程标准化管控。</div>
+          <div class="cert-tag">国际标准</div>
+        </div>
+        <div class="cert-card animate-fade-in" style="transition-delay:0.3s">
+          <div class="cert-icon green-bg">📦</div>
+          <div class="cert-title">绿色包装认证</div>
+          <div class="cert-desc">独立包装采用食品级铝箔材质，可回收设计。包装材料通过FDA食品接触材料安全认证。</div>
+          <div class="cert-tag">环保安全</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 研发实验室 -->
+    <section>
+      <h2 class="section-title">研发实验室</h2>
+      <p class="section-sub">专业研发团队与先进实验设备，为产品品质保驾护航</p>
+      <div class="gold-divider"></div>
+      <div class="lab-gallery">
+        <div class="lab-item animate-fade-in">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#E8F4EC,#C8E0CC);">🧪</div>
+          <div class="lab-item-label">提取实验室</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.05s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#FDE8EE,#F5C5D5);">🔬</div>
+          <div class="lab-item-label">质量检测中心</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.1s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#FFF0D5,#FFD880);">📦</div>
+          <div class="lab-item-label">成品包装线</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.15s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#ECE8F5,#C8C0E0);">💻</div>
+          <div class="lab-item-label">配方研发室</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.2s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#D5EEF5,#B0D8E8);">🌡️</div>
+          <div class="lab-item-label">稳定性测试室</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.25s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#EEF0DA,#D8DDB5);">🌿</div>
+          <div class="lab-item-label">原料仓储区</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.3s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#F5E8E0,#E0C8B5);">📊</div>
+          <div class="lab-item-label">数据分析中心</div>
+        </div>
+        <div class="lab-item animate-fade-in" style="transition-delay:0.35s">
+          <div class="lab-item-bg" style="background:linear-gradient(135deg,#E8E8F5,#C8C8E0);">👨‍🔬</div>
+          <div class="lab-item-label">感官评测室</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 研发团队 -->
+    <section>
+      <h2 class="section-title">核心研发团队</h2>
+      <p class="section-sub">跨学科专业团队，将食养智慧与现代科学连接</p>
+      <div class="gold-divider"></div>
+      <div class="rd-grid">
+        <div class="rd-card animate-fade-in">
+          <div class="rd-avatar">👩‍🔬</div>
+          <div class="rd-info">
+            <div class="rd-name">陈博士</div>
+            <div class="rd-role">首席研发官 · 食品科学博士</div>
+            <div class="rd-bio">15年功能食品研发经验，专注药食同源原料的活性成分研究与提取工艺优化，主导完成多项食品配方发明专利。</div>
+          </div>
+        </div>
+        <div class="rd-card animate-fade-in" style="transition-delay:0.1s">
+          <div class="rd-avatar">👨‍🔬</div>
+          <div class="rd-info">
+            <div class="rd-name">李研究员</div>
+            <div class="rd-role">营养学顾问 · 注册营养师</div>
+            <div class="rd-bio">临床营养学背景，10年营养配方设计经验，负责产品营养配比的科学性与适用人群的安全性评估。</div>
+          </div>
+        </div>
+        <div class="rd-card animate-fade-in" style="transition-delay:0.15s">
+          <div class="rd-avatar">👩‍🍳</div>
+          <div class="rd-info">
+            <div class="rd-name">王总工程师</div>
+            <div class="rd-role">生产技术总监 · 20年食品工程</div>
+            <div class="rd-bio">深耕食品工程与生产线管理，精通低温提取、软糖成型、活性保护等核心工艺，确保生产标准化与品质稳定。</div>
+          </div>
+        </div>
+        <div class="rd-card animate-fade-in" style="transition-delay:0.2s">
+          <div class="rd-avatar">🧑‍⚕️</div>
+          <div class="rd-info">
+            <div class="rd-name">张总监</div>
+            <div class="rd-role">质量控制总监 · ISO审核员</div>
+            <div class="rd-bio">负责全链条质量管控体系，从原料检验、生产监控到成品出库，确保每批次产品符合食品安全国家标准。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 质量标准 -->
+    <section>
+      <h2 class="section-title">品质管控标准</h2>
+      <p class="section-sub">从源头到终端，全流程品质可追溯</p>
+      <div class="gold-divider"></div>
+      <div class="quality-list">
+        <div class="quality-item animate-fade-in">
+          <div class="quality-icon">🌱</div>
+          <div class="quality-text">
+            <h4>原料入厂检验</h4>
+            <p>每批原料入厂前进行供应商资质审核、感官检验、理化指标检测和微生物检测，不合格原料一律拒收。</p>
+          </div>
+        </div>
+        <div class="quality-item animate-fade-in" style="transition-delay:0.05s">
+          <div class="quality-icon">⚗️</div>
+          <div class="quality-text">
+            <h4>生产过程监控</h4>
+            <p>关键控制点（CCP）实时监控，温度、时间、配比等核心参数全程记录，偏差自动预警。</p>
+          </div>
+        </div>
+        <div class="quality-item animate-fade-in" style="transition-delay:0.1s">
+          <div class="quality-icon">🧪</div>
+          <div class="quality-text">
+            <h4>成品出厂检测</h4>
+            <p>每批次成品送检第三方权威机构，检测项目覆盖：微生物指标、重金属含量、农残检测、营养成分标示值。</p>
+          </div>
+        </div>
+        <div class="quality-item animate-fade-in" style="transition-delay:0.15s">
+          <div class="quality-icon">📋</div>
+          <div class="quality-text">
+            <h4>全程可追溯</h4>
+            <p>建立完整的批次追溯体系，每包产品可追溯至原料批次、生产日期、检测报告，消费者扫码即可查询。</p>
+          </div>
+        </div>
+        <div class="quality-item animate-fade-in" style="transition-delay:0.2s">
+          <div class="quality-icon">🔒</div>
+          <div class="quality-text">
+            <h4>稳定性考察</h4>
+            <p>加速试验与长期留样考察双轨并行，持续监测产品在保质期内的品质变化，确保消费者收到的每一颗都是最佳状态。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <h2>🌸 了解更多产品详情</h2>
+      <p>源自东方食养智慧，融合现代营养科学的日常养肤软糖</p>
+      <a href="product.html" class="cta-btn">🍬 查看产品详情 →</a>
+    </div>
+
+    <!-- Compliance -->
+    <div style="margin-top:2rem;padding:1rem 1.5rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.12);border-radius:var(--radius-md);font-size:0.8rem;color:var(--color-warm-brown-light);line-height:1.7;text-align:center;">
+      <strong style="color:var(--color-warm-brown);">⚠️ 合规提示：</strong>本页面展示的研发工艺、专利及检测信息仅供参考，实际以产品包装标注为准。本产品为普通食品，不能代替药物。如有健康问题请咨询专业医师。
+      <a href="compliance.html" style="color:var(--color-gold-dark);font-weight:600;margin-left:0.5rem;">查看完整合规说明 →</a>
+    </div>
+  </div>
+
+  <script>
+    // Scroll animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.style.transitionDelay || '0s';
+          setTimeout(() => entry.target.classList.add('visible'), parseFloat(delay) * 1000);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.animate-fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

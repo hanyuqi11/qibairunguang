@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会员中心 · 七白润光</title>
+  <style>
+    :root {
+      --color-primary: #E8B4C5; --color-primary-light: #F5D5E0; --color-primary-dark: #C985A0;
+      --color-gold: #C9A84C; --color-gold-dark: #A07830;
+      --color-ivory: #FDFAF5; --color-cream: #FEF6EC;
+      --color-warm-brown: #6B4226; --color-warm-brown-light: #A0704A;
+      --color-dark-bg: #1A1208;
+      --font-serif: 'Noto Serif SC','SimSun',Georgia,serif;
+      --font-sans: 'PingFang SC','Microsoft YaHei',sans-serif;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-full:9999px;
+      --shadow-sm: 0 2px 8px rgba(200,130,100,0.1);
+      --shadow-md: 0 8px 32px rgba(200,130,100,0.15);
+      --transition: 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;}
+
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,245,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.12);box-shadow:0 2px 20px rgba(107,66,38,0.06);}
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-links{display:flex;align-items:center;gap:1.25rem;}
+    .nav-link{font-size:0.85rem;color:var(--color-warm-brown-light);font-weight:500;padding:0.4rem 0.75rem;border-radius:var(--radius-full);transition:all var(--transition);}
+    .nav-link:hover{background:rgba(232,180,197,0.15);color:var(--color-warm-brown);}
+
+    .page-wrap{max-width:1000px;margin:0 auto;padding:88px 2rem 4rem;}
+
+    /* Profile Hero */
+    .profile-hero{
+      background:linear-gradient(135deg,var(--color-warm-brown) 0%,#9B5F3A 50%,var(--color-gold-dark) 100%);
+      border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem;
+      position:relative;overflow:hidden;
+      box-shadow:var(--shadow-md);
+    }
+    .profile-hero::before{
+      content:'';position:absolute;top:-50%;right:-10%;width:300px;height:300px;
+      background:radial-gradient(circle,rgba(255,255,255,0.06) 0%,transparent 70%);border-radius:50%;
+    }
+    .profile-top{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+    .profile-avatar{
+      width:72px;height:72px;border-radius:50%;
+      background:rgba(255,255,255,0.15);
+      border:3px solid rgba(255,255,255,0.3);
+      display:flex;align-items:center;justify-content:center;font-size:2.5rem;
+      position:relative;cursor:pointer;flex-shrink:0;
+    }
+    .profile-avatar .edit-badge{position:absolute;bottom:2px;right:2px;width:20px;height:20px;background:var(--color-gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;border:2px solid white;}
+    .profile-info{flex:1;}
+    .profile-name{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;color:white;margin-bottom:0.3rem;}
+    .profile-phone{font-size:0.82rem;color:rgba(255,255,255,0.7);margin-bottom:0.5rem;}
+    .profile-badges{display:flex;flex-wrap:wrap;gap:0.5rem;}
+    .profile-badge{padding:0.2rem 0.75rem;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-full);font-size:0.74rem;color:rgba(255,255,255,0.85);}
+    .profile-badge.gold{background:rgba(201,168,76,0.25);border-color:rgba(201,168,76,0.4);color:var(--color-gold-light);}
+    .profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.1);}
+    .profile-stat{text-align:center;padding:0.5rem;}
+    .ps-num{font-family:var(--font-serif);font-size:1.4rem;font-weight:700;color:white;}
+    .ps-label{font-size:0.72rem;color:rgba(255,255,255,0.65);margin-top:0.15rem;}
+
+    /* Nav Tabs */
+    .member-tabs{display:flex;gap:0;background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);margin-bottom:1.5rem;overflow-x:auto;}
+    .member-tab{padding:1rem 1.25rem;border:none;background:transparent;font-size:0.86rem;font-weight:500;color:var(--color-warm-brown-light);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all var(--transition);}
+    .member-tab.active{color:var(--color-warm-brown);border-bottom-color:var(--color-primary-dark);font-weight:700;}
+
+    /* Tab Content */
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+
+    /* Grid Cards */
+    .section-card{background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem;}
+    .section-head{padding:1rem 1.5rem;background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-bottom:1px solid rgba(201,168,76,0.08);font-weight:600;font-size:0.9rem;display:flex;align-items:center;justify-content:space-between;}
+    .section-head .view-all{font-size:0.78rem;color:var(--color-gold-dark);font-weight:500;cursor:pointer;}
+    .section-body{padding:1.5rem;}
+
+    /* Level Progress */
+    .level-card{background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-radius:var(--radius-md);padding:1.25rem;border:1px solid rgba(201,168,76,0.12);}
+    .level-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;}
+    .level-name{font-family:var(--font-serif);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.4rem;}
+    .level-badge{padding:0.2rem 0.75rem;border-radius:var(--radius-full);font-size:0.75rem;font-weight:600;}
+    .lv0{background:rgba(201,168,76,0.12);color:var(--color-gold-dark);}
+    .lv1{background:rgba(150,180,160,0.15);color:#3a7a50;}
+    .lv2{background:rgba(180,130,200,0.15);color:#7B4FA6;}
+    .lv3{background:linear-gradient(135deg,rgba(201,168,76,0.2),rgba(232,180,197,0.2));color:var(--color-warm-brown);}
+    .progress-bar{height:8px;background:rgba(201,168,76,0.12);border-radius:var(--radius-full);overflow:hidden;margin-bottom:0.5rem;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--color-primary-dark),var(--color-gold));border-radius:var(--radius-full);transition:width 1s ease;}
+    .progress-text{display:flex;justify-content:space-between;font-size:0.74rem;color:var(--color-warm-brown-light);}
+    .level-stages{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-top:1rem;}
+    .level-stage{text-align:center;padding:0.5rem;border-radius:var(--radius-sm);border:1px solid rgba(201,168,76,0.1);}
+    .level-stage.current{background:rgba(232,180,197,0.1);border-color:var(--color-primary);}
+    .ls-icon{font-size:1.2rem;margin-bottom:0.2rem;}
+    .ls-name{font-size:0.7rem;font-weight:600;color:var(--color-warm-brown);}
+    .ls-pts{font-size:0.65rem;color:var(--color-warm-brown-light);}
+
+    /* Points History */
+    .points-list{display:flex;flex-direction:column;gap:0.75rem;}
+    .points-item{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid rgba(201,168,76,0.06);}
+    .points-item:last-child{border-bottom:none;}
+    .pi-left{display:flex;align-items:center;gap:0.75rem;}
+    .pi-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .pi-icon.earn{background:rgba(72,187,120,0.1);}
+    .pi-icon.spend{background:rgba(229,62,62,0.07);}
+    .pi-title{font-size:0.86rem;font-weight:500;color:var(--color-warm-brown);}
+    .pi-date{font-size:0.74rem;color:var(--color-warm-brown-light);}
+    .pi-pts{font-weight:700;font-size:0.95rem;}
+    .pi-pts.earn{color:#276749;}
+    .pi-pts.spend{color:#E53E3E;}
+
+    /* Coupon */
+    .coupon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+    .coupon-card{
+      border-radius:var(--radius-md);overflow:hidden;
+      border:1px solid rgba(201,168,76,0.15);position:relative;
+    }
+    .coupon-card.used{opacity:0.5;}
+    .coupon-card.expired{opacity:0.4;}
+    .coupon-top{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));padding:1rem 1.25rem;color:white;}
+    .coupon-discount{font-family:var(--font-serif);font-size:1.6rem;font-weight:700;}
+    .coupon-condition{font-size:0.74rem;opacity:0.85;margin-top:0.15rem;}
+    .coupon-bottom{padding:0.75rem 1.25rem;background:white;}
+    .coupon-name{font-size:0.84rem;font-weight:600;color:var(--color-warm-brown);}
+    .coupon-expire{font-size:0.72rem;color:var(--color-warm-brown-light);margin-top:0.2rem;}
+    .coupon-status{position:absolute;top:8px;right:8px;padding:0.15rem 0.5rem;border-radius:var(--radius-full);font-size:0.65rem;font-weight:700;}
+    .coupon-status.valid{background:rgba(255,255,255,0.2);color:white;}
+    .coupon-status.used{background:rgba(107,66,38,0.15);color:var(--color-warm-brown-light);}
+
+    /* Favorites */
+    .fav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;}
+    .fav-card{border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.12);overflow:hidden;background:white;transition:all var(--transition);}
+    .fav-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .fav-img{height:90px;overflow:hidden;}
+    .fav-img img{width:100%;height:100%;object-fit:cover;}
+    .fav-info{padding:0.75rem;}
+    .fav-name{font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.25rem;}
+    .fav-price{font-size:0.85rem;font-weight:700;color:var(--color-primary-dark);font-family:var(--font-serif);}
+    .btn-fav-buy{width:100%;margin-top:0.5rem;padding:0.45rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;border:none;border-radius:var(--radius-full);font-size:0.76rem;font-weight:600;}
+
+    /* History */
+    .history-list{display:flex;flex-direction:column;gap:0.75rem;}
+    .history-item{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid rgba(201,168,76,0.06);}
+    .history-item:last-child{border-bottom:none;}
+    .hi-emoji{width:44px;height:44px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;}
+    .hi-emoji img{width:100%;height:100%;object-fit:cover;}
+    .hi-name{font-size:0.86rem;font-weight:500;color:var(--color-warm-brown);}
+    .hi-time{font-size:0.74rem;color:var(--color-warm-brown-light);}
+    .hi-go{padding:0.3rem 0.75rem;border:1.5px solid rgba(201,168,76,0.25);border-radius:var(--radius-full);font-size:0.76rem;color:var(--color-warm-brown-light);background:transparent;transition:all var(--transition);}
+    .hi-go:hover{border-color:var(--color-primary);color:var(--color-primary-dark);}
+
+    /* Profile Edit */
+    .profile-edit-form{display:flex;flex-direction:column;gap:1rem;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+    .form-group{display:flex;flex-direction:column;gap:0.4rem;}
+    .form-label{font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);}
+    .form-input{padding:0.7rem 0.9rem;border:1.5px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);font-size:0.88rem;outline:none;transition:border-color var(--transition);background:white;}
+    .form-input:focus{border-color:var(--color-primary);}
+    .btn-save{padding:0.75rem 2rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;border:none;border-radius:var(--radius-full);font-size:0.9rem;font-weight:600;box-shadow:0 4px 16px rgba(201,133,160,0.3);transition:all var(--transition);}
+    .btn-save:hover{transform:translateY(-2px);}
+
+    /* Skin Record */
+    .skin-timeline{display:flex;flex-direction:column;gap:1rem;}
+    .skin-entry{padding:1rem 1.25rem;background:var(--color-ivory);border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);}
+    .skin-entry-date{font-size:0.76rem;color:var(--color-warm-brown-light);margin-bottom:0.5rem;}
+    .skin-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+    .skin-tag{padding:0.2rem 0.6rem;background:rgba(232,180,197,0.12);border:1px solid rgba(232,180,197,0.25);border-radius:var(--radius-full);font-size:0.76rem;color:var(--color-primary-dark);}
+    .skin-note{font-size:0.82rem;color:var(--color-warm-brown-light);margin-top:0.4rem;}
+
+    /* Toast */
+    .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;padding:0.85rem 1.5rem;background:#1A1208;color:white;border-radius:var(--radius-md);font-size:0.88rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,0.2);transform:translateY(100px);opacity:0;transition:all 0.3s ease;pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+
+    @media(max-width:768px){
+      .page-wrap{padding:80px 1rem 4rem;}
+      .profile-stats{grid-template-columns:repeat(2,1fr);}
+      .level-stages{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🌸</div>
+      <span class="brand-name">七白润光</span>
+    </a>
+    <div class="nav-links">
+      <a href="product.html" class="nav-link">商品</a>
+      <a href="tech.html" class="nav-link">研发工艺</a>
+      <a href="order.html?view=orders" class="nav-link">订单</a>
+      <a href="checkin.html" class="nav-link">打卡</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <div class="profile-top">
+        <div class="profile-avatar" id="profileAvatar" onclick="switchTab('profile')">
+          🌸<div class="edit-badge">✏️</div>
+        </div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">食养达人</div>
+          <div class="profile-phone" id="profilePhone">138****0000</div>
+          <div class="profile-badges">
+            <span class="profile-badge gold" id="profileLevel">🌟 白芷会员</span>
+            <span class="profile-badge" id="profileJoinDate">2026年加入</span>
+            <span class="profile-badge" id="profileSkinBadge">✨ 肤质：未设置</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="ps-num" id="statsPoints">0</div>
+          <div class="ps-label">积分</div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-num" id="statsOrders">0</div>
+          <div class="ps-label">订单</div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-num" id="statsFavs">0</div>
+          <div class="ps-label">收藏</div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-num" id="statsCheckins">0</div>
+          <div class="ps-label">打卡天数</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="member-tabs">
+      <button class="member-tab active" data-tab="overview">概览</button>
+      <button class="member-tab" data-tab="points">积分</button>
+      <button class="member-tab" data-tab="coupons">优惠券</button>
+      <button class="member-tab" data-tab="favorites">收藏</button>
+      <button class="member-tab" data-tab="history">浏览记录</button>
+      <button class="member-tab" data-tab="skin">肤质记录</button>
+      <button class="member-tab" data-tab="profile">个人资料</button>
+    </div>
+
+    <!-- ===== OVERVIEW ===== -->
+    <div class="tab-panel active" id="tab-overview">
+      <!-- Level -->
+      <div class="section-card">
+        <div class="section-head">🏆 会员等级</div>
+        <div class="section-body">
+          <div class="level-card">
+            <div class="level-row">
+              <div class="level-name"><span id="lvIcon">🌿</span><span id="lvName">白芷会员</span></div>
+              <span class="level-badge lv0" id="lvBadge">Lv.1</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin:0.6rem 0 0.3rem;">
+              <span style="font-size:0.78rem;color:var(--color-warm-brown-light);">成长值</span>
+              <span style="font-family:var(--font-serif);font-size:1.3rem;font-weight:700;color:var(--color-gold-dark);" id="growthValue">0</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="lvProgress" style="width:0%"></div></div>
+            <div class="progress-text">
+              <span id="lvCurrentPts">0 积分</span>
+              <span id="lvNextTarget">升级还需 X 积分</span>
+            </div>
+          </div>
+          <div class="level-stages">
+            <div class="level-stage current">
+              <div class="ls-icon">🌿</div>
+              <div class="ls-name">白芷会员</div>
+              <div class="ls-pts">0积分起</div>
+            </div>
+            <div class="level-stage">
+              <div class="ls-icon">🍄</div>
+              <div class="ls-name">茯苓会员</div>
+              <div class="ls-pts">500积分</div>
+            </div>
+            <div class="level-stage">
+              <div class="ls-icon">🌸</div>
+              <div class="ls-name">白芍会员</div>
+              <div class="ls-pts">2000积分</div>
+            </div>
+            <div class="level-stage">
+              <div class="ls-icon">👑</div>
+              <div class="ls-name">七白贵宾</div>
+              <div class="ls-pts">5000积分</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-card">
+        <div class="section-head">⚡ 快捷入口</div>
+        <div class="section-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+          <a href="order.html?view=orders" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">📦</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">我的订单</div>
+          </a>
+          <a href="checkin.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">📅</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">21天打卡</div>
+          </a>
+          <a href="report.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">📊</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">食养报告</div>
+          </a>
+          <a href="order.html?view=orders" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(255,80,50,0.12);background:rgba(255,80,50,0.03);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">🔄</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">售后申请</div>
+          </a>
+          <a href="product.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">💝</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">我的收藏</div>
+          </a>
+          <a href="cart.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">🛒</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">购物车</div>
+          </a>
+          <a href="article.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">📚</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">科普中心</div>
+          </a>
+          <a href="tech.html" style="text-align:center;padding:1rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:var(--color-ivory);transition:all var(--transition);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:1.5rem;margin-bottom:0.4rem;">🔬</div>
+            <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);">研发工艺</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Benefits -->
+      <div class="section-card">
+        <div class="section-head">🎁 会员权益</div>
+        <div class="section-body" style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;">
+          <div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);">
+            <span style="font-size:1.3rem;">🏷️</span>
+            <div><div style="font-size:0.82rem;font-weight:600;">专属折扣</div><div style="font-size:0.72rem;color:var(--color-warm-brown-light);">会员专享9.5折优惠</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);">
+            <span style="font-size:1.3rem;">🎁</span>
+            <div><div style="font-size:0.82rem;font-weight:600;">生日礼券</div><div style="font-size:0.72rem;color:var(--color-warm-brown-light);">生日月赠送专属优惠券</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);">
+            <span style="font-size:1.3rem;">📅</span>
+            <div><div style="font-size:0.82rem;font-weight:600;">打卡奖励</div><div style="font-size:0.72rem;color:var(--color-warm-brown-light);">完成21天挑战赢积分</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);">
+            <span style="font-size:1.3rem;">📞</span>
+            <div><div style="font-size:0.82rem;font-weight:600;">专属客服</div><div style="font-size:0.72rem;color:var(--color-warm-brown-light);">七白贵宾享1对1营养师</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linkage / Mini Program & Official Account -->
+      <div class="section-card">
+        <div class="section-head">📱 关注我们</div>
+        <div class="section-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;">
+          <div style="text-align:center;padding:1rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <div style="width:64px;height:64px;margin:0 auto 0.5rem;background:white;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.15);box-shadow:var(--shadow-sm);">
+              <div style="text-align:center;font-size:0.55rem;color:var(--color-warm-brown-light);line-height:1.3;">小程序<br>码</div>
+            </div>
+            <div style="font-size:0.78rem;font-weight:600;">微信小程序</div>
+            <div style="font-size:0.68rem;color:var(--color-warm-brown-light);">扫码体验</div>
+          </div>
+          <div style="text-align:center;padding:1rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <div style="width:64px;height:64px;margin:0 auto 0.5rem;background:white;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,0.15);box-shadow:var(--shadow-sm);">
+              <div style="text-align:center;font-size:0.55rem;color:var(--color-warm-brown-light);line-height:1.3;">公众号<br>码</div>
+            </div>
+            <div style="font-size:0.78rem;font-weight:600;">微信公众号</div>
+            <div style="font-size:0.68rem;color:var(--color-warm-brown-light);">关注有礼</div>
+          </div>
+          <div style="text-align:center;padding:1rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);" id="notifCard" onclick="toggleNotif()">
+            <div style="width:64px;height:64px;margin:0 auto 0.5rem;background:linear-gradient(135deg,var(--color-primary-light),rgba(201,168,76,0.15));border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:2rem;border:1px solid rgba(201,168,76,0.15);box-shadow:var(--shadow-sm);">
+              🔔
+            </div>
+            <div style="font-size:0.78rem;font-weight:600;">消息通知</div>
+            <div style="font-size:0.68rem;color:var(--color-warm-brown-light);" id="notifStatus">点击开启</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== POINTS ===== -->
+    <div class="tab-panel" id="tab-points">
+      <div class="section-card">
+        <div class="section-head">💎 积分明细</div>
+        <div class="section-body">
+          <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:1.5rem;padding:1rem;background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-radius:var(--radius-md);">
+            <span style="font-family:var(--font-serif);font-size:2.5rem;font-weight:700;color:var(--color-primary-dark);" id="totalPoints">0</span>
+            <span style="font-size:0.9rem;color:var(--color-warm-brown-light);">积分可用</span>
+            <div style="margin-left:auto;text-align:right;">
+              <div style="font-size:0.78rem;color:var(--color-warm-brown-light);">1积分 ≈ ¥0.01</div>
+              <div style="font-size:0.75rem;color:var(--color-warm-brown-light);" id="pointsEquiv">≈ ¥0 等值优惠</div>
+            </div>
+          </div>
+          <div class="points-list" id="pointsList">
+            <!-- JS render -->
+          </div>
+        </div>
+      </div>
+      <!-- Points Ways -->
+      <div class="section-card">
+        <div class="section-head">📈 获取积分方式</div>
+        <div class="section-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem;">
+          <div style="padding:0.9rem;border-radius:var(--radius-md);background:var(--color-ivory);border:1px solid rgba(201,168,76,0.1);text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:0.4rem;">🛍️</div>
+            <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem;">购物获积分</div>
+            <div style="font-size:0.75rem;color:var(--color-warm-brown-light);">每消费¥1 = 1积分</div>
+          </div>
+          <div style="padding:0.9rem;border-radius:var(--radius-md);background:var(--color-ivory);border:1px solid rgba(201,168,76,0.1);text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:0.4rem;">📅</div>
+            <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem;">每日打卡</div>
+            <div style="font-size:0.75rem;color:var(--color-warm-brown-light);">每次打卡 +5积分</div>
+          </div>
+          <div style="padding:0.9rem;border-radius:var(--radius-md);background:var(--color-ivory);border:1px solid rgba(201,168,76,0.1);text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:0.4rem;">✍️</div>
+            <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem;">评价晒单</div>
+            <div style="font-size:0.75rem;color:var(--color-warm-brown-light);">图文评价 +20积分</div>
+          </div>
+          <div style="padding:0.9rem;border-radius:var(--radius-md);background:var(--color-ivory);border:1px solid rgba(201,168,76,0.1);text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:0.4rem;">🎂</div>
+            <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem;">生日礼遇</div>
+            <div style="font-size:0.75rem;color:var(--color-warm-brown-light);">生日月 +100积分</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COUPONS ===== -->
+    <div class="tab-panel" id="tab-coupons">
+      <div class="section-card">
+        <div class="section-head">🎟️ 我的优惠券</div>
+        <div class="section-body">
+          <div class="coupon-grid" id="couponList">
+            <!-- JS render -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FAVORITES ===== -->
+    <div class="tab-panel" id="tab-favorites">
+      <div class="section-card">
+        <div class="section-head">❤️ 我的收藏</div>
+        <div class="section-body">
+          <div class="fav-grid" id="favList">
+            <!-- JS render -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== HISTORY ===== -->
+    <div class="tab-panel" id="tab-history">
+      <div class="section-card">
+        <div class="section-head">👁️ 浏览记录 <span class="view-all" onclick="clearHistory()">清空记录</span></div>
+        <div class="section-body">
+          <div class="history-list" id="historyList">
+            <!-- JS render -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SKIN ===== -->
+    <div class="tab-panel" id="tab-skin">
+      <div class="section-card">
+        <div class="section-head">🌸 肤质记录</div>
+        <div class="section-body">
+          <div style="margin-bottom:1.5rem;padding:1rem;background:var(--color-ivory);border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);">
+            <div style="font-size:0.86rem;font-weight:600;margin-bottom:0.75rem;">记录今日肤质状态：</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;" id="skinQuickSelect">
+              <button class="skin-quick-btn" data-val="水润✨">水润✨</button>
+              <button class="skin-quick-btn" data-val="干燥🌵">干燥🌵</button>
+              <button class="skin-quick-btn" data-val="出油💧">出油💧</button>
+              <button class="skin-quick-btn" data-val="暗沉🌑">暗沉🌑</button>
+              <button class="skin-quick-btn" data-val="泛红🌹">泛红🌹</button>
+              <button class="skin-quick-btn" data-val="稳定☀️">稳定☀️</button>
+            </div>
+            <style>.skin-quick-btn{padding:0.35rem 0.85rem;border:1.5px solid rgba(201,168,76,0.2);border-radius:var(--radius-full);background:white;font-size:0.78rem;color:var(--color-warm-brown-light);cursor:pointer;transition:all var(--transition);}.skin-quick-btn.sel{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.12);color:var(--color-primary-dark);font-weight:600;}.skin-quick-btn:hover{border-color:var(--color-primary);}</style>
+            <button style="padding:0.6rem 1.4rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;border:none;border-radius:var(--radius-full);font-size:0.84rem;font-weight:600;" onclick="addSkinRecord()">+ 记录今日状态</button>
+          </div>
+          <div class="skin-timeline" id="skinTimeline">
+            <!-- JS render -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE EDIT ===== -->
+    <div class="tab-panel" id="tab-profile">
+      <div class="section-card">
+        <div class="section-head">✏️ 编辑个人资料</div>
+        <div class="section-body">
+          <div class="profile-edit-form">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
+              <div style="font-size:3rem;" id="editAvatar">🌸</div>
+              <div>
+                <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.6rem;">选择头像</div>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                  <span class="avatar-opt-edit" data-a="🌸" onclick="selectEditAvatar(this)">🌸</span>
+                  <span class="avatar-opt-edit" data-a="🌙" onclick="selectEditAvatar(this)">🌙</span>
+                  <span class="avatar-opt-edit" data-a="✨" onclick="selectEditAvatar(this)">✨</span>
+                  <span class="avatar-opt-edit" data-a="🌿" onclick="selectEditAvatar(this)">🌿</span>
+                  <span class="avatar-opt-edit" data-a="💎" onclick="selectEditAvatar(this)">💎</span>
+                  <span class="avatar-opt-edit" data-a="🌺" onclick="selectEditAvatar(this)">🌺</span>
+                  <span class="avatar-opt-edit" data-a="🦋" onclick="selectEditAvatar(this)">🦋</span>
+                  <span class="avatar-opt-edit" data-a="🍄" onclick="selectEditAvatar(this)">🍄</span>
+                </div>
+                <style>.avatar-opt-edit{font-size:1.3rem;cursor:pointer;padding:4px;border-radius:50%;border:2px solid transparent;transition:all var(--transition);}.avatar-opt-edit:hover,.avatar-opt-edit.sel{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.15);}</style>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">昵称</label>
+                <input type="text" class="form-input" id="editNickname" placeholder="2-10字昵称" maxlength="10">
+              </div>
+              <div class="form-group">
+                <label class="form-label">手机号</label>
+                <input type="tel" class="form-input" id="editPhone" placeholder="绑定手机号" maxlength="11" readonly style="background:var(--color-ivory);">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">生日（选填）</label>
+              <input type="date" class="form-input" id="editBirthday">
+            </div>
+            <div class="form-group">
+              <label class="form-label">个性签名（选填）</label>
+              <input type="text" class="form-input" id="editBio" placeholder="说点什么..." maxlength="30">
+            </div>
+            <button class="btn-save" onclick="saveProfile()">保存修改</button>
+          </div>
+        </div>
+      </div>
+      <!-- Danger Zone -->
+      <div class="section-card" style="border-color:rgba(229,62,62,0.15);">
+        <div class="section-head" style="color:#C53030;">⚠️ 账号操作</div>
+        <div class="section-body" style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <button onclick="logout()" style="padding:0.6rem 1.4rem;border:1.5px solid rgba(229,62,62,0.3);border-radius:var(--radius-full);background:transparent;color:#C53030;font-size:0.85rem;font-weight:500;">退出登录</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-wrap -->
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let user = JSON.parse(localStorage.getItem('qibai_user') || 'null');
+    let skinSelections = [];
+
+    // ===== Login Check =====
+    if (!user) {
+      window.location.href = 'login.html?redirect=member.html';
+    }
+
+    // ===== Init Profile =====
+    function initProfile() {
+      if (!user) return;
+      document.getElementById('profileAvatar').firstChild.nodeValue = user.avatar || '🌸';
+      document.getElementById('profileName').textContent = user.nickname || '食养达人';
+      document.getElementById('profilePhone').textContent = (user.phone || '').replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+      document.getElementById('statsPoints').textContent = user.points || 0;
+      document.getElementById('totalPoints').textContent = user.points || 0;
+      document.getElementById('pointsEquiv').textContent = '≈ ¥' + ((user.points || 0) * 0.01).toFixed(2) + ' 等值优惠';
+
+      const skinType = (user.skinType || []).join('·') || '未设置';
+      document.getElementById('profileSkinBadge').textContent = '✨ 肤质：' + skinType;
+
+      const orders = JSON.parse(localStorage.getItem('qibai_orders') || '[]');
+      document.getElementById('statsOrders').textContent = orders.length;
+
+      const favs = JSON.parse(localStorage.getItem('qibai_favorites') || '[]');
+      document.getElementById('statsFavs').textContent = favs.length;
+
+      const checkins = JSON.parse(localStorage.getItem('qibai_checkins') || '{}');
+      const checkinCount = Object.keys(checkins).filter(k => checkins[k]).length;
+      document.getElementById('statsCheckins').textContent = checkinCount;
+
+      document.getElementById('profileJoinDate').textContent = user.joinDate || '2026年加入';
+
+      // Level
+      const pts = user.points || 0;
+      const levels = [
+        { name: '白芷会员', icon: '🌿', badge: 'Lv.1', cls: 'lv0', max: 500 },
+        { name: '茯苓会员', icon: '🍄', badge: 'Lv.2', cls: 'lv1', max: 2000 },
+        { name: '白芍会员', icon: '🌸', badge: 'Lv.3', cls: 'lv2', max: 5000 },
+        { name: '七白贵宾', icon: '👑', badge: 'Lv.4', cls: 'lv3', max: Infinity }
+      ];
+      let lv = levels[0];
+      let prevMax = 0;
+      for (let i = levels.length-1; i >= 0; i--) {
+        if (pts >= (i === 0 ? 0 : [0,500,2000,5000][i])) { lv = levels[i]; prevMax = [0,500,2000,5000][i]; break; }
+      }
+      document.getElementById('lvIcon').textContent = lv.icon;
+      document.getElementById('lvName').textContent = lv.name;
+      document.getElementById('lvBadge').textContent = lv.badge;
+      document.getElementById('lvBadge').className = 'level-badge ' + lv.cls;
+      document.getElementById('profileLevel').textContent = lv.icon + ' ' + lv.name;
+      const nextMax = lv.max === Infinity ? prevMax + 1000 : lv.max;
+      const pct = lv.max === Infinity ? 100 : Math.min(100, ((pts - prevMax) / (nextMax - prevMax)) * 100);
+      document.getElementById('lvProgress').style.width = pct + '%';
+      document.getElementById('lvCurrentPts').textContent = pts + ' 积分';
+      document.getElementById('lvNextTarget').textContent = lv.max === Infinity ? '已达最高等级 🎉' : `升级还需 ${Math.max(0, nextMax - pts)} 积分`;
+      document.getElementById('growthValue').textContent = pts;
+
+      // Level stages
+      const stageEls = document.querySelectorAll('.level-stage');
+      const levelThresholds = [0, 500, 2000, 5000];
+      stageEls.forEach((el, i) => {
+        el.classList.toggle('current', pts >= levelThresholds[i] && (i === 3 || pts < levelThresholds[i+1]));
+      });
+
+      // Profile Edit form
+      document.getElementById('editAvatar').textContent = user.avatar || '🌸';
+      document.getElementById('editNickname').value = user.nickname || '';
+      document.getElementById('editPhone').value = user.phone || '';
+      document.getElementById('editBirthday').value = user.birthday || '';
+      document.getElementById('editBio').value = user.bio || '';
+    }
+
+    // ===== Points History =====
+    function renderPoints() {
+      const history = user.pointsHistory || [
+        { icon: '🛍️', title: '购买商品', date: '2026-05-15', pts: 128, type: 'earn' },
+        { icon: '📅', title: '连续打卡7天', date: '2026-05-14', pts: 35, type: 'earn' },
+        { icon: '✍️', title: '评价晒单', date: '2026-05-10', pts: 20, type: 'earn' },
+        { icon: '🎁', title: '注册礼包', date: '2026-05-01', pts: 100, type: 'earn' },
+        { icon: '🎟️', title: '积分兑换优惠券', date: '2026-05-05', pts: -80, type: 'spend' }
+      ];
+      document.getElementById('pointsList').innerHTML = history.map(h => `
+        <div class="points-item">
+          <div class="pi-left">
+            <div class="pi-icon ${h.type}">${h.icon}</div>
+            <div>
+              <div class="pi-title">${h.title}</div>
+              <div class="pi-date">${h.date}</div>
+            </div>
+          </div>
+          <span class="pi-pts ${h.type}">${h.pts > 0 ? '+' : ''}${h.pts}积分</span>
+        </div>
+      `).join('');
+    }
+
+    // ===== Coupons =====
+    function renderCoupons() {
+      const coupons = user.coupons || [
+        { discount: '9折', condition: '无门槛可用', name: '全场9折券', expire: '2026-06-30', code: 'QIBAI10', valid: true },
+        { discount: '¥20', condition: '满¥199减¥20', name: '满减优惠券', expire: '2026-06-15', code: 'WELCOME20', valid: true },
+        { discount: '8折', condition: '21天计划专属', name: '21天食养折扣', expire: '2026-05-31', code: 'SIGN21', valid: false, status: 'used' }
+      ];
+      document.getElementById('couponList').innerHTML = coupons.map(c => `
+        <div class="coupon-card ${c.status || ''}">
+          <div class="coupon-top">
+            <div class="coupon-discount">${c.discount}</div>
+            <div class="coupon-condition">${c.condition}</div>
+            <span class="coupon-status ${c.valid ? 'valid' : 'used'}">${c.valid ? '可用' : (c.status === 'expired' ? '已过期' : '已使用')}</span>
+          </div>
+          <div class="coupon-bottom">
+            <div class="coupon-name">${c.name}</div>
+            <div class="coupon-expire">有效期至 ${c.expire} · 码: ${c.code}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== Favorites =====
+    function renderFavorites() {
+      const favs = JSON.parse(localStorage.getItem('qibai_favorites') || '[]');
+      if (favs.length === 0) {
+        document.getElementById('favList').innerHTML = '<p style="font-size:0.85rem;color:var(--color-warm-brown-light);grid-column:1/-1;">还没有收藏商品，去逛逛吧～</p>';
+        return;
+      }
+      document.getElementById('favList').innerHTML = favs.map(f => `
+        <div class="fav-card">
+          <div class="fav-img"><img src="${f.image || 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png'}" alt="${f.name}"></div>
+          <div class="fav-info">
+            <div class="fav-name">${f.name}</div>
+            <div class="fav-price">¥${f.price}</div>
+            <button class="btn-fav-buy" onclick="window.location.href='product.html'">立即购买</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== History =====
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem('qibai_browse_history') || '[]');
+      if (history.length === 0) {
+        // Add sample
+        const sample = [
+          { emoji: '🍬', image: 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png', name: '七白润光·古法玫瑰软糖', time: '刚刚', url: 'product.html' },
+
+          { emoji: '📚', name: '什么是药食同源？中国传统食养智慧', time: '1小时前', url: 'article.html' },
+          { emoji: '📅', name: '21天食养打卡计划', time: '今天', url: 'checkin.html' }
+        ];
+        document.getElementById('historyList').innerHTML = sample.map(h => `
+          <div class="history-item">
+            <div class="hi-emoji"><img src="${h.image || 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png'}" alt="${h.name}"></div>
+            <div style="flex:1;min-width:0;">
+              <div class="hi-name">${h.name}</div>
+              <div class="hi-time">${h.time}</div>
+            </div>
+            <a href="${h.url}" class="hi-go">查看</a>
+          </div>
+        `).join('');
+        return;
+      }
+      document.getElementById('historyList').innerHTML = history.map(h => `
+        <div class="history-item">
+          <div class="hi-emoji"><img src="${h.image || 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png'}" alt="${h.name}"></div>
+          <div style="flex:1;min-width:0;">
+            <div class="hi-name">${h.name}</div>
+            <div class="hi-time">${h.time}</div>
+          </div>
+          <a href="${h.url || '#'}" class="hi-go">查看</a>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('qibai_browse_history');
+      renderHistory();
+      showToast('浏览记录已清空');
+    }
+
+    // ===== Skin Record =====
+    document.querySelectorAll('.skin-quick-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('sel');
+        const v = this.dataset.val;
+        const i = skinSelections.indexOf(v);
+        if (i >= 0) skinSelections.splice(i, 1); else skinSelections.push(v);
+      });
+    });
+
+    function addSkinRecord() {
+      if (skinSelections.length === 0) { showToast('请至少选择一个肤质状态'); return; }
+      const records = JSON.parse(localStorage.getItem('qibai_skin_records') || '[]');
+      records.unshift({
+        date: new Date().toLocaleDateString('zh-CN'),
+        tags: [...skinSelections],
+        note: ''
+      });
+      localStorage.setItem('qibai_skin_records', JSON.stringify(records));
+      skinSelections = [];
+      document.querySelectorAll('.skin-quick-btn').forEach(b => b.classList.remove('sel'));
+      renderSkinRecords();
+      showToast('✅ 肤质状态已记录！');
+    }
+
+    function renderSkinRecords() {
+      const records = JSON.parse(localStorage.getItem('qibai_skin_records') || '[]');
+      const container = document.getElementById('skinTimeline');
+      if (records.length === 0) {
+        // Sample
+        container.innerHTML = `
+          <div class="skin-entry"><div class="skin-entry-date">2026年5月15日</div><div class="skin-tags"><span class="skin-tag">稳定☀️</span><span class="skin-tag">水润✨</span></div></div>
+          <div class="skin-entry"><div class="skin-entry-date">2026年5月14日</div><div class="skin-tags"><span class="skin-tag">轻微出油💧</span><span class="skin-tag">稳定☀️</span></div></div>
+        `;
+        return;
+      }
+      container.innerHTML = records.map(r => `
+        <div class="skin-entry">
+          <div class="skin-entry-date">${r.date}</div>
+          <div class="skin-tags">${r.tags.map(t => `<span class="skin-tag">${t}</span>`).join('')}</div>
+          ${r.note ? `<div class="skin-note">${r.note}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // ===== Profile Save =====
+    let editAvatarVal = user ? (user.avatar || '🌸') : '🌸';
+    function selectEditAvatar(el) {
+      document.querySelectorAll('.avatar-opt-edit').forEach(a => a.classList.remove('sel'));
+      el.classList.add('sel');
+      editAvatarVal = el.dataset.a;
+      document.getElementById('editAvatar').textContent = editAvatarVal;
+    }
+
+    function saveProfile() {
+      const nick = document.getElementById('editNickname').value.trim();
+      if (!nick || nick.length < 2) { showToast('昵称不能少于2字'); return; }
+      user.avatar = editAvatarVal;
+      user.nickname = nick;
+      user.birthday = document.getElementById('editBirthday').value;
+      user.bio = document.getElementById('editBio').value;
+      localStorage.setItem('qibai_user', JSON.stringify(user));
+      initProfile();
+      showToast('✅ 资料已保存！');
+    }
+
+    // ===== Logout =====
+    function logout() {
+      if (!confirm('确认退出登录？')) return;
+      localStorage.removeItem('qibai_user');
+      window.location.href = 'login.html';
+    }
+
+    // ===== Tabs =====
+    function switchTab(tabId) {
+      document.querySelectorAll('.member-tab').forEach((t, i) => {
+        const id = t.dataset.tab;
+        t.classList.toggle('active', id === tabId);
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+
+      if (tabId === 'points') renderPoints();
+      if (tabId === 'coupons') renderCoupons();
+      if (tabId === 'favorites') renderFavorites();
+      if (tabId === 'history') renderHistory();
+      if (tabId === 'skin') renderSkinRecords();
+    }
+
+    document.querySelectorAll('.member-tab').forEach(tab => {
+      tab.addEventListener('click', function() { switchTab(this.dataset.tab); });
+    });
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ===== Notification Toggle =====
+    function toggleNotif() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            document.getElementById('notifStatus').textContent = '已开启 ✅';
+            document.getElementById('notifStatus').style.color = '#276749';
+            showToast('🔔 通知已开启，打卡提醒将准时送达');
+          } else {
+            document.getElementById('notifStatus').textContent = '已关闭';
+            showToast('通知权限未开启');
+          }
+        });
+      } else {
+        showToast('当前浏览器不支持通知功能');
+      }
+    }
+
+    // Init notif status
+    if ('Notification' in window && Notification.permission === 'granted') {
+      document.getElementById('notifStatus').textContent = '已开启 ✅';
+      document.getElementById('notifStatus').style.color = '#276749';
+    }
+
+    // ===== Init =====
+    initProfile();
+  </script>
+</body>
+</html>

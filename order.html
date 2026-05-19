@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>订单中心 · 七白润光</title>
+  <style>
+    :root {
+      --color-primary: #E8B4C5; --color-primary-light: #F5D5E0; --color-primary-dark: #C985A0;
+      --color-gold: #C9A84C; --color-gold-light: #F0D080; --color-gold-dark: #A07830;
+      --color-ivory: #FDFAF5; --color-cream: #FEF6EC;
+      --color-warm-brown: #6B4226; --color-warm-brown-light: #A0704A;
+      --color-dark-bg: #1A1208;
+      --font-serif: 'Noto Serif SC','SimSun',Georgia,serif;
+      --font-sans: 'PingFang SC','Microsoft YaHei',sans-serif;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-full:9999px;
+      --shadow-sm: 0 2px 8px rgba(200,130,100,0.1);
+      --shadow-md: 0 8px 32px rgba(200,130,100,0.15);
+      --shadow-lg: 0 20px 60px rgba(200,130,100,0.2);
+      --transition: 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;}
+    input,select{font-family:inherit;}
+
+    /* Navbar */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,245,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.12);box-shadow:0 2px 20px rgba(107,66,38,0.06);}
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    .page-wrap{max-width:900px;margin:0 auto;padding:88px 2rem 5rem;}
+
+    /* View Manager */
+    .view{display:none;}
+    .view.active{display:block;}
+
+    /* ===== ORDER FORM ===== */
+    /* Steps */
+    .steps{display:flex;align-items:center;margin-bottom:2rem;}
+    .step{display:flex;align-items:center;gap:0.5rem;}
+    .step-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border:2px solid rgba(201,168,76,0.2);color:var(--color-warm-brown-light);}
+    .step-circle.active{background:var(--color-primary-dark);border-color:var(--color-primary-dark);color:white;}
+    .step-circle.done{background:rgba(72,187,120,0.15);border-color:rgba(72,187,120,0.4);color:#276749;}
+    .step-label{font-size:0.82rem;color:var(--color-warm-brown-light);}
+    .step-label.active{color:var(--color-warm-brown);font-weight:600;}
+    .step-line{flex:1;height:1px;background:rgba(201,168,76,0.15);margin:0 0.75rem;}
+
+    /* Form Sections */
+    .form-section{background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);margin-bottom:1rem;overflow:hidden;}
+    .form-section-header{padding:1rem 1.5rem;background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-bottom:1px solid rgba(201,168,76,0.08);font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;}
+    .form-section-body{padding:1.5rem;}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:600px){.form-grid{grid-template-columns:1fr;}}
+    .form-group{display:flex;flex-direction:column;gap:0.4rem;}
+    .form-group.full{grid-column:1/-1;}
+    .form-label{font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);}
+    .form-label .required{color:#E53E3E;}
+    .form-input{padding:0.7rem 0.9rem;border:1.5px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);font-size:0.88rem;outline:none;transition:border-color var(--transition);background:white;}
+    .form-input:focus{border-color:var(--color-primary);}
+    .form-select{padding:0.7rem 0.9rem;border:1.5px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);font-size:0.88rem;outline:none;transition:border-color var(--transition);background:white;appearance:none;}
+
+    /* Address Cards */
+    .address-list{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;}
+    .address-card{padding:1.1rem 1.25rem;border:1.5px solid rgba(201,168,76,0.15);border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition);}
+    .address-card:hover{border-color:var(--color-primary);background:rgba(232,180,197,0.04);}
+    .address-card.selected{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.06);}
+    .address-name{font-weight:700;font-size:0.9rem;color:var(--color-warm-brown);display:flex;align-items:center;gap:0.5rem;}
+    .address-tag{padding:0.1rem 0.5rem;background:rgba(201,133,160,0.12);border-radius:var(--radius-full);font-size:0.7rem;color:var(--color-primary-dark);}
+    .address-phone{font-size:0.8rem;color:var(--color-warm-brown-light);margin:0.2rem 0;}
+    .address-detail{font-size:0.84rem;color:var(--color-warm-brown);}
+    .btn-add-address{display:flex;align-items:center;gap:0.4rem;padding:0.7rem 1.2rem;border:1.5px dashed rgba(201,168,76,0.3);border-radius:var(--radius-md);background:transparent;color:var(--color-warm-brown-light);font-size:0.85rem;width:100%;justify-content:center;transition:all var(--transition);}
+    .btn-add-address:hover{border-color:var(--color-primary);color:var(--color-primary-dark);}
+
+    /* Payment Methods */
+    .payment-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;}
+    @media(max-width:500px){.payment-methods{grid-template-columns:1fr 1fr;}}
+    .payment-method{padding:0.9rem;border:1.5px solid rgba(201,168,76,0.15);border-radius:var(--radius-md);cursor:pointer;text-align:center;transition:all var(--transition);}
+    .payment-method:hover{border-color:var(--color-primary);}
+    .payment-method.selected{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.08);}
+    .pm-icon{font-size:1.5rem;margin-bottom:0.4rem;}
+    .pm-name{font-size:0.8rem;font-weight:600;color:var(--color-warm-brown);}
+
+    /* Order Summary (in form) */
+    .order-items{display:flex;flex-direction:column;gap:0.75rem;}
+    .order-item{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;}
+    .oi-emoji{width:40px;height:40px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;}
+    .oi-emoji img{width:100%;height:100%;object-fit:cover;}
+    .oi-name{flex:1;font-size:0.85rem;font-weight:500;}
+    .oi-spec{font-size:0.74rem;color:var(--color-warm-brown-light);}
+    .oi-price{font-size:0.9rem;font-weight:700;color:var(--color-primary-dark);white-space:nowrap;}
+
+    .price-summary{border-top:1px solid rgba(201,168,76,0.1);margin-top:1rem;padding-top:1rem;display:flex;flex-direction:column;gap:0.5rem;}
+    .ps-row{display:flex;justify-content:space-between;font-size:0.84rem;}
+    .ps-row .ps-label{color:var(--color-warm-brown-light);}
+    .ps-row.total{font-weight:700;font-size:1rem;margin-top:0.25rem;}
+    .ps-row.total .ps-val{color:var(--color-primary-dark);}
+
+    /* Submit Row */
+    .submit-row{display:flex;justify-content:flex-end;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;}
+    .btn-back{padding:0.8rem 1.6rem;background:transparent;border:1.5px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.9rem;font-weight:500;color:var(--color-warm-brown);transition:all var(--transition);}
+    .btn-back:hover{border-color:var(--color-gold);}
+    .btn-submit{padding:0.8rem 2rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary),var(--color-gold));color:white;border:none;border-radius:var(--radius-full);font-size:0.95rem;font-weight:700;box-shadow:0 6px 25px rgba(201,133,160,0.35);transition:all var(--transition);}
+    .btn-submit:hover{transform:translateY(-2px);}
+
+    /* ===== SUCCESS VIEW ===== */
+    .success-view{text-align:center;padding:3rem 2rem;}
+    .success-icon{font-size:4rem;margin-bottom:1rem;}
+    .success-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;}
+    .success-sub{color:var(--color-warm-brown-light);font-size:0.9rem;margin-bottom:2rem;}
+    .order-no{display:inline-block;padding:0.5rem 1.25rem;background:var(--color-cream);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-full);font-size:0.84rem;margin-bottom:2rem;font-family:monospace;}
+
+    /* Logistics */
+    .logistics-card{background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);margin-top:1.5rem;overflow:hidden;text-align:left;}
+    .logistics-header{padding:1rem 1.5rem;background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-bottom:1px solid rgba(201,168,76,0.08);font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:0.5rem;justify-content:space-between;}
+    .track-no{font-size:0.78rem;color:var(--color-warm-brown-light);font-family:monospace;}
+    .logistics-steps{padding:1.5rem;display:flex;flex-direction:column;gap:0;}
+    .log-step{display:flex;gap:1rem;position:relative;padding-bottom:1.25rem;}
+    .log-step:last-child{padding-bottom:0;}
+    .log-step::before{content:'';position:absolute;left:9px;top:18px;bottom:0;width:1px;background:rgba(201,168,76,0.2);}
+    .log-step:last-child::before{display:none;}
+    .log-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:0.55rem;}
+    .log-dot.active{background:var(--color-primary-dark);box-shadow:0 0 0 3px rgba(201,133,160,0.2);}
+    .log-dot.done{background:rgba(72,187,120,0.2);border:1.5px solid rgba(72,187,120,0.4);}
+    .log-dot.pending{background:rgba(201,168,76,0.1);border:1.5px solid rgba(201,168,76,0.2);}
+    .log-content{}
+    .log-title{font-size:0.88rem;font-weight:600;color:var(--color-warm-brown);}
+    .log-time{font-size:0.76rem;color:var(--color-warm-brown-light);}
+    .log-detail{font-size:0.8rem;color:var(--color-warm-brown-light);margin-top:0.2rem;}
+
+    .success-btns{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;}
+    .btn-primary-sm{padding:0.7rem 1.6rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;border:none;border-radius:var(--radius-full);font-size:0.88rem;font-weight:600;box-shadow:0 4px 16px rgba(201,133,160,0.3);transition:all var(--transition);}
+    .btn-primary-sm:hover{transform:translateY(-2px);}
+    .btn-outline-sm{padding:0.7rem 1.6rem;background:transparent;border:1.5px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.88rem;font-weight:500;color:var(--color-warm-brown);transition:all var(--transition);}
+    .btn-outline-sm:hover{border-color:var(--color-gold);}
+
+    /* ===== ORDER LIST VIEW ===== */
+    .orders-tabs{display:flex;gap:0;border-bottom:2px solid rgba(201,168,76,0.15);margin-bottom:1.5rem;overflow-x:auto;}
+    .orders-tab{padding:0.75rem 1.25rem;border:none;background:transparent;font-size:0.88rem;font-weight:500;color:var(--color-warm-brown-light);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all var(--transition);}
+    .orders-tab.active{color:var(--color-warm-brown);border-bottom-color:var(--color-primary-dark);font-weight:600;}
+
+    .orders-list{display:flex;flex-direction:column;gap:1rem;}
+    .order-card{background:white;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);overflow:hidden;}
+    .order-card-header{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,168,76,0.08);background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));}
+    .order-no-small{font-size:0.78rem;color:var(--color-warm-brown-light);font-family:monospace;}
+    .order-status-badge{padding:0.25rem 0.75rem;border-radius:var(--radius-full);font-size:0.75rem;font-weight:600;}
+    .status-pending{background:rgba(255,160,30,0.12);color:#9C4221;}
+    .status-paid{background:rgba(66,153,225,0.1);color:#2A4365;}
+    .status-shipped{background:rgba(159,122,234,0.1);color:#553C9A;}
+    .status-delivered{background:rgba(72,187,120,0.1);color:#276749;}
+    .status-refund{background:rgba(229,62,62,0.08);color:#C53030;}
+    .order-items-preview{padding:1rem 1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;}
+    .oi-mini{display:flex;align-items:center;gap:0.5rem;}
+    .oi-mini-emoji{width:44px;height:44px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;}
+    .oi-mini-emoji img{width:100%;height:100%;object-fit:cover;}
+    .oi-mini-info{font-size:0.82rem;}
+    .oi-mini-name{font-weight:500;color:var(--color-warm-brown);}
+    .oi-mini-spec{color:var(--color-warm-brown-light);font-size:0.76rem;}
+    .order-card-footer{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;border-top:1px solid rgba(201,168,76,0.06);}
+    .order-total-text{font-size:0.85rem;color:var(--color-warm-brown-light);}
+    .order-total-amt{font-size:1.05rem;font-weight:700;color:var(--color-primary-dark);font-family:var(--font-serif);}
+    .order-actions{display:flex;gap:0.5rem;}
+    .btn-order-action{padding:0.5rem 1rem;border-radius:var(--radius-full);font-size:0.8rem;font-weight:600;border:1.5px solid;cursor:pointer;transition:all var(--transition);}
+    .btn-order-primary{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;border-color:transparent;}
+    .btn-order-outline{background:transparent;color:var(--color-warm-brown);border-color:rgba(201,168,76,0.3);}
+    .btn-order-outline:hover{border-color:var(--color-gold);}
+
+    /* Empty Orders */
+    .orders-empty{padding:4rem 2rem;text-align:center;color:var(--color-warm-brown-light);}
+    .orders-empty .empty-icon{font-size:3.5rem;opacity:0.35;margin-bottom:1rem;}
+
+    /* Modal */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+    .modal-overlay.hidden{display:none;}
+    .modal{background:white;border-radius:var(--radius-lg);padding:2rem;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    .modal-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:1.25rem;}
+    .modal-btns{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;}
+
+    /* Toast */
+    .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;padding:0.85rem 1.5rem;background:#1A1208;color:white;border-radius:var(--radius-md);font-size:0.88rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,0.2);transform:translateY(100px);opacity:0;transition:all 0.3s ease;pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+
+    /* Order Detail Expand */
+    .order-detail-expand{padding:0 1.5rem 1rem;display:none;border-top:1px solid rgba(201,168,76,0.06);}
+    .order-detail-expand.open{display:block;}
+    .ode-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.35rem 0;color:var(--color-warm-brown-light);}
+    .ode-row .ode-label{flex-shrink:0;min-width:70px;}
+    .ode-row .ode-val{flex:1;text-align:right;word-break:break-all;}
+    .ode-amount{border-top:1px dashed rgba(201,168,76,0.15);margin-top:0.5rem;padding-top:0.5rem;}
+    .ode-amount-row{display:flex;justify-content:space-between;font-size:0.82rem;padding:0.2rem 0;color:var(--color-warm-brown-light);}
+    .ode-amount-row.total{font-weight:700;color:var(--color-primary-dark);font-size:0.95rem;}
+
+    /* Address Actions */
+    .address-actions{display:flex;gap:0.5rem;margin-top:0.5rem;}
+    .btn-addr-action{padding:0.25rem 0.6rem;border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-full);background:white;font-size:0.72rem;color:var(--color-warm-brown-light);cursor:pointer;transition:all var(--transition);}
+    .btn-addr-action:hover{border-color:var(--color-primary);color:var(--color-primary-dark);}
+    .btn-addr-action.danger:hover{border-color:#E53E3E;color:#E53E3E;}
+
+    /* Footer */
+    .site-footer{margin-top:3rem;padding:2rem 2rem 1rem;background:linear-gradient(160deg,var(--color-cream),var(--color-ivory));border-top:1px solid rgba(201,168,76,0.1);text-align:center;}
+    .footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.5rem 0;}
+    .footer-links a{font-size:0.78rem;color:var(--color-warm-brown-light);transition:color var(--transition);}
+    .footer-links a:hover{color:var(--color-warm-brown);}
+    .footer-copy{font-size:0.72rem;color:rgba(160,112,74,0.5);}
+
+    @media(max-width:768px){.page-wrap{padding:80px 1rem 4rem;}}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🌸</div>
+      <span class="brand-name">七白润光</span>
+    </a>
+    <div style="display:flex;gap:0.75rem;">
+      <a href="tech.html" style="font-size:0.78rem;padding:0.35rem 0.7rem;border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-full);color:var(--color-warm-brown-light);transition:all var(--transition);">🔬 工艺</a>
+      <a href="cart.html" style="font-size:1.1rem;padding:0.4rem 0.8rem;border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-full);font-size:0.82rem;color:var(--color-warm-brown-light);">← 返回购物车</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- ===== ORDER FORM VIEW ===== -->
+    <div class="view active" id="viewForm">
+      <!-- Steps -->
+      <div class="steps">
+        <div class="step">
+          <div class="step-circle active" id="step1Circle">1</div>
+          <div class="step-label active" id="step1Label">收货地址</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle" id="step2Circle">2</div>
+          <div class="step-label" id="step2Label">确认订单</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle" id="step3Circle">3</div>
+          <div class="step-label" id="step3Label">支付方式</div>
+        </div>
+      </div>
+
+      <!-- Sub-step 1: Address -->
+      <div id="formStep1">
+        <div class="form-section">
+          <div class="form-section-header">📍 收货地址</div>
+          <div class="form-section-body">
+            <div class="address-list" id="addressList"></div>
+            <button class="btn-add-address" onclick="showAddAddressModal()">➕ 添加新地址</button>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button class="btn-submit" onclick="goToStep(2)">下一步：确认订单 →</button>
+        </div>
+      </div>
+
+      <!-- Sub-step 2: Confirm Order -->
+      <div id="formStep2" style="display:none">
+        <div class="form-section">
+          <div class="form-section-header">🛍️ 确认商品</div>
+          <div class="form-section-body">
+            <div class="order-items" id="confirmItems"></div>
+            <div class="price-summary" id="confirmPriceSummary"></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-header">📝 订单备注</div>
+          <div class="form-section-body">
+            <textarea class="form-input" id="orderNote" rows="2" placeholder="有什么需要备注的？（选填）" style="resize:none;width:100%;"></textarea>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button class="btn-back" onclick="goToStep(1)">← 上一步</button>
+          <button class="btn-submit" onclick="goToStep(3)">下一步：选择支付 →</button>
+        </div>
+      </div>
+
+      <!-- Sub-step 3: Payment -->
+      <div id="formStep3" style="display:none">
+        <div class="form-section">
+          <div class="form-section-header">💳 支付方式</div>
+          <div class="form-section-body">
+            <div class="payment-methods">
+              <div class="payment-method selected" data-pm="wechat" onclick="selectPayment(this)">
+                <div class="pm-icon">💚</div>
+                <div class="pm-name">微信支付</div>
+              </div>
+              <div class="payment-method" data-pm="alipay" onclick="selectPayment(this)">
+                <div class="pm-icon">💙</div>
+                <div class="pm-name">支付宝</div>
+              </div>
+              <div class="payment-method" data-pm="card" onclick="selectPayment(this)">
+                <div class="pm-icon">💳</div>
+                <div class="pm-name">银行卡</div>
+              </div>
+            </div>
+            <div style="margin-top:1.25rem;padding:1rem;background:var(--color-cream);border-radius:var(--radius-md);font-size:0.84rem;color:var(--color-warm-brown-light);">
+              💡 点击"确认支付"后将跳转到支付页面。本系统为演示版本，不会产生真实扣款。
+            </div>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button class="btn-back" onclick="goToStep(2)">← 上一步</button>
+          <button class="btn-submit" onclick="submitOrder()">确认支付</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SUCCESS VIEW ===== -->
+    <div class="view" id="viewSuccess">
+      <div class="success-view">
+        <div class="success-icon">✅</div>
+        <div class="success-title">订单提交成功！</div>
+        <div class="success-sub">感谢您的购买，我们将尽快为您安排发货</div>
+        <div class="order-no" id="successOrderNo">订单号：QB2026XXXXXXXX</div>
+
+        <!-- Logistics -->
+        <div class="logistics-card">
+          <div class="logistics-header">
+            <span>🚚 物流动态</span>
+            <span class="track-no" id="logisticsTrackNo">顺丰速运 · 追踪中</span>
+          </div>
+          <div class="logistics-steps">
+            <div class="log-step">
+              <div class="log-dot active"></div>
+              <div class="log-content">
+                <div class="log-title">订单已确认</div>
+                <div class="log-time" id="logTime1"></div>
+                <div class="log-detail">商家已确认您的订单，正在备货中</div>
+              </div>
+            </div>
+            <div class="log-step">
+              <div class="log-dot pending"></div>
+              <div class="log-content">
+                <div class="log-title">等待发货</div>
+                <div class="log-time">预计1-2个工作日内发出</div>
+                <div class="log-detail">包装完成后将推送快递单号</div>
+              </div>
+            </div>
+            <div class="log-step">
+              <div class="log-dot pending"></div>
+              <div class="log-content">
+                <div class="log-title">运输中</div>
+                <div class="log-time">预计3-5个工作日送达</div>
+              </div>
+            </div>
+            <div class="log-step">
+              <div class="log-dot pending"></div>
+              <div class="log-content">
+                <div class="log-title">已签收</div>
+                <div class="log-time">等待送达</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="success-btns">
+          <button class="btn-primary-sm" onclick="showView('viewOrders');loadOrders()">查看订单详情</button>
+          <a href="checkin.html" class="btn-outline-sm">📅 开始21天打卡</a>
+          <a href="product.html" class="btn-outline-sm">继续购物</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ORDER LIST VIEW ===== -->
+    <div class="view" id="viewOrders">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <h2 style="font-family:var(--font-serif);font-size:1.4rem;font-weight:700;">我的订单</h2>
+        <button onclick="showView('viewForm');goToStep(1)" style="padding:0.5rem 1.1rem;border:1.5px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);background:transparent;font-size:0.82rem;color:var(--color-warm-brown);">+ 去购物</button>
+      </div>
+
+      <div class="orders-tabs">
+        <button class="orders-tab active" data-status="all">全部</button>
+        <button class="orders-tab" data-status="pending">待付款</button>
+        <button class="orders-tab" data-status="paid">待发货</button>
+        <button class="orders-tab" data-status="shipped">运输中</button>
+        <button class="orders-tab" data-status="delivered">已收货</button>
+        <button class="orders-tab" data-status="refund">售后</button>
+      </div>
+
+      <div class="orders-list" id="ordersList"></div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">首页</a>
+      <a href="product.html">商品</a>
+      <a href="cart.html">购物车</a>
+      <a href="compliance.html">合规说明</a>
+      <a href="member.html">会员中心</a>
+    </div>
+    <div class="footer-copy">© 2026 七白润光 · 普通食品</div>
+  </footer>
+
+  <!-- Add Address Modal -->
+  <div class="modal-overlay hidden" id="addressModal">
+    <div class="modal">
+      <div class="modal-title">📍 添加收货地址</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">姓名 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="addrName" placeholder="收货人姓名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">手机号 <span class="required">*</span></label>
+          <input type="tel" class="form-input" id="addrPhone" placeholder="11位手机号" maxlength="11">
+        </div>
+        <div class="form-group">
+          <label class="form-label">省市区 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="addrRegion" placeholder="如：广东省深圳市南山区">
+        </div>
+        <div class="form-group">
+          <label class="form-label">标签</label>
+          <select class="form-select form-input" id="addrTag">
+            <option value="家">🏠 家</option>
+            <option value="公司">🏢 公司</option>
+            <option value="学校">🎓 学校</option>
+            <option value="其他">📍 其他</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">详细地址 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="addrDetail" placeholder="街道、楼栋、门牌号等">
+        </div>
+        <div class="form-group full" style="flex-direction:row;align-items:center;gap:0.5rem;">
+          <input type="checkbox" id="addrDefault" style="width:16px;height:16px;">
+          <label for="addrDefault" style="font-size:0.84rem;cursor:pointer;">设为默认地址</label>
+        </div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-back" onclick="hideAddressModal()">取消</button>
+        <button class="btn-submit" onclick="saveAddress()">保存地址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Order Modal -->
+  <div class="modal-overlay hidden" id="cancelModal">
+    <div class="modal">
+      <div class="modal-title">⚠️ 取消订单</div>
+      <div style="font-size:0.88rem;color:var(--color-warm-brown-light);margin-bottom:1rem;">请选择取消原因：</div>
+      <select class="form-select form-input" id="cancelReason">
+        <option>不想要了</option>
+        <option>信息填写有误</option>
+        <option>选错商品/规格</option>
+        <option>发现更便宜的</option>
+        <option>其他原因</option>
+      </select>
+      <div class="modal-btns">
+        <button class="btn-back" onclick="hideCancelModal()">放弃</button>
+        <button class="btn-submit" style="background:linear-gradient(135deg,#E53E3E,#C53030);" onclick="confirmCancel()">确认取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refund Modal -->
+  <div class="modal-overlay hidden" id="refundModal">
+    <div class="modal">
+      <div class="modal-title">🔄 申请售后</div>
+      <div style="font-size:0.85rem;color:var(--color-warm-brown-light);margin-bottom:1rem;">请描述您遇到的问题：</div>
+      <select class="form-select form-input" id="refundType" style="margin-bottom:0.75rem;">
+        <option>仅退款（无需退货）</option>
+        <option>退款退货</option>
+        <option>换货</option>
+      </select>
+      <textarea class="form-input" id="refundReason" rows="3" placeholder="请描述问题详情..." style="resize:none;width:100%;"></textarea>
+      <div class="modal-btns">
+        <button class="btn-back" onclick="hideRefundModal()">取消</button>
+        <button class="btn-submit" onclick="confirmRefund()">提交申请</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let currentStep = 1;
+    let selectedAddressIdx = 0;
+    let selectedPayment = 'wechat';
+    let cancelTargetOrderId = null;
+    let refundTargetOrderId = null;
+    let checkoutData = JSON.parse(localStorage.getItem('qibai_checkout') || '{}');
+    let addresses = JSON.parse(localStorage.getItem('qibai_addresses') || '[]');
+    let orders = JSON.parse(localStorage.getItem('qibai_orders') || '[]');
+
+    // ===== View Manager =====
+    function showView(id) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ===== URL Param Check =====
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('view') === 'orders' || orders.length > 0 && !checkoutData.items) {
+      showView('viewOrders');
+      loadOrders();
+    }
+
+    // ===== Steps =====
+    function goToStep(n) {
+      currentStep = n;
+      [1,2,3].forEach(i => {
+        const circle = document.getElementById('step' + i + 'Circle');
+        const label = document.getElementById('step' + i + 'Label');
+        document.getElementById('formStep' + i).style.display = 'none';
+        if (i < n) { circle.className = 'step-circle done'; circle.textContent = '✓'; label.className = 'step-label'; }
+        else if (i === n) { circle.className = 'step-circle active'; circle.textContent = i; label.className = 'step-label active'; }
+        else { circle.className = 'step-circle'; circle.textContent = i; label.className = 'step-label'; }
+      });
+      document.getElementById('formStep' + n).style.display = 'block';
+
+      if (n === 1) renderAddresses();
+      if (n === 2) renderConfirmOrder();
+    }
+
+    // ===== Address =====
+    function renderAddresses() {
+      const list = document.getElementById('addressList');
+      if (addresses.length === 0) {
+        list.innerHTML = '<p style="font-size:0.85rem;color:var(--color-warm-brown-light);margin-bottom:0.75rem;">还没有收货地址，请添加一个</p>';
+        return;
+      }
+      list.innerHTML = addresses.map((a, i) => `
+        <div class="address-card${i === selectedAddressIdx ? ' selected' : ''}" onclick="selectAddress(${i})">
+          <div class="address-name">
+            ${a.name}
+            <span class="address-tag">${a.tag || '家'}</span>
+            ${a.isDefault ? '<span class="address-tag" style="background:rgba(201,133,160,0.15);color:var(--color-primary-dark)">默认</span>' : ''}
+          </div>
+          <div class="address-phone">${a.phone}</div>
+          <div class="address-detail">${a.region} ${a.detail}</div>
+          <div class="address-actions">
+            <button class="btn-addr-action" onclick="event.stopPropagation();editAddress(${i})">✏️ 编辑</button>
+            ${!a.isDefault ? `<button class="btn-addr-action danger" onclick="event.stopPropagation();deleteAddress(${i})">🗑️ 删除</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAddress(i) {
+      selectedAddressIdx = i;
+      renderAddresses();
+    }
+
+    function showAddAddressModal() { document.getElementById('addressModal').classList.remove('hidden'); }
+    function hideAddressModal() { document.getElementById('addressModal').classList.add('hidden'); }
+
+    function saveAddress() {
+      const name = document.getElementById('addrName').value.trim();
+      const phone = document.getElementById('addrPhone').value.trim();
+      const region = document.getElementById('addrRegion').value.trim();
+      const detail = document.getElementById('addrDetail').value.trim();
+      const tag = document.getElementById('addrTag').value;
+      const isDefault = document.getElementById('addrDefault').checked;
+      if (!name || !phone || !region || !detail) { showToast('请填写完整地址信息'); return; }
+      if (!/^1[3-9]\d{9}$/.test(phone)) { showToast('请输入正确的手机号'); return; }
+      const editIdx = document.getElementById('addressModal').dataset.editIdx;
+      if (editIdx !== undefined && editIdx !== '') {
+        // Edit mode
+        addresses[parseInt(editIdx)] = { name, phone, region, detail, tag, isDefault };
+      } else {
+        // Add mode
+        if (isDefault) addresses.forEach(a => a.isDefault = false);
+        addresses.push({ name, phone, region, detail, tag, isDefault });
+        if (isDefault || addresses.length === 1) selectedAddressIdx = addresses.length - 1;
+      }
+      if (isDefault) addresses.forEach(a => a.isDefault = false);
+      if (editIdx !== undefined && editIdx !== '') addresses[parseInt(editIdx)].isDefault = isDefault;
+      localStorage.setItem('qibai_addresses', JSON.stringify(addresses));
+      delete document.getElementById('addressModal').dataset.editIdx;
+      hideAddressModal();
+      renderAddresses();
+      showToast(editIdx !== undefined && editIdx !== '' ? '✅ 地址已更新' : '✅ 地址已保存');
+    }
+
+    // ===== Confirm Order =====
+    function renderConfirmOrder() {
+      const items = checkoutData.items || [];
+      const container = document.getElementById('confirmItems');
+      container.innerHTML = items.map(i => `
+        <div class="order-item">
+          <div class="oi-emoji"><img src="${i.image || 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png'}" alt="${i.name}"></div>
+          <div>
+            <div class="oi-name">${i.name}</div>
+            <div class="oi-spec">${[i.flavor, i.pkg].filter(Boolean).join(' · ')} × ${i.qty || 1}</div>
+          </div>
+          <div class="oi-price">¥${i.price * (i.qty || 1)}</div>
+        </div>
+      `).join('');
+
+      const summary = document.getElementById('confirmPriceSummary');
+      const disc = checkoutData.disc || 0;
+      const ship = checkoutData.shipping || 0;
+      const total = checkoutData.total || 0;
+      summary.innerHTML = `
+        <div class="ps-row"><span class="ps-label">商品金额</span><span>¥${checkoutData.items ? checkoutData.items.reduce((s,i)=>s+i.price*(i.qty||1),0) : 0}</span></div>
+        ${disc > 0 ? `<div class="ps-row"><span class="ps-label">优惠折扣</span><span style="color:#276749">-¥${disc}</span></div>` : ''}
+        <div class="ps-row"><span class="ps-label">运费</span><span>${ship === 0 ? '免运费' : '¥'+ship}</span></div>
+        <div class="ps-row total"><span class="ps-label">合计</span><span class="ps-val">¥${total}</span></div>
+      `;
+    }
+
+    // ===== Payment =====
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPayment = el.dataset.pm;
+    }
+
+    // ===== Submit Order =====
+    function submitOrder() {
+      if (addresses.length === 0) { showToast('请先添加收货地址'); goToStep(1); return; }
+      const addr = addresses[selectedAddressIdx];
+      const orderNo = 'QB' + Date.now();
+      const now = new Date();
+      const order = {
+        id: orderNo,
+        items: checkoutData.items || [],
+        address: addr,
+        payment: selectedPayment,
+        total: checkoutData.total || 0,
+        disc: checkoutData.disc || 0,
+        shipping: checkoutData.shipping || 0,
+        note: document.getElementById('orderNote').value,
+        status: 'paid',
+        createdAt: now.toLocaleString('zh-CN')
+      };
+      orders.unshift(order);
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+      // Clear cart of purchased items
+      const cartIds = (checkoutData.items || []).map(i => i.id);
+      let cart = JSON.parse(localStorage.getItem('qibai_cart') || '[]');
+      cart = cart.filter(i => !cartIds.includes(i.id));
+      localStorage.setItem('qibai_cart', JSON.stringify(cart));
+      localStorage.removeItem('qibai_checkout');
+
+      // Success view
+      document.getElementById('successOrderNo').textContent = '订单号：' + orderNo;
+      document.getElementById('logisticsTrackNo').textContent = 'SF' + Math.floor(Math.random()*9000000000+1000000000);
+      document.getElementById('logTime1').textContent = now.toLocaleString('zh-CN');
+      showView('viewSuccess');
+      showToast('🎉 订单提交成功！');
+    }
+
+    // ===== Order List =====
+    function loadOrders() {
+      renderOrders('all');
+      document.querySelectorAll('.orders-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.orders-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          renderOrders(this.dataset.status);
+        });
+      });
+    }
+
+    const STATUS_LABELS = {
+      pending: { text: '待付款', cls: 'status-pending' },
+      paid: { text: '待发货', cls: 'status-paid' },
+      shipped: { text: '运输中', cls: 'status-shipped' },
+      delivered: { text: '已收货', cls: 'status-delivered' },
+      cancelled: { text: '已取消', cls: 'status-refund' },
+      refund: { text: '售后中', cls: 'status-refund' }
+    };
+
+    function renderOrders(statusFilter) {
+      const list = document.getElementById('ordersList');
+      let filtered = statusFilter === 'all' ? orders : orders.filter(o => o.status === statusFilter);
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="orders-empty"><div class="empty-icon">📦</div><p>暂无相关订单</p></div>`;
+        return;
+      }
+      list.innerHTML = filtered.map(order => {
+        const sl = STATUS_LABELS[order.status] || { text: order.status, cls: '' };
+        return `
+        <div class="order-card">
+          <div class="order-card-header">
+            <div>
+              <div class="order-no-small">${order.id}</div>
+              <div style="font-size:0.75rem;color:var(--color-warm-brown-light);margin-top:0.2rem;cursor:pointer;" onclick="toggleOrderDetail('${order.id}')">
+                收起/展开详情 ▾
+              </div>
+              <div style="font-size:0.75rem;color:var(--color-warm-brown-light);margin-top:0.2rem;">${order.createdAt || ''}</div>
+            </div>
+            <span class="order-status-badge ${sl.cls}">${sl.text}</span>
+          </div>
+          <div class="order-items-preview">
+            ${(order.items || []).slice(0,2).map(i => `
+              <div class="oi-mini">
+                <div class="oi-mini-emoji"><img src="${i.image || 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png'}" alt="${i.name}"></div>
+                <div class="oi-mini-info">
+                  <div class="oi-mini-name">${i.name}</div>
+                  <div class="oi-mini-spec">${[i.flavor,i.pkg].filter(Boolean).join(' · ')} ×${i.qty||1}</div>
+                </div>
+              </div>
+            `).join('')}
+            ${order.items && order.items.length > 2 ? `<span style="font-size:0.78rem;color:var(--color-warm-brown-light);align-self:center;">+${order.items.length-2}件</span>` : ''}
+          </div>
+          <div class="order-card-footer">
+            <div>
+              <div class="order-total-text">共 ${(order.items||[]).reduce((s,i)=>s+(i.qty||1),0)} 件商品</div>
+              <div class="order-total-amt">¥${order.total}</div>
+            </div>
+            <div class="order-actions">${renderOrderActions(order)}</div>
+          </div>
+          <div class="order-detail-expand" id="detail-${order.id}">
+            ${renderOrderDetail(order)}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderOrderActions(order) {
+      const btns = [];
+      if (order.status === 'pending') {
+        btns.push(`<button class="btn-order-action btn-order-primary" onclick="payOrder('${order.id}')">去付款</button>`);
+        btns.push(`<button class="btn-order-action btn-order-outline" onclick="showCancelModal('${order.id}')">取消订单</button>`);
+      }
+      if (order.status === 'paid') {
+        btns.push(`<button class="btn-order-action btn-order-outline" onclick="showCancelModal('${order.id}')">取消订单</button>`);
+      }
+      if (order.status === 'shipped') {
+        btns.push(`<button class="btn-order-action btn-order-primary" onclick="confirmReceive('${order.id}')">确认收货</button>`);
+        btns.push(`<a href="javascript:void(0)" class="btn-order-action btn-order-outline">查看物流</a>`);
+      }
+      if (order.status === 'delivered') {
+        btns.push(`<a href="product.html" class="btn-order-action btn-order-primary">再次购买</a>`);
+        btns.push(`<button class="btn-order-action btn-order-outline" onclick="showRefundModal('${order.id}')">申请售后</button>`);
+      }
+      if (order.status === 'refund') {
+        btns.push(`<button class="btn-order-action btn-order-outline" disabled>处理中</button>`);
+      }
+      return btns.join('');
+    }
+
+    function payOrder(id) {
+      const idx = orders.findIndex(o => o.id === id);
+      if (idx >= 0) { orders[idx].status = 'paid'; }
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+      renderOrders(document.querySelector('.orders-tab.active').dataset.status);
+      showToast('✅ 支付成功！');
+    }
+
+    function confirmReceive(id) {
+      const idx = orders.findIndex(o => o.id === id);
+      if (idx >= 0) { orders[idx].status = 'delivered'; }
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+      renderOrders(document.querySelector('.orders-tab.active').dataset.status);
+      showToast('✅ 确认收货成功！');
+    }
+
+    // Cancel Modal
+    function showCancelModal(id) { cancelTargetOrderId = id; document.getElementById('cancelModal').classList.remove('hidden'); }
+    function hideCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
+    function confirmCancel() {
+      const idx = orders.findIndex(o => o.id === cancelTargetOrderId);
+      if (idx >= 0) orders[idx].status = 'cancelled';
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+      hideCancelModal();
+      renderOrders(document.querySelector('.orders-tab.active').dataset.status);
+      showToast('订单已取消');
+    }
+
+    // Refund Modal
+    function showRefundModal(id) { refundTargetOrderId = id; document.getElementById('refundModal').classList.remove('hidden'); }
+    function hideRefundModal() { document.getElementById('refundModal').classList.add('hidden'); }
+    function confirmRefund() {
+      const idx = orders.findIndex(o => o.id === refundTargetOrderId);
+      if (idx >= 0) orders[idx].status = 'refund';
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+      hideRefundModal();
+      renderOrders(document.querySelector('.orders-tab.active').dataset.status);
+      showToast('🔄 售后申请已提交，客服将在24小时内联系您');
+    }
+
+    // Toggle Order Detail
+    function toggleOrderDetail(orderId) {
+      const el = document.getElementById('detail-' + orderId);
+      if (el) el.classList.toggle('open');
+    }
+
+    // Render Order Detail
+    function renderOrderDetail(order) {
+      const addr = order.address || {};
+      const paymentMap = { wechat: '微信支付', alipay: '支付宝', card: '银行卡' };
+      return `
+        <div style="margin-bottom:0.75rem;">
+          <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.4rem;">📍 收货信息</div>
+          <div class="ode-row"><span class="ode-label">收货人</span><span class="ode-val">${addr.name || '-'}</span></div>
+          <div class="ode-row"><span class="ode-label">手机号</span><span class="ode-val">${addr.phone || '-'}</span></div>
+          <div class="ode-row"><span class="ode-label">地址</span><span class="ode-val">${addr.region || ''} ${addr.detail || ''}</span></div>
+        </div>
+        <div style="margin-bottom:0.75rem;">
+          <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.4rem;">💳 支付信息</div>
+          <div class="ode-row"><span class="ode-label">支付方式</span><span class="ode-val">${paymentMap[order.payment] || order.payment || '-'}</span></div>
+          <div class="ode-row"><span class="ode-label">下单时间</span><span class="ode-val">${order.createdAt || '-'}</span></div>
+          ${order.note ? `<div class="ode-row"><span class="ode-label">备注</span><span class="ode-val">${order.note}</span></div>` : ''}
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.4rem;">💰 金额明细</div>
+          <div class="ode-amount">
+            <div class="ode-amount-row"><span>商品金额</span><span>¥${(order.items||[]).reduce((s,i)=>s+i.price*(i.qty||1),0)}</span></div>
+            ${order.disc > 0 ? `<div class="ode-amount-row"><span>优惠折扣</span><span style="color:#276749">-¥${order.disc}</span></div>` : ''}
+            <div class="ode-amount-row"><span>运费</span><span>${order.shipping === 0 ? '免运费' : '¥'+order.shipping}</span></div>
+            <div class="ode-amount-row total"><span>实付金额</span><span>¥${order.total}</span></div>
+          </div>
+        </div>`;
+    }
+
+    // Address Edit/Delete
+    function deleteAddress(idx) {
+      addresses.splice(idx, 1);
+      if (selectedAddressIdx >= addresses.length) selectedAddressIdx = Math.max(0, addresses.length - 1);
+      localStorage.setItem('qibai_addresses', JSON.stringify(addresses));
+      renderAddresses();
+      showToast('地址已删除');
+    }
+
+    function editAddress(idx) {
+      const a = addresses[idx];
+      document.getElementById('addrName').value = a.name;
+      document.getElementById('addrPhone').value = a.phone;
+      document.getElementById('addrRegion').value = a.region;
+      document.getElementById('addrDetail').value = a.detail;
+      document.getElementById('addrTag').value = a.tag || '家';
+      document.getElementById('addrDefault').checked = a.isDefault || false;
+      showAddAddressModal();
+      // Mark as edit mode
+      document.getElementById('addressModal').dataset.editIdx = idx;
+    }
+
+    // Override saveAddress to support edit
+
+    // Toast
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // Init
+    goToStep(1);
+    if (addresses.length === 0) {
+      // Add default demo address
+      addresses.push({ name: '示例用户', phone: '13800000000', region: '广东省深圳市南山区', detail: '科技园南区XX栋XXX室', tag: '家', isDefault: true });
+      localStorage.setItem('qibai_addresses', JSON.stringify(addresses));
+    }
+    renderAddresses();
+
+    // Add some sample orders for demo
+    if (orders.length === 0) {
+      orders = [
+        { id: 'QB20260501001', items: [{ image: 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png', name: '七白润光·古法玫瑰软糖', flavor: '玫瑰原味', pkg: '单盒装', price: 128, qty: 1 }], total: 128, disc: 0, shipping: 0, status: 'delivered', createdAt: '2026/5/1 10:23:45' },
+        { id: 'QB20260515002', items: [{ image: 'images/Elegant_gift_box_packaging_for_2026-05-18T15-58-48.png', name: '七白润光·古法玫瑰软糖', flavor: '玫瑰荔枝', pkg: '三盒装', price: 328, qty: 1 }], total: 328, disc: 0, shipping: 0, status: 'shipped', createdAt: '2026/5/15 14:32:12' }
+      ];
+      localStorage.setItem('qibai_orders', JSON.stringify(orders));
+    }
+
+    if (!checkoutData.items || checkoutData.items.length === 0) {
+      showView('viewOrders');
+      loadOrders();
+    }
+  </script>
+</body>
+</html>

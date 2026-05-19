@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>科普中心 · 七白润光</title>
+  <style>
+    :root{--color-primary:#E8B4C5;--color-primary-light:#F5D5E0;--color-primary-dark:#C985A0;--color-gold:#C9A84C;--color-gold-light:#F0D080;--color-gold-dark:#A07830;--color-ivory:#FDFAF5;--color-cream:#FEF6EC;--color-dark-bg:#1A1208;--color-warm-brown:#6B4226;--color-warm-brown-light:#A0704A;--font-serif:'Noto Serif SC','SimSun',Georgia,serif;--font-sans:'PingFang SC','Microsoft YaHei',sans-serif;--radius-sm:8px;--radius-md:16px;--radius-lg:24px;--radius-full:9999px;--shadow-sm:0 2px 8px rgba(200,130,100,0.1);--shadow-md:0 8px 32px rgba(200,130,100,0.15);--shadow-lg:0 20px 60px rgba(200,130,100,0.2);--transition:0.3s cubic-bezier(0.25,0.46,0.45,0.94);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,245,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.12);}
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-links{display:flex;gap:1rem;align-items:center;font-size:0.85rem;}
+    .nav-links a{color:var(--color-warm-brown-light);transition:color var(--transition);}
+    .nav-links a:hover{color:var(--color-warm-brown);}
+    .article-hero{margin-top:64px;background:linear-gradient(160deg,#FEF2F8,var(--color-cream),#FFF8EE);padding:2.5rem 2rem;text-align:center;}
+    .hero-title{font-family:var(--font-serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;margin-bottom:0.5rem;}
+    .hero-sub{font-size:0.9rem;color:var(--color-warm-brown-light);margin-bottom:1.5rem;}
+    .hero-stats{display:flex;justify-content:center;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+    .hero-stat{text-align:center;}
+    .hero-stat-num{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:var(--color-gold-dark);}
+    .hero-stat-label{font-size:0.72rem;color:var(--color-warm-brown-light);}
+    .search-bar{max-width:500px;margin:0 auto;display:flex;background:white;border-radius:var(--radius-full);box-shadow:var(--shadow-md);overflow:hidden;border:1.5px solid rgba(200,130,100,0.1);}
+    .search-input{flex:1;padding:0.75rem 1.2rem;border:none;font-size:0.9rem;font-family:var(--font-sans);color:var(--color-warm-brown);outline:none;background:transparent;}
+    .search-input::placeholder{color:#C8A898;}
+    .search-btn{padding:0.75rem 1.2rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));border:none;color:white;cursor:pointer;font-size:1rem;transition:all var(--transition);}
+    .search-btn:hover{background:linear-gradient(135deg,var(--color-gold-dark),var(--color-gold));}
+    .page-content{max-width:1100px;margin:0 auto;padding:2rem 2rem 4rem;}
+    .tab-nav{display:flex;overflow-x:auto;gap:0;border-bottom:2px solid rgba(200,130,100,0.1);margin-bottom:1.5rem;}
+    .tab-nav::-webkit-scrollbar{display:none;}
+    .tab-item{white-space:nowrap;padding:0.7rem 1.2rem;font-size:0.85rem;cursor:pointer;color:var(--color-warm-brown-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all var(--transition);}
+    .tab-item.active{color:var(--color-warm-brown);border-bottom-color:var(--color-primary-dark);font-weight:700;}
+    .tab-panel{display:none;}.tab-panel.active{display:block;}
+    .article-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+    .article-card{background:white;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:all var(--transition);border:1px solid rgba(200,130,100,0.06);}
+    .article-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .ac-img{height:130px;background:linear-gradient(135deg,#FEF2F8,#FFF8EE);display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;}
+    .ac-cat{position:absolute;bottom:8px;left:8px;padding:0.2rem 0.7rem;border-radius:var(--radius-full);font-size:0.68rem;font-weight:700;color:white;}
+    .ac-reads{position:absolute;top:8px;right:8px;padding:0.2rem 0.5rem;background:rgba(255,255,255,0.85);border-radius:var(--radius-full);font-size:0.65rem;color:var(--color-warm-brown-light);}
+    .ac-body{padding:1rem;}
+    .ac-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;line-height:1.4;}
+    .ac-meta{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--color-warm-brown-light);}
+    .ac-desc{font-size:0.78rem;color:var(--color-warm-brown-light);margin:0.4rem 0;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .featured-article{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;display:grid;grid-template-columns:120px 1fr;gap:1.2rem;cursor:pointer;transition:all var(--transition);border:1px solid rgba(200,130,100,0.06);}
+    .featured-article:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+    .fa-img{border-radius:var(--radius-sm);background:linear-gradient(135deg,#FEF2F8,#FFF8EE);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+    .fa-cat{display:inline-block;padding:0.15rem 0.6rem;border-radius:var(--radius-full);font-size:0.68rem;font-weight:700;color:white;margin-bottom:0.4rem;}
+    .fa-title{font-family:var(--font-serif);font-size:1.05rem;font-weight:700;margin-bottom:0.3rem;line-height:1.4;}
+    .fa-desc{font-size:0.8rem;color:var(--color-warm-brown-light);line-height:1.5;}
+    .fa-meta{font-size:0.72rem;color:var(--color-warm-brown-light);margin-top:0.4rem;}
+    .article-detail{display:none;}.article-detail.open{display:block;}
+    .ad-hero{border-radius:var(--radius-lg);height:200px;background:linear-gradient(135deg,#FEF2F8,#FFF8EE);display:flex;align-items:center;justify-content:center;font-size:6rem;margin-bottom:1.5rem;position:relative;}
+    .ad-back{position:absolute;top:1rem;left:1rem;padding:0.4rem 0.8rem;background:rgba(255,255,255,0.9);border-radius:var(--radius-full);font-size:0.8rem;cursor:pointer;border:none;color:var(--color-warm-brown);transition:all var(--transition);z-index:2;}
+    .ad-back:hover{box-shadow:var(--shadow-sm);}
+    .ad-cat{display:inline-block;padding:0.2rem 0.8rem;border-radius:var(--radius-full);font-size:0.72rem;font-weight:700;color:white;margin-bottom:0.8rem;}
+    .ad-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;margin-bottom:0.5rem;line-height:1.3;}
+    .ad-meta{font-size:0.78rem;color:var(--color-warm-brown-light);margin-bottom:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;}
+    .ad-body{font-size:0.9rem;line-height:1.9;color:var(--color-warm-brown);}
+    .ad-body h3{font-family:var(--font-serif);font-size:1.05rem;margin:1.5rem 0 0.5rem;}
+    .ad-body p{margin-bottom:0.8rem;}
+    .ad-body .highlight{background:rgba(232,180,197,0.15);border-left:3px solid var(--color-primary);padding:0.8rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:1rem 0;}
+    .ad-body ul{margin:0.5rem 0 0.8rem 1.2rem;font-size:0.88rem;color:var(--color-warm-brown);}
+    .ad-body li{margin-bottom:0.3rem;line-height:1.6;}
+    .related-section{margin-top:2.5rem;padding-top:1.5rem;border-top:2px solid rgba(200,130,100,0.1);}
+    .related-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:1rem;}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.8rem;}
+    .related-card{display:flex;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);}
+    .related-card:hover{background:rgba(232,180,197,0.1);transform:translateX(4px);}
+    .related-emoji{font-size:1.5rem;flex-shrink:0;width:40px;text-align:center;}
+    .related-info{min-width:0;}
+    .related-info h4{font-size:0.82rem;font-weight:600;margin-bottom:0.2rem;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .related-info span{font-size:0.68rem;color:var(--color-warm-brown-light);}
+    .faq-list{display:flex;flex-direction:column;gap:0.5rem;}
+    .faq-item{background:white;border-radius:var(--radius-md);border:1px solid rgba(200,130,100,0.08);overflow:hidden;}
+    .faq-q{padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:600;font-size:0.88rem;transition:background var(--transition);}
+    .faq-q:hover{background:rgba(232,180,197,0.05);}
+    .faq-q .arrow{transition:transform var(--transition);font-size:0.72rem;color:var(--color-warm-brown-light);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;font-size:0.84rem;color:var(--color-warm-brown-light);line-height:1.7;}
+    .faq-a.open{max-height:500px;}
+    .faq-a-inner{padding:0 1.2rem 1rem;}
+    .compliance-content{background:white;border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow-sm);}
+    .compliance-content h3{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin:1.5rem 0 0.5rem;}
+    .compliance-content h3:first-child{margin-top:0;}
+    .compliance-content p{font-size:0.85rem;color:var(--color-warm-brown-light);line-height:1.8;margin-bottom:0.5rem;}
+    .warn-box{background:rgba(255,235,59,0.1);border:1px solid rgba(255,193,7,0.3);border-radius:var(--radius-sm);padding:1rem;font-size:0.82rem;margin-top:1rem;line-height:1.7;}
+    .hot-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem;justify-content:center;}
+    .hot-tag{padding:0.3rem 0.8rem;background:white;border:1px solid rgba(200,130,100,0.15);border-radius:var(--radius-full);font-size:0.75rem;color:var(--color-warm-brown-light);cursor:pointer;transition:all var(--transition);}
+    .hot-tag:hover{border-color:var(--color-primary);color:var(--color-warm-brown);background:rgba(232,180,197,0.05);}
+    .reading-progress{position:fixed;top:64px;left:0;height:3px;background:linear-gradient(90deg,var(--color-primary-dark),var(--color-gold));z-index:150;transition:width 0.15s;width:0;}
+    .recently-read{margin-top:2rem;padding:1.5rem;background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid rgba(200,130,100,0.06);}
+    .recently-read h3{font-family:var(--font-serif);font-size:1rem;font-weight:700;margin-bottom:0.75rem;}
+    .recent-list{display:flex;flex-direction:column;gap:0.5rem;}
+    .recent-item{display:flex;gap:0.6rem;padding:0.5rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);}
+    .recent-item:hover{background:rgba(232,180,197,0.06);}
+    .recent-item .ri-emoji{font-size:1.3rem;flex-shrink:0;width:32px;text-align:center;}
+    .recent-item .ri-info{min-width:0;}
+    .recent-item .ri-title{font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
+    .recent-item .ri-meta{font-size:0.68rem;color:var(--color-warm-brown-light);}
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--color-warm-brown);color:white;padding:0.7rem 1.5rem;border-radius:var(--radius-full);font-size:0.85rem;z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .site-footer{margin-top:3rem;padding:2rem 2rem 1rem;background:linear-gradient(160deg,var(--color-cream),var(--color-ivory));border-top:1px solid rgba(201,168,76,0.1);text-align:center;}
+    .footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.5rem 0;}
+    .footer-links a{font-size:0.78rem;color:var(--color-warm-brown-light);transition:color var(--transition);}
+    .footer-links a:hover{color:var(--color-warm-brown);}
+    .footer-copy{font-size:0.72rem;color:rgba(160,112,74,0.5);}
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="brand"><div class="brand-icon">🌸</div><span class="brand-name">七白润光</span></a>
+  <div class="nav-links">
+    <a href="product.html">🛒 商品</a>
+    <a href="tech.html">🔬 研发工艺</a>
+    <a href="member.html">👤 会员中心</a>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+<div class="reading-progress" id="readingProgress"></div>
+
+<div class="article-hero">
+  <h1 class="hero-title">科普中心</h1>
+  <p class="hero-sub">古法传承与现代科学的交汇 · 药食同源知识库</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num" id="total-articles">0</div><div class="hero-stat-label">篇科普文章</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="total-reads">0</div><div class="hero-stat-label">累计阅读</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">常见问题</div></div>
+  </div>
+  <div class="search-bar">
+    <input type="text" class="search-input" id="search-input" placeholder="搜索文章、成分、问题...">
+    <button class="search-btn" onclick="doSearch()">🔍</button>
+  </div>
+  <div class="hot-tags" id="hot-tags"></div>
+</div>
+
+<div class="page-content">
+  <div class="article-detail" id="article-detail"></div>
+  <div id="main-tabs">
+    <div class="tab-nav">
+      <div class="tab-item active" onclick="switchTab(this,'all')">全部文章</div>
+      <div class="tab-item" onclick="switchTab(this,'herb')">本草成分</div>
+      <div class="tab-item" onclick="switchTab(this,'food')">食养知识</div>
+      <div class="tab-item" onclick="switchTab(this,'skin')">肌肤护理</div>
+      <div class="tab-item" onclick="switchTab(this,'faq')">常见问题</div>
+      <div class="tab-item" onclick="switchTab(this,'compliance')">合规说明</div>
+    </div>
+    <div class="tab-panel active" id="panel-all">
+      <div id="search-results" style="display:none"></div>
+      <div id="all-content"></div>
+    </div>
+    <div class="tab-panel" id="panel-herb"><div id="herb-content"></div></div>
+    <div class="tab-panel" id="panel-food"><div id="food-content"></div></div>
+    <div class="tab-panel" id="panel-skin"><div id="skin-content"></div></div>
+    <div class="tab-panel" id="panel-faq"><div class="faq-list" id="faq-list"></div></div>
+    <div class="tab-panel" id="panel-compliance"><div class="compliance-content" id="compliance-content"></div></div>
+  </div>
+
+  <!-- Recently Read -->
+  <div class="recently-read" id="recently-read" style="display:none;">
+    <h3>📖 最近阅读</h3>
+    <div class="recent-list" id="recent-list"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">首页</a>
+      <a href="product.html">商品</a>
+      <a href="tech.html">研发工艺</a>
+      <a href="compliance.html">合规说明</a>
+      <a href="checkin.html">21天打卡</a>
+    </div>
+    <div class="footer-copy">© 2026 七白润光 · 普通食品 · 科普内容仅供参考</div>
+  </footer>
+</div>
+
+<script>
+  function showToast(msg) { const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
+  let readCounts = JSON.parse(localStorage.getItem('qibai_article_reads') || '{}');
+  let recentArticles = JSON.parse(localStorage.getItem('qibai_recent_articles') || '[]');
+
+  const ARTICLES = [
+    { id:1, cat:'herb', catName:'本草成分', color:'#C985A0', emoji:'🌿', title:'七白配方的历史溯源与现代研究', desc:'从隋唐《千金翼方》到现代功效验证，七白配方的千年传承与科学解读', date:'2026-05-15', readTime:'8分钟', featured:true, tags:['七白配方','白芷','历史'],
+      body:'<h3>什么是七白配方？</h3><p>七白配方最早记载于隋唐时期的《千金翼方》，由白芷、白茯苓、白芍、白术、白附子、白蔹、白及七味本草组成。这七味本草均以"白"字命名，在中医传统中与"润泽肤色"高度关联。</p><div class="highlight">⚠️ 提示：以上描述仅为中医传统文献记载，本品为普通食品，不做医疗功效宣称。</div><h3>现代科学的解读</h3><p>现代植物化学和药理学研究表明，七白配方中的多个成分含有黄酮类、多糖类、酚酸类等抗氧化活性物质，在体外实验中显示出一定的自由基清除能力。</p><p>需要注意的是，食品中成分的体外研究结果与实际食用效果之间存在差距，受到消化吸收、生物利用度、剂量等多重因素影响。</p><h3>七白软糖的食品级应用</h3><p>七白润光软糖将七白配方中经食品安全认证的成分（白芷提取物、茯苓粉、白芍提取物、白术提取物）与玫瑰精华、小分子胶原肽、维生素C等现代营养素复配。</p>' },
+    { id:2, cat:'herb', catName:'本草成分', color:'#C985A0', emoji:'🌸', title:'白芷：古法养肤的本草明星', desc:'深入解析白芷的活性成分及其在食养中的作用机制', date:'2026-05-12', readTime:'6分钟', featured:false, tags:['白芷','香豆素','光敏'],
+      body:'<h3>白芷的化学成分</h3><p>白芷（Angelica dahurica）的干燥根茎含有香豆素类化合物，包括欧前胡素（Imperatorin）、异欧前胡素等，以及挥发油成分。</p><div class="highlight">科学背景：欧前胡素等香豆素类成分在体外实验中显示出对酪氨酸酶的抑制活性，但人体内食用后的实际效果需更多临床研究支持。</div><h3>食用安全性</h3><p>白芷在《中国食品安全标准》中作为天然香辛料有一定的食品应用历史。白芷含有呋喃香豆素类成分，过量摄入可能引起光敏反应，使用含白芷产品后建议做好防晒。</p>' },
+    { id:3, cat:'herb', catName:'本草成分', color:'#C985A0', emoji:'🍄', title:'茯苓：内外兼修的药食同源佳品', desc:'茯苓多糖的免疫调节作用与现代营养学视角', date:'2026-05-09', readTime:'5分钟', featured:false, tags:['茯苓','多糖','免疫'],
+      body:'<h3>茯苓简介</h3><p>茯苓（Poria cocos）是多孔菌科真菌茯苓的干燥菌核，是中医"四君子汤"的重要组成之一，也是国家卫健委批准的药食同源物质。</p><h3>主要活性成分</h3><ul><li>茯苓多糖（Pachyman）：具有免疫调节活性</li><li>三萜类化合物：茯苓酸、去氢茯苓酸等</li><li>蛋白质、氨基酸、微量元素</li></ul><h3>食养价值</h3><p>茯苓在传统中医中被称为"四时神药"。从现代营养学角度看，茯苓富含膳食纤维，有助于肠道健康。</p><div class="highlight">茯苓是七白配方中安全性最高的成分之一，适合日常长期食用。</div>' },
+    { id:4, cat:'herb', catName:'本草成分', color:'#C985A0', emoji:'🌺', title:'白芍：养血调经的本草经典', desc:'白芍总苷的药理研究与日常食养价值', date:'2026-05-06', readTime:'5分钟', featured:true, tags:['白芍','总苷','养血'],
+      body:'<h3>白芍的传统应用</h3><p>白芍（Paeonia lactiflora）是毛茛科植物芍药的干燥根，在《神农本草经》中被列为上品。白芍味苦酸、性微寒，具有养血调经、敛阴止汗、柔肝止痛的功效。</p><h3>现代研究发现</h3><p>白芍总苷（TGP）是白芍的主要活性成分群：</p><ul><li>抗氧化：清除自由基，减少氧化应激</li><li>抗炎：调节炎症因子水平</li><li>免疫调节：双向调节免疫功能</li></ul><div class="highlight">七白软糖中的白芍提取物采用标准化工艺，确保芍药苷含量稳定。</div>' },
+    { id:5, cat:'food', catName:'食养知识', color:'#C9A84C', emoji:'🍬', title:'软糖≠保健品：普通食品与保健食品的区别', desc:'一文厘清"蓝帽子"与普通食品的边界，理性看待食养产品', date:'2026-05-14', readTime:'5分钟', featured:true, tags:['普通食品','蓝帽子','区别'],
+      body:'<h3>保健食品（蓝帽子）vs 普通食品</h3><p>保健食品须经国家市场监督管理总局批准，批准文号为"国食健字"，包装上有"小蓝帽"标志，可宣传特定保健功能。</p><p>普通食品（包括七白润光软糖）仅提供营养物质，不得宣传任何疾病预防、治疗或特定保健功能。</p><div class="highlight">七白润光软糖是普通食品，其配方成分均为合法食品原料。我们不会对产品做出任何医疗或保健功效宣称。</div><h3>为什么选择食品形态？</h3><p>以软糖为载体的食品，核心价值在于：让有营养背景的天然成分以美味、便携的方式融入日常生活，帮助建立健康的生活方式。</p>' },
+    { id:6, cat:'food', catName:'食养知识', color:'#C9A84C', emoji:'🥗', title:'药食同源：哪些本草可以"当饭吃"？', desc:'国家卫健委公布的药食同源目录解读', date:'2026-05-10', readTime:'7分钟', featured:false, tags:['药食同源','目录','法规'],
+      body:'<h3>药食同源的政策依据</h3><p>国家卫生健康委员会发布了《既是食品又是中药材的物质目录》，收录了白芷、茯苓、白芍、白术、桔梗、薏苡仁等数十种既可食用又具有药用价值的本草成分。</p><p>七白配方中白芷、茯苓、白芍、白术均属于药食同源范畴，可在食品中合规使用。</p><h3>如何科学看待药食同源</h3><p>药食同源并不意味着这些成分可以代替药物治疗。食品中的用量通常远低于药用剂量，需要长期、系统地通过饮食调理。</p><h3>常见的药食同源食材</h3><ul><li>花类：玫瑰花、金银花、菊花</li><li>根茎类：山药、生姜、百合</li><li>果实类：枸杞、红枣、桂圆</li><li>菌类：茯苓、灵芝</li></ul>' },
+    { id:7, cat:'food', catName:'食养知识', color:'#C9A84C', emoji:'🍵', title:'胶原肽的科学：口服美容真的有用吗？', desc:'小分子胶原肽的吸收机制与皮肤健康的关系', date:'2026-05-03', readTime:'6分钟', featured:false, tags:['胶原蛋白','肽','吸收'],
+      body:'<h3>什么是胶原肽？</h3><p>胶原蛋白是人体含量最丰富的蛋白质，占皮肤干重的70%以上。胶原肽是通过酶解技术将大分子胶原蛋白分解为小分子肽段（通常2000-5000道尔顿），以提高口服吸收率。</p><h3>口服吸收机制</h3><p>小分子胶原肽经口服后，在胃肠道被进一步分解为氨基酸和短肽，通过肠黏膜吸收入血。</p><h3>临床研究证据</h3><p>多项随机对照试验显示，口服胶原肽8-12周后，受试者的皮肤弹性和水分含量有统计学显著改善。但这些研究多数由行业资助，需要更多独立研究验证。</p><div class="highlight">胶原肽作为蛋白质来源是安全的，但不应将其视为"灵丹妙药"，均衡饮食和健康生活方式才是皮肤健康的基础。</div>' },
+    { id:8, cat:'food', catName:'食养知识', color:'#C9A84C', emoji:'🫐', title:'花青素：天然的抗氧化能手', desc:'花青素的抗氧化机制与日常食物来源指南', date:'2026-04-28', readTime:'5分钟', featured:false, tags:['花青素','抗氧化','蓝莓'],
+      body:'<h3>什么是花青素？</h3><p>花青素（Anthocyanins）是一类广泛存在于植物中的水溶性天然色素，属于黄酮类化合物，具有强大的抗氧化活性。</p><h3>抗氧化机制</h3><ul><li>直接清除自由基（DPPH、ABTS等）</li><li>螯合金属离子，减少Fenton反应</li><li>上调内源性抗氧化酶（SOD、CAT）活性</li><li>抑制氧化应激信号通路</li></ul><h3>日常食物来源</h3><ul><li>紫色/蓝色水果：蓝莓、紫薯、桑葚、葡萄</li><li>红色蔬菜：紫甘蓝、红苋菜</li><li>黑米、黑豆等黑色谷物</li></ul><p>七白润光软糖中添加的玫瑰精华也含有少量花青素类成分。</p>' },
+    { id:9, cat:'skin', catName:'肌肤护理', color:'#A0704A', emoji:'✨', title:'暗沉肌的成因分析与食养辅助策略', desc:'了解肌肤暗沉的多种成因，掌握内调外养的综合改善方案', date:'2026-05-13', readTime:'8分钟', featured:false, tags:['暗沉','成因','改善'],
+      body:'<h3>肌肤暗沉的主要成因</h3><ul><li>黑色素沉积（紫外线刺激后酪氨酸酶活化）</li><li>角质层堆积（代谢减慢导致老废角质积聚）</li><li>血液循环不畅（缺氧状态下肤色发灰）</li><li>氧化损伤（自由基攻击皮肤细胞）</li><li>睡眠不足与压力</li></ul><h3>食养辅助策略</h3><p>从营养学角度，维生素C是合法可宣称有助于减少黑色素形成的营养素。胶原蛋白肽作为蛋白质来源，有助于维持皮肤结构。</p><div class="highlight">重要提醒：肤色改善涉及多维度因素，防晒、保湿、充足睡眠和均衡饮食是最核心的基础措施。任何食品都无法单独解决肌肤问题。</div>' },
+    { id:10, cat:'skin', catName:'肌肤护理', color:'#A0704A', emoji:'💧', title:'21天食养计划的科学设计逻辑', desc:'为什么是21天？食养周期背后的营养学与皮肤生物学依据', date:'2026-05-08', readTime:'6分钟', featured:false, tags:['21天','周期','习惯'],
+      body:'<h3>21天背后的生物学基础</h3><p>皮肤表皮细胞的更新周期通常为28天（随年龄增长延长），角质形成细胞从基底层迁移至角质层需要约14天，完整脱落需要约28天。21天食养计划覆盖了约一个完整皮肤更新周期的3/4。</p><h3>连续打卡的习惯养成价值</h3><p>研究表明，新习惯的形成平均需要21-66天的坚持（Phillippa Lally等，2010）。21天打卡系统的核心价值在于帮助用户建立"每日食养"的饮食习惯。</p><h3>如何判断食养效果？</h3><ul><li>每天同一光线条件下拍照对比</li><li>记录皮肤水润度、出油量变化</li><li>每周填写肤质日记（可在打卡页面完成）</li><li>关注整体精神状态和睡眠质量改善</li></ul>' },
+    { id:11, cat:'skin', catName:'肌肤护理', color:'#A0704A', emoji:'☀️', title:'防晒与食养：为什么缺一不可', desc:'紫外线对皮肤的损伤机制及食养如何辅助防晒', date:'2026-05-01', readTime:'6分钟', featured:false, tags:['防晒','紫外线','协同'],
+      body:'<h3>紫外线对皮肤的损伤</h3><ul><li>UVB：引起皮肤红肿、晒伤，直接损伤DNA</li><li>UVA：穿透至真皮层，产生自由基，加速光老化</li><li>两者均可激活酪氨酸酶，促进黑色素合成</li></ul><h3>食养的辅助防晒作用</h3><p>虽然食养不能替代物理/化学防晒，但以下营养素可以帮助减轻紫外线损伤：</p><ul><li>维生素C：中和自由基，辅助胶原蛋白合成</li><li>维生素E：脂溶性抗氧化剂，保护细胞膜</li><li>多酚类：如绿茶儿茶素、葡萄籽原花青素</li><li>β-胡萝卜素：轻微的光保护作用</li></ul><div class="highlight">无论食养方案多完善，每日防晒（SPF30+）都是不可省略的护肤基础。</div>' },
+    { id:12, cat:'skin', catName:'肌肤护理', color:'#A0704A', emoji:'🧪', title:'皮肤屏障修复：从科学角度理解保湿', desc:'角质层屏障功能的维护与修复策略', date:'2026-04-25', readTime:'7分钟', featured:false, tags:['皮肤屏障','保湿','修复'],
+      body:'<h3>什么是皮肤屏障？</h3><p>皮肤屏障主要由角质层和皮脂膜组成，角质细胞间填充着由神经酰胺、胆固醇和游离脂肪酸构成的脂质基质。</p><h3>屏障受损的表现</h3><ul><li>皮肤干燥、紧绷、脱屑</li><li>敏感、泛红、刺痛</li><li>更容易出油（代偿性分泌增加）</li><li>护肤品吸收不良</li></ul><h3>食养如何辅助屏障修复</h3><ul><li>必需脂肪酸（亚油酸、α-亚麻酸）：神经酰胺的前体</li><li>维生素B族（尤其是B3烟酰胺）：增强屏障功能</li><li>锌：参与皮肤修复和免疫功能</li><li>蛋白质/胶原肽：提供皮肤结构所需的氨基酸</li></ul><p>七白润光软糖中的胶原肽和多种本草提取物可以为皮肤提供修复所需的基础营养支持。</p>' }
+  ];
+
+  const FAQS = [
+    { q:'七白润光软糖是保健食品吗？', a:'不是。七白润光软糖是普通食品，不是保健食品（蓝帽子），不具备特殊保健功能批文，也不会做出任何医疗或保健功效宣称。' },
+    { q:'配料中含有白附子，安全吗？', a:'白附子在中医传统中有美白功效，但其性味较为峻烈，目前不在国家药食同源目录中。我们的产品配料中已将白附子替换为同样具有美白相关记载的白术提取物，以确保食品安全。请以实际产品配料表为准。' },
+    { q:'孕妇和哺乳期可以食用吗？', a:'建议谨慎食用并咨询医师。白芷等部分成分对孕妇可能存在一定风险。为安全起见，孕妇、哺乳期女性及婴幼儿不建议食用。' },
+    { q:'可以和其他保健品一起服用吗？', a:'与一般维生素、普通营养素产品同服通常无明显冲突，但建议间隔服用（相差30分钟以上）。若正在服用中药汤剂或中成药，请避免同时服用以防成分叠加。如有疑虑请咨询专业医师或营养师。' },
+    { q:'糖分含量是多少？体重管理中能吃吗？', a:'每颗软糖约含碳水化合物4g（其中糖约3g），建议每日4颗，总额外糖摄入约12g。在控制整体饮食总量的前提下，适量食用不影响体重管理。如严格控糖（如糖尿病患者），请在医生指导下决定是否食用。' },
+    { q:'中断几天会影响效果吗？', a:'偶尔中断（1-3天）不会使效果完全消失，但长期坚持才能体现食养的累积效果。建议通过打卡计划帮助保持习惯。' },
+    { q:'产品宣传"药食同源"合法吗？', a:'七白配方中白芷、茯苓、白芍、白术均在国家卫健委《既是食品又是中药材的物质目录》中，使用"药食同源"表述来介绍这些成分的背景是合规的。但我们不会以此宣传任何疾病预防、诊断、治疗功能。' }
+  ];
+
+  const HOT_TAGS = ['七白配方','白芷','药食同源','胶原肽','防晒','21天','皮肤屏障','花青素','维生素C','暗沉'];
+
+  document.getElementById('total-articles').textContent = ARTICLES.length;
+  document.getElementById('total-reads').textContent = Object.values(readCounts).reduce((s,v) => s+v, 0);
+  document.getElementById('hot-tags').innerHTML = HOT_TAGS.map(t => '<span class="hot-tag" onclick="searchTag(\''+t+'\')">'+t+'</span>').join('');
+
+  function searchTag(tag) { document.getElementById('search-input').value = tag; doSearch(); }
+
+  function switchTab(el, id) {
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    if (id === 'faq') renderFaq();
+    if (id === 'compliance') renderCompliance();
+    if (id === 'all') renderAll();
+    if (id === 'herb') renderCat('herb');
+    if (id === 'food') renderCat('food');
+    if (id === 'skin') renderCat('skin');
+    document.getElementById('article-detail').classList.remove('open');
+    document.getElementById('main-tabs').style.display = 'block';
+  }
+
+  function renderArticleCard(a) {
+    const reads = readCounts[a.id] || 0;
+    return '<div class="article-card" onclick="openArticle('+a.id+')"><div class="ac-img">'+a.emoji+'<span class="ac-cat" style="background:'+a.color+'">'+a.catName+'</span>'+(reads>0?'<span class="ac-reads">👁 '+reads+'</span>':'')+'</div><div class="ac-body"><div class="ac-title">'+a.title+'</div><div class="ac-desc">'+a.desc+'</div><div class="ac-meta"><span>'+a.date+'</span><span>⏱ '+a.readTime+'</span></div></div></div>';
+  }
+
+  function renderFeatured(a) {
+    return '<div class="featured-article" onclick="openArticle('+a.id+')"><div class="fa-img">'+a.emoji+'</div><div><span class="fa-cat" style="background:'+a.color+'">'+a.catName+'</span><div class="fa-title">'+a.title+'</div><div class="fa-desc">'+a.desc+'</div><div class="fa-meta">'+a.date+' · ⏱ '+a.readTime+'</div></div></div>';
+  }
+
+  function renderAll() {
+    const featured = ARTICLES.filter(a => a.featured);
+    const others = ARTICLES.filter(a => !a.featured);
+    document.getElementById('all-content').innerHTML =
+      '<div style="font-size:0.82rem;font-weight:700;color:var(--color-warm-brown-light);margin-bottom:0.8rem;letter-spacing:0.05em;">精选推荐</div>' +
+      featured.map(renderFeatured).join('') +
+      '<div style="font-size:0.82rem;font-weight:700;color:var(--color-warm-brown-light);margin:1.2rem 0 0.8rem;letter-spacing:0.05em;">更多文章</div>' +
+      '<div class="article-grid">' + others.map(renderArticleCard).join('') + '</div>';
+  }
+
+  function renderCat(cat) {
+    const arts = ARTICLES.filter(a => a.cat === cat);
+    document.getElementById(cat + '-content').innerHTML = '<div class="article-grid">' + arts.map(renderArticleCard).join('') + '</div>';
+  }
+
+  function renderFaq() {
+    document.getElementById('faq-list').innerHTML = FAQS.map(f =>
+      '<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>'+f.q+'</span><span class="arrow">▼</span></div><div class="faq-a"><div class="faq-a-inner">'+f.a+'</div></div></div>'
+    ).join('');
+  }
+
+  function renderCompliance() {
+    document.getElementById('compliance-content').innerHTML =
+      '<h3>关于本品分类</h3><p>七白润光软糖属于普通食品（糖果类），依据《食品安全法》及相关法规生产、销售。</p><h3>关于功效宣称</h3><p>根据国家相关法规，普通食品不得宣传疾病预防、诊断、治疗功能。本品所有宣传内容均经法务团队审核。</p><h3>关于药食同源原料</h3><p>本品使用的白芷、茯苓、白芍、白术等原料均列于国家卫健委《既是食品又是中药材的物质目录》。</p><h3>关于广告合规</h3><p>本品广告经广告主依法备案，所有广告内容不含绝对化用语、不含医疗功效宣称。</p><h3>消费者权益保障</h3><p>消费者享有7天无理由退换货权利，如有质量问题可联系客服处理。</p><div class="warn-box">⚠️ 重要提示：本品为普通食品，不能代替药物。如您有皮肤疾病或其他健康问题，请及时就医。</div><p style="margin-top:1rem;">客服邮箱：service@qibairuguang.com | 合规咨询：compliance@qibairuguang.com</p>';
+  }
+
+  function toggleFaq(el) {
+    const a = el.nextElementSibling;
+    const arrow = el.querySelector('.arrow');
+    const isOpen = a.classList.contains('open');
+    document.querySelectorAll('.faq-a').forEach(x => { x.classList.remove('open'); if(x.previousElementSibling) x.previousElementSibling.querySelector('.arrow').style.transform='rotate(0)'; });
+    if (!isOpen) { a.classList.add('open'); arrow.style.transform = 'rotate(180deg)'; }
+  }
+
+  function openArticle(id) {
+    const a = ARTICLES.find(x => x.id === id);
+    if (!a) return;
+    readCounts[id] = (readCounts[id] || 0) + 1;
+    localStorage.setItem('qibai_article_reads', JSON.stringify(readCounts));
+    // Track recent
+    recentArticles = recentArticles.filter(x => x.id !== id);
+    recentArticles.unshift({ id: a.id, emoji: a.emoji, title: a.title, catName: a.catName, color: a.color, readTime: a.readTime, ts: Date.now() });
+    if (recentArticles.length > 10) recentArticles = recentArticles.slice(0, 10);
+    localStorage.setItem('qibai_recent_articles', JSON.stringify(recentArticles));
+    document.getElementById('total-reads').textContent = Object.values(readCounts).reduce((s,v) => s+v, 0);
+    const related = ARTICLES.filter(x => x.cat === a.cat && x.id !== a.id).slice(0, 3);
+    if (related.length < 3) { related.push(...ARTICLES.filter(x => x.cat !== a.cat && x.id !== a.id).slice(0, 3 - related.length)); }
+    const detail = document.getElementById('article-detail');
+    detail.innerHTML =
+      '<div class="ad-hero"><button class="ad-back" onclick="closeArticle()">← 返回列表</button>'+a.emoji+'</div>' +
+      '<span class="ad-cat" style="background:'+a.color+'">'+a.catName+'</span>' +
+      '<h2 class="ad-title">'+a.title+'</h2>' +
+      '<div class="ad-meta"><span>📅 '+a.date+'</span><span>⏱ '+a.readTime+'</span><span>👁 '+(readCounts[id]||0)+'次阅读</span></div>' +
+      '<div class="ad-body">'+a.body+'</div>' +
+      '<div style="margin-top:2rem;padding:1rem;background:rgba(232,180,197,0.08);border-radius:var(--radius-sm);font-size:0.78rem;color:var(--color-warm-brown-light);">以上内容仅供科普参考，不构成医疗建议。如有健康问题请咨询专业医师。</div>' +
+      (related.length ? '<div class="related-section"><div class="related-title">📖 相关推荐</div><div class="related-grid">'+related.map(r => '<div class="related-card" onclick="openArticle('+r.id+')"><div class="related-emoji">'+r.emoji+'</div><div class="related-info"><h4>'+r.title+'</h4><span>'+r.catName+' · '+r.readTime+'</span></div></div>').join('')+'</div></div>' : '');
+    detail.classList.add('open');
+    document.getElementById('main-tabs').style.display = 'none';
+    window.scrollTo(0, 0);
+  }
+
+  function closeArticle() {
+    document.getElementById('article-detail').classList.remove('open');
+    document.getElementById('main-tabs').style.display = 'block';
+    const activeTab = document.querySelector('.tab-item.active');
+    if (activeTab) {
+      const idx = Array.from(document.querySelectorAll('.tab-item')).indexOf(activeTab);
+      const ids = ['all','herb','food','skin','faq','compliance'];
+      if (ids[idx] === 'all') renderAll();
+      else if (['herb','food','skin'].includes(ids[idx])) renderCat(ids[idx]);
+    }
+  }
+
+  function doSearch() {
+    const q = document.getElementById('search-input').value.trim().toLowerCase();
+    const resultsEl = document.getElementById('search-results');
+    const allContent = document.getElementById('all-content');
+    if (!q) { resultsEl.style.display='none'; allContent.style.display='block'; return; }
+    const found = ARTICLES.filter(a =>
+      a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q) ||
+      a.catName.toLowerCase().includes(q) || a.body.toLowerCase().includes(q) ||
+      (a.tags && a.tags.some(t => t.toLowerCase().includes(q)))
+    );
+    const foundFaq = FAQS.filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q));
+    resultsEl.style.display = 'block'; allContent.style.display = 'none';
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.tab-item').classList.add('active');
+    document.getElementById('panel-all').classList.add('active');
+    if (!found.length && !foundFaq.length) {
+      resultsEl.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--color-warm-brown-light);">未找到"'+q+'"相关内容<br><span style="font-size:0.75rem;margin-top:0.5rem;display:inline-block;">试试其他关键词，如：白芷、药食同源、防晒等</span></div>';
+      return;
+    }
+    resultsEl.innerHTML =
+      '<div style="font-size:0.82rem;font-weight:600;color:var(--color-warm-brown-light);margin-bottom:0.8rem;">搜索"'+q+'"的结果（'+(found.length+foundFaq.length)+'条）</div>' +
+      (found.length ? '<div class="article-grid">'+found.map(renderArticleCard).join('')+'</div>' : '') +
+      (foundFaq.length ? '<div style="margin-top:1.5rem;"><div style="font-size:0.82rem;font-weight:600;color:var(--color-warm-brown-light);margin-bottom:0.8rem;">相关问题</div><div class="faq-list">'+foundFaq.map(f => '<div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>'+f.q+'</span><span class="arrow">▼</span></div><div class="faq-a"><div class="faq-a-inner">'+f.a+'</div></div></div>').join('')+'</div></div>' : '');
+  }
+
+  document.getElementById('search-input').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+  const hash = location.hash;
+  if (hash === '#faq') switchTab(document.querySelectorAll('.tab-item')[4], 'faq');
+  else if (hash === '#compliance') switchTab(document.querySelectorAll('.tab-item')[5], 'compliance');
+  else renderAll();
+  renderRecentlyRead();
+
+  // Reading progress bar
+  window.addEventListener('scroll', function() {
+    const detail = document.getElementById('article-detail');
+    const bar = document.getElementById('readingProgress');
+    if (!detail || !detail.classList.contains('open')) { bar.style.width = '0'; return; }
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = Math.min(100, (scrollTop / docHeight) * 100) + '%';
+  });
+
+  function renderRecentlyRead() {
+    const el = document.getElementById('recently-read');
+    const list = document.getElementById('recent-list');
+    if (recentArticles.length === 0) { el.style.display = 'none'; return; }
+    el.style.display = 'block';
+    list.innerHTML = recentArticles.slice(0, 5).map(r => `
+      <div class="recent-item" onclick="openArticle(${r.id})">
+        <div class="ri-emoji">${r.emoji}</div>
+        <div class="ri-info">
+          <div class="ri-title">${r.title}</div>
+          <div class="ri-meta">${r.catName} · ⏱ ${r.readTime}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>

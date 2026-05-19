@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>21天食养计划 · 七白润光</title>
+  <style>
+    :root{--color-primary:#E8B4C5;--color-primary-dark:#C985A0;--color-gold:#C9A84C;--color-gold-dark:#A07830;--color-gold-light:#F0D080;--color-ivory:#FDFAF5;--color-cream:#FEF6EC;--color-warm-brown:#6B4226;--color-warm-brown-light:#A0704A;--color-dark-bg:#1A1208;--font-serif:'Noto Serif SC','SimSun',Georgia,serif;--font-sans:'PingFang SC','Microsoft YaHei',sans-serif;--radius-sm:8px;--radius-md:16px;--radius-lg:24px;--radius-full:9999px;--shadow-sm:0 2px 8px rgba(200,130,100,0.1);--shadow-md:0 8px 32px rgba(200,130,100,0.15);--transition:0.3s cubic-bezier(0.25,0.46,0.45,0.94);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,245,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.12);}
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-links{display:flex;gap:1rem;align-items:center;font-size:0.85rem;}
+    .nav-links a{color:var(--color-warm-brown-light);transition:color var(--transition);}
+    .nav-links a:hover{color:var(--color-warm-brown);}
+    @media(max-width:500px){.nav-links a span.nav-text{display:none;}}
+
+    /* Hero */
+    .plan-hero{
+      margin-top:64px;padding:3rem 2rem;
+      background:linear-gradient(160deg,var(--color-dark-bg),#2C1A0A);
+      text-align:center;position:relative;overflow:hidden;
+    }
+    .plan-hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+    .hero-badge{display:inline-block;padding:0.3rem 1rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.75rem;color:var(--color-gold-light);font-weight:600;margin-bottom:1rem;letter-spacing:0.1em;}
+    .hero-title{font-family:var(--font-serif);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;color:white;margin-bottom:0.5rem;}
+    .hero-sub{font-size:0.9rem;color:rgba(255,255,255,0.55);margin-bottom:1.5rem;}
+    .hero-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;}
+    .hs-item{text-align:center;}
+    .hs-num{font-family:var(--font-serif);font-size:2rem;font-weight:700;color:var(--color-gold-light);}
+    .hs-label{font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:0.1rem;}
+
+    /* Progress ring */
+    .progress-ring-wrap{display:flex;justify-content:center;margin:2rem 0 1rem;}
+    .ring-svg{transform:rotate(-90deg);}
+    .ring-bg{fill:none;stroke:rgba(255,255,255,0.1);stroke-width:8;}
+    .ring-fill{fill:none;stroke:url(#ringGrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease;}
+    .ring-text{transform:rotate(90deg);}
+    .ring-day{font-size:2.8rem;font-weight:700;fill:white;text-anchor:middle;dominant-baseline:middle;font-family:var(--font-serif);}
+    .ring-label{font-size:0.75rem;fill:rgba(255,255,255,0.5);text-anchor:middle;dominant-baseline:middle;}
+
+    /* Content */
+    .page-content{max-width:860px;margin:0 auto;padding:2rem 2rem 4rem;}
+
+    /* Section tabs */
+    .section-tabs{display:flex;gap:0;margin-bottom:1.5rem;background:white;border-radius:var(--radius-full);padding:4px;box-shadow:var(--shadow-sm);overflow-x:auto;}
+    .section-tabs::-webkit-scrollbar{display:none;}
+    .sec-tab{flex:1;min-width:fit-content;padding:0.6rem 1rem;text-align:center;border:none;background:transparent;border-radius:var(--radius-full);font-size:0.82rem;font-weight:500;cursor:pointer;color:var(--color-warm-brown-light);transition:all var(--transition);white-space:nowrap;}
+    .sec-tab.active{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;font-weight:600;box-shadow:0 2px 10px rgba(201,133,160,0.3);}
+    .sec-panel{display:none;}
+    .sec-panel.active{display:block;}
+
+    /* Today card */
+    .today-card{background:white;border-radius:var(--radius-lg);box-shadow:0 12px 48px rgba(200,130,100,0.18);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+    .today-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--color-primary),var(--color-gold),var(--color-primary-dark));}
+    .today-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;}
+    .today-date{font-size:0.82rem;color:var(--color-warm-brown-light);}
+    .today-day{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;}
+    .streak-badge{display:flex;align-items:center;gap:0.3rem;padding:0.3rem 0.8rem;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:var(--radius-full);font-size:0.78rem;color:var(--color-gold-dark);font-weight:600;}
+
+    /* Task list */
+    .tasks{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;}
+    .task-item{display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1rem;border:1.5px solid rgba(200,130,100,0.12);border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);}
+    .task-item.done{border-color:rgba(76,175,80,0.3);background:rgba(76,175,80,0.04);}
+    .task-check{width:22px;height:22px;border-radius:50%;border:2px solid rgba(200,130,100,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--transition);font-size:0.7rem;color:transparent;}
+    .task-item.done .task-check{background:#4CAF50;border-color:#4CAF50;color:white;}
+    .task-icon{font-size:1.2rem;flex-shrink:0;}
+    .task-name{font-size:0.88rem;font-weight:500;flex:1;}
+    .task-pts{font-size:0.72rem;color:var(--color-gold-dark);font-weight:600;}
+    .task-item.done .task-name{text-decoration:line-through;color:var(--color-warm-brown-light);}
+
+    /* Checkin button */
+    .btn-checkin{width:100%;padding:1rem;border:none;border-radius:var(--radius-full);font-size:1rem;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:0.05em;}
+    .btn-checkin.ready{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary),var(--color-gold));color:white;box-shadow:0 8px 30px rgba(201,133,160,0.4);}
+    .btn-checkin.ready:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(201,133,160,0.5);}
+    .btn-checkin.done-today{background:rgba(76,175,80,0.1);color:#4CAF50;border:1.5px solid rgba(76,175,80,0.3);cursor:default;}
+
+    /* Water tracker */
+    .water-tracker{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+    .water-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+    .water-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;}
+    .water-title::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,#4FC3F7,#0288D1);border-radius:2px;}
+    .water-stats{display:flex;align-items:center;gap:1rem;}
+    .water-total{font-family:var(--font-serif);font-size:1.4rem;font-weight:700;color:#0288D1;}
+    .water-goal{font-size:0.72rem;color:var(--color-warm-brown-light);}
+    .water-progress-bar{height:10px;background:rgba(2,136,209,0.1);border-radius:5px;overflow:hidden;margin-bottom:1rem;}
+    .water-progress-fill{height:100%;background:linear-gradient(90deg,#4FC3F7,#0288D1);border-radius:5px;transition:width 0.5s ease;}
+    .water-cups{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:1rem;}
+    .water-cup{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:2px solid rgba(2,136,209,0.2);cursor:pointer;transition:all var(--transition);position:relative;}
+    .water-cup:hover{border-color:#4FC3F7;background:rgba(79,195,247,0.05);}
+    .water-cup.filled{background:linear-gradient(180deg,rgba(79,195,247,0.3),rgba(2,136,209,0.2));border-color:#4FC3F7;}
+    .water-cup .cup-icon{font-size:1.3rem;margin-bottom:2px;}
+    .water-cup.filled .cup-icon{filter:none;}
+    .water-cup:not(.filled) .cup-icon{filter:grayscale(0.6);opacity:0.5;}
+    .water-cup .cup-label{font-size:0.55rem;color:var(--color-warm-brown-light);}
+    .water-actions{display:flex;gap:0.6rem;}
+    .btn-water{flex:1;padding:0.6rem;border:none;border-radius:var(--radius-full);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all var(--transition);}
+    .btn-water-add{background:linear-gradient(135deg,#4FC3F7,#0288D1);color:white;}
+    .btn-water-add:hover{opacity:0.9;}
+    .btn-water-reset{background:rgba(200,130,100,0.08);color:var(--color-warm-brown-light);}
+    .btn-water-reset:hover{background:rgba(200,130,100,0.15);}
+
+    /* Sleep tracker */
+    .sleep-tracker{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+    .sleep-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;}
+    .sleep-title::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,#7E57C2,#4527A0);border-radius:2px;}
+    .sleep-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+    @media(max-width:500px){.sleep-form{grid-template-columns:1fr;}}
+    .sleep-field{display:flex;flex-direction:column;gap:0.3rem;}
+    .sleep-field label{font-size:0.78rem;color:var(--color-warm-brown-light);font-weight:600;}
+    .sleep-field input{padding:0.6rem 0.8rem;border:1.5px solid rgba(200,130,100,0.15);border-radius:var(--radius-sm);font-size:0.9rem;font-family:var(--font-sans);color:var(--color-warm-brown);outline:none;transition:border-color var(--transition);}
+    .sleep-field input:focus{border-color:var(--color-primary);}
+    .sleep-result{display:flex;align-items:center;gap:1rem;padding:1rem;background:linear-gradient(135deg,rgba(126,87,194,0.08),rgba(69,39,160,0.05));border-radius:var(--radius-sm);margin-bottom:1rem;}
+    .sleep-duration{font-family:var(--font-serif);font-size:2rem;font-weight:700;color:#4527A0;}
+    .sleep-quality{display:flex;flex-direction:column;gap:0.2rem;}
+    .sleep-quality-text{font-size:0.85rem;font-weight:600;}
+    .sleep-quality-desc{font-size:0.72rem;color:var(--color-warm-brown-light);}
+    .btn-sleep{width:100%;padding:0.6rem;border:none;border-radius:var(--radius-full);font-size:0.85rem;font-weight:600;cursor:pointer;background:linear-gradient(135deg,#7E57C2,#4527A0);color:white;transition:all var(--transition);}
+    .btn-sleep:hover{opacity:0.9;}
+
+    /* Skin diary */
+    .skin-diary{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+    .skin-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;}
+    .skin-title::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--color-primary),var(--color-gold));border-radius:2px;}
+    .skin-states{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;}
+    @media(max-width:500px){.skin-states{grid-template-columns:repeat(2,1fr);}}
+    .skin-state{padding:0.7rem;border:1.5px solid rgba(200,130,100,0.12);border-radius:var(--radius-sm);text-align:center;cursor:pointer;transition:all var(--transition);font-size:0.82rem;}
+    .skin-state:hover{border-color:var(--color-primary);background:rgba(232,180,197,0.05);}
+    .skin-state.selected{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.12);font-weight:600;}
+    .skin-state .state-icon{font-size:1.2rem;display:block;margin-bottom:0.2rem;}
+    .skin-factors{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+    .skin-factor{padding:0.35rem 0.8rem;border:1px solid rgba(200,130,100,0.15);border-radius:var(--radius-full);font-size:0.75rem;cursor:pointer;transition:all var(--transition);color:var(--color-warm-brown-light);}
+    .skin-factor:hover{border-color:var(--color-primary);}
+    .skin-factor.selected{border-color:var(--color-primary-dark);background:rgba(232,180,197,0.12);color:var(--color-warm-brown);}
+    .skin-note{width:100%;padding:0.7rem;border:1.5px solid rgba(200,130,100,0.12);border-radius:var(--radius-sm);font-size:0.85rem;font-family:var(--font-sans);color:var(--color-warm-brown);outline:none;resize:vertical;min-height:60px;transition:border-color var(--transition);}
+    .skin-note:focus{border-color:var(--color-primary);}
+    .skin-note::placeholder{color:#C8A898;}
+    .btn-skin{width:100%;padding:0.6rem;border:none;border-radius:var(--radius-full);font-size:0.85rem;font-weight:600;cursor:pointer;margin-top:0.8rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary));color:white;transition:all var(--transition);}
+    .btn-skin:hover{opacity:0.9;}
+
+    /* Calendar */
+    .calendar-card{background:white;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:1.5rem;margin-bottom:1.5rem;}
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+    .cal-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;}
+    .cal-nav{display:flex;gap:0.5rem;}
+    .cal-nav button{width:28px;height:28px;border:1px solid rgba(200,130,100,0.2);border-radius:50%;background:white;cursor:pointer;font-size:0.8rem;transition:all var(--transition);}
+    .cal-nav button:hover{border-color:var(--color-primary);background:rgba(232,180,197,0.08);}
+    .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:0.5rem;}
+    .cal-weekday{text-align:center;font-size:0.72rem;font-weight:600;color:var(--color-warm-brown-light);padding:0.3rem;}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+    .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:0.82rem;cursor:pointer;position:relative;transition:all var(--transition);}
+    .cal-day.other-month{color:rgba(200,130,100,0.25);}
+    .cal-day.today{background:rgba(232,180,197,0.2);font-weight:700;color:var(--color-warm-brown);}
+    .cal-day.checked{background:linear-gradient(135deg,var(--color-primary),var(--color-gold));color:white;font-weight:700;}
+    .cal-day.makeup{background:linear-gradient(135deg,var(--color-gold-light),var(--color-gold));color:white;font-weight:600;}
+    .cal-day.checked::after,.cal-day.makeup::after{content:'✓';position:absolute;bottom:-2px;right:-2px;width:12px;height:12px;background:#4CAF50;border-radius:50%;font-size:0.5rem;display:flex;align-items:center;justify-content:center;line-height:12px;text-align:center;}
+    .cal-day.makeup::after{background:var(--color-gold);}
+    .cal-day:not(.checked):not(.other-month):hover{background:rgba(232,180,197,0.1);}
+
+    /* Milestones */
+    .milestones{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;margin-bottom:1.5rem;}
+    @media(min-width:500px){.milestones{grid-template-columns:repeat(4,1fr);}}
+    .milestone{background:white;border-radius:var(--radius-md);padding:1rem;text-align:center;border:1.5px solid rgba(200,130,100,0.1);transition:all var(--transition);position:relative;overflow:hidden;}
+    .milestone.reached{border-color:var(--color-gold);background:linear-gradient(135deg,rgba(232,180,197,0.1),rgba(201,168,76,0.08));}
+    .milestone-day{font-size:1.5rem;font-weight:700;color:rgba(200,130,100,0.2);font-family:var(--font-serif);}
+    .milestone.reached .milestone-day{color:var(--color-gold);}
+    .milestone-icon{font-size:1.4rem;margin:0.3rem 0;}
+    .milestone-name{font-size:0.78rem;font-weight:600;}
+    .milestone-desc{font-size:0.7rem;color:var(--color-warm-brown-light);margin-top:0.2rem;}
+    .milestone.reached .milestone-name{color:var(--color-warm-brown);}
+    .milestone-badge{position:absolute;top:6px;right:6px;font-size:0.65rem;background:var(--color-gold);color:white;padding:0.1rem 0.4rem;border-radius:var(--radius-full);}
+
+    /* Info card */
+    .info-card{background:white;border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.2rem;}
+    .card-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;}
+    .card-title::before{content:'';width:3px;height:16px;background:linear-gradient(180deg,var(--color-primary),var(--color-gold));border-radius:2px;}
+
+    /* Make-up checkin modal */
+    .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:200;justify-content:center;align-items:center;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:white;border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:380px;max-height:80vh;overflow-y:auto;}
+    .modal-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:1rem;text-align:center;}
+    .makeup-dates{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:1rem;}
+    .makeup-date{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:0.78rem;cursor:pointer;border:1.5px solid rgba(200,130,100,0.15);transition:all var(--transition);}
+    .makeup-date:hover{border-color:var(--color-primary);background:rgba(232,180,197,0.08);}
+    .makeup-date.can-makeup{border-color:var(--color-gold);background:rgba(201,168,76,0.08);}
+    .makeup-date.selected{background:var(--color-gold);border-color:var(--color-gold);color:white;font-weight:600;}
+    .makeup-date.has-checkin{background:#E8E8E8;color:#999;cursor:not-allowed;}
+    .makeup-remaining{text-align:center;font-size:0.78rem;color:var(--color-gold-dark);margin-bottom:1rem;}
+    .modal-actions{display:flex;gap:0.8rem;}
+    .modal-actions button{flex:1;padding:0.6rem;border:none;border-radius:var(--radius-full);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all var(--transition);}
+    .btn-modal-cancel{background:rgba(200,130,100,0.08);color:var(--color-warm-brown-light);}
+    .btn-modal-confirm{background:linear-gradient(135deg,var(--color-gold),var(--color-gold-dark));color:white;}
+    .btn-modal-confirm:hover{opacity:0.9;}
+
+    /* Skin history */
+    .skin-history{display:flex;flex-direction:column;gap:0.6rem;max-height:300px;overflow-y:auto;}
+    .skin-record-item{display:flex;align-items:center;gap:0.8rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);}
+    .sr-date{font-size:0.72rem;color:var(--color-warm-brown-light);white-space:nowrap;min-width:60px;}
+    .sr-state{font-size:0.82rem;font-weight:600;}
+    .sr-factors{font-size:0.72rem;color:var(--color-warm-brown-light);flex:1;}
+    .sr-del{font-size:0.75rem;color:#999;cursor:pointer;padding:0.2rem 0.4rem;border:none;background:none;border-radius:var(--radius-sm);transition:all var(--transition);}
+    .sr-del:hover{background:rgba(255,0,0,0.08);color:#E53935;}
+
+    /* Toast */
+    .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--color-warm-brown);color:white;padding:0.7rem 1.5rem;border-radius:var(--radius-full);font-size:0.85rem;z-index:9999;opacity:0;transition:all 0.3s;pointer-events:none;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+    .pop{animation:pop 0.4s ease;}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+    .fade-in{animation:fadeInUp 0.5s ease both;}
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="brand"><div class="brand-icon">🌸</div><span class="brand-name">七白润光</span></a>
+  <div class="nav-links">
+    <a href="report.html">📊 <span class="nav-text">周报</span></a>
+    <a href="tech.html">🔬 <span class="nav-text">研发工艺</span></a>
+    <a href="member.html">👤 <span class="nav-text">会员中心</span></a>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+
+<!-- Makeup modal -->
+<div class="modal-overlay" id="makeup-modal">
+  <div class="modal">
+    <div class="modal-title">📝 选择补卡日期</div>
+    <div class="makeup-remaining">本月剩余补卡次数：<strong id="makeup-remaining-count">3</strong> 次</div>
+    <div class="makeup-dates" id="makeup-dates"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeMakeupModal()">取消</button>
+      <button class="btn-modal-confirm" onclick="confirmMakeup()">确认补卡</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="plan-hero">
+  <div class="hero-badge">✨ 21天食养焕肤计划</div>
+  <h1 class="hero-title">坚持·改变·焕新</h1>
+  <p class="hero-sub">古法七白配方 × 科学食养方案，21天见证肌肤蜕变</p>
+
+  <!-- Progress ring -->
+  <div class="progress-ring-wrap">
+    <svg class="ring-svg" width="140" height="140" viewBox="0 0 140 140">
+      <defs>
+        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:var(--color-primary);stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:var(--color-gold);stop-opacity:1"/>
+        </linearGradient>
+      </defs>
+      <circle class="ring-bg" cx="70" cy="70" r="58"/>
+      <circle class="ring-fill" id="ring-fill" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+      <text class="ring-text" x="70" y="65">
+        <tspan class="ring-day" id="ring-day" x="70" dy="0">0</tspan>
+      </text>
+      <text x="70" y="88" style="text-anchor:middle;fill:rgba(255,255,255,0.45);font-size:11px;">/ 21 天</text>
+    </svg>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hs-item"><div class="hs-num" id="stat-streak">0</div><div class="hs-label">连续打卡</div></div>
+    <div class="hs-item"><div class="hs-num" id="stat-total">0</div><div class="hs-label">累计打卡</div></div>
+    <div class="hs-item"><div class="hs-num" id="stat-points">0</div><div class="hs-label">本计划积分</div></div>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <!-- Section tabs -->
+  <div class="section-tabs">
+    <div class="sec-tab active" onclick="switchSection(this,'today')">📋 今日打卡</div>
+    <div class="sec-tab" onclick="switchSection(this,'water')">💧 饮水记录</div>
+    <div class="sec-tab" onclick="switchSection(this,'sleep')">😴 作息记录</div>
+    <div class="sec-tab" onclick="switchSection(this,'skin')">🌸 肤质日记</div>
+    <div class="sec-tab" onclick="switchSection(this,'calendar')">📅 日历</div>
+    <div class="sec-tab" onclick="switchSection(this,'progress')">📈 进度</div>
+  </div>
+
+  <!-- Today panel -->
+  <div class="sec-panel active" id="panel-today">
+    <div class="today-card fade-in" id="today-card">
+      <div class="today-header">
+        <div>
+          <div class="today-date" id="today-date"></div>
+          <div class="today-day" id="today-day-label">第 1 天</div>
+        </div>
+        <div class="streak-badge" id="streak-badge">🔥 连续 0 天</div>
+      </div>
+
+      <div class="tasks" id="task-list">
+        <div class="task-item" id="task-eat" onclick="toggleTask('eat')">
+          <div class="task-check" id="check-eat">✓</div>
+          <div class="task-icon">🍬</div>
+          <div class="task-name">今日已服用七白软糖（2颗）</div>
+          <div class="task-pts">+5分</div>
+        </div>
+        <div class="task-item" id="task-water" onclick="toggleTask('water')">
+          <div class="task-check" id="check-water">✓</div>
+          <div class="task-icon">💧</div>
+          <div class="task-name">饮水≥2000ml（8杯以上）</div>
+          <div class="task-pts">+2分</div>
+        </div>
+        <div class="task-item" id="task-sleep" onclick="toggleTask('sleep')">
+          <div class="task-check" id="check-sleep">✓</div>
+          <div class="task-icon">😴</div>
+          <div class="task-name">睡眠时间≥7小时</div>
+          <div class="task-pts">+2分</div>
+        </div>
+        <div class="task-item" id="task-sunscreen" onclick="toggleTask('sunscreen')">
+          <div class="task-check" id="check-sunscreen">✓</div>
+          <div class="task-icon">☀️</div>
+          <div class="task-name">外出已做防晒</div>
+          <div class="task-pts">+1分</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <div class="makeup-bar" style="flex:1;min-width:200px;">
+          <span style="font-size:1.2rem;">📝</span>
+          <span style="flex:1;color:var(--color-warm-brown-light);font-size:0.82rem;">忘打卡了？本月剩余 <strong id="makeup-bar-count">3</strong> 次补卡机会</span>
+          <button class="btn-makeup" onclick="openMakeupModal()" style="padding:0.4rem 0.9rem;background:var(--color-gold);color:white;border:none;border-radius:var(--radius-full);font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;">补卡</button>
+        </div>
+      </div>
+
+      <button class="btn-checkin ready" id="btn-checkin" onclick="doCheckin()">🌸 完成今日打卡</button>
+    </div>
+  </div>
+
+  <!-- Water panel -->
+  <div class="sec-panel" id="panel-water">
+    <div class="water-tracker fade-in">
+      <div class="water-header">
+        <div class="water-title">💧 饮水记录</div>
+        <div class="water-stats">
+          <div class="water-total" id="water-total">0ml</div>
+          <div class="water-goal">目标 2000ml</div>
+        </div>
+      </div>
+      <div class="water-progress-bar"><div class="water-progress-fill" id="water-progress" style="width:0%"></div></div>
+      <div class="water-cups" id="water-cups"></div>
+      <div class="water-actions">
+        <button class="btn-water btn-water-add" onclick="addWaterCup()">💧 +250ml</button>
+        <button class="btn-water btn-water-add" onclick="addWaterCup500()">💧 +500ml</button>
+        <button class="btn-water btn-water-reset" onclick="resetWater()">重置</button>
+      </div>
+      <div style="margin-top:1rem;padding:0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);font-size:0.78rem;color:var(--color-warm-brown-light);line-height:1.6;">
+        💡 <strong>饮水小贴士：</strong>每日饮水2000ml有助于促进新陈代谢，帮助食养成分更好吸收。建议少量多次饮用，不要等到口渴再喝。
+      </div>
+    </div>
+  </div>
+
+  <!-- Sleep panel -->
+  <div class="sec-panel" id="panel-sleep">
+    <div class="sleep-tracker fade-in">
+      <div class="sleep-title">😴 作息记录</div>
+      <div class="sleep-form">
+        <div class="sleep-field">
+          <label>🌙 入睡时间</label>
+          <input type="time" id="sleep-time" value="23:00">
+        </div>
+        <div class="sleep-field">
+          <label>☀️ 起床时间</label>
+          <input type="time" id="wake-time" value="07:00">
+        </div>
+      </div>
+      <div class="sleep-result" id="sleep-result">
+        <div class="sleep-duration" id="sleep-duration">8.0h</div>
+        <div class="sleep-quality">
+          <div class="sleep-quality-text" id="sleep-quality-text">睡眠质量：优秀</div>
+          <div class="sleep-quality-desc" id="sleep-quality-desc">7-9小时为最佳睡眠时长</div>
+        </div>
+      </div>
+      <button class="btn-sleep" onclick="saveSleep()">保存今日作息</button>
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.5rem;">近7天作息记录</div>
+        <div id="sleep-history" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skin panel -->
+  <div class="sec-panel" id="panel-skin">
+    <div class="skin-diary fade-in">
+      <div class="skin-title">🌸 今日肤质记录</div>
+      <div class="skin-states" id="skin-states">
+        <div class="skin-state" data-state="光泽感十足" onclick="selectSkinState(this)">
+          <span class="state-icon">✨</span>光泽感十足
+        </div>
+        <div class="skin-state" data-state="水润嫩滑" onclick="selectSkinState(this)">
+          <span class="state-icon">💧</span>水润嫩滑
+        </div>
+        <div class="skin-state" data-state="状态一般" onclick="selectSkinState(this)">
+          <span class="state-icon">😐</span>状态一般
+        </div>
+        <div class="skin-state" data-state="有些暗沉" onclick="selectSkinState(this)">
+          <span class="state-icon">😶</span>有些暗沉
+        </div>
+        <div class="skin-state" data-state="偏油出痘" onclick="selectSkinState(this)">
+          <span class="state-icon">😟</span>偏油出痘
+        </div>
+        <div class="skin-state" data-state="干燥起皮" onclick="selectSkinState(this)">
+          <span class="state-icon">🏜️</span>干燥起皮
+        </div>
+        <div class="skin-state" data-state="敏感泛红" onclick="selectSkinState(this)">
+          <span class="state-icon">🔴</span>敏感泛红
+        </div>
+      </div>
+      <div style="font-size:0.78rem;font-weight:600;margin-bottom:0.4rem;color:var(--color-warm-brown-light);">影响因素（可多选）</div>
+      <div class="skin-factors" id="skin-factors">
+        <span class="skin-factor" data-factor="熬夜" onclick="toggleFactor(this)">🌙 熬夜</span>
+        <span class="skin-factor" data-factor="压力" onclick="toggleFactor(this)">😤 压力</span>
+        <span class="skin-factor" data-factor="饮食油腻" onclick="toggleFactor(this)">🍔 饮食油腻</span>
+        <span class="skin-factor" data-factor="暴晒" onclick="toggleFactor(this)">☀️ 暴晒</span>
+        <span class="skin-factor" data-factor="空调房" onclick="toggleFactor(this)">❄️ 空调房</span>
+        <span class="skin-factor" data-factor="饮水充足" onclick="toggleFactor(this)">💧 饮水充足</span>
+        <span class="skin-factor" data-factor="规律运动" onclick="toggleFactor(this)">🏃 规律运动</span>
+        <span class="skin-factor" data-factor="心情愉悦" onclick="toggleFactor(this)">😊 心情愉悦</span>
+      </div>
+      <textarea class="skin-note" id="skin-note" placeholder="记录今天的肤质变化感受（选填）..."></textarea>
+      <button class="btn-skin" onclick="saveSkinRecord()">保存肤质记录</button>
+    </div>
+    <div class="info-card fade-in">
+      <div class="card-title">历史肤质记录</div>
+      <div class="skin-history" id="skin-history"></div>
+    </div>
+  </div>
+
+  <!-- Calendar panel -->
+  <div class="sec-panel" id="panel-calendar">
+    <div class="calendar-card fade-in">
+      <div class="cal-header">
+        <div class="cal-title">📅 打卡日历</div>
+        <div class="cal-nav">
+          <button onclick="prevMonth()">‹</button>
+          <span id="cal-month-label" style="font-size:0.82rem;color:var(--color-warm-brown-light);line-height:28px;padding:0 0.3rem;"></span>
+          <button onclick="nextMonth()">›</button>
+        </div>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">日</div><div class="cal-weekday">一</div><div class="cal-weekday">二</div><div class="cal-weekday">三</div><div class="cal-weekday">四</div><div class="cal-weekday">五</div><div class="cal-weekday">六</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+      <div style="display:flex;gap:1rem;font-size:0.72rem;color:var(--color-warm-brown-light);margin-top:0.8rem;">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));margin-right:4px;"></span>正常打卡</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--color-gold-light),var(--color-gold));margin-right:4px;"></span>补卡</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress panel -->
+  <div class="sec-panel" id="panel-progress">
+    <div class="card-title" style="margin-bottom:0.8rem;">成长节点</div>
+    <div class="milestones fade-in" id="milestones">
+      <div class="milestone" id="ms-1">
+        <div class="milestone-day">D1</div>
+        <div class="milestone-icon">🌱</div>
+        <div class="milestone-name">食养启程</div>
+        <div class="milestone-desc">七白精华开始积累</div>
+      </div>
+      <div class="milestone" id="ms-7">
+        <div class="milestone-day">D7</div>
+        <div class="milestone-icon">💧</div>
+        <div class="milestone-name">水润初现</div>
+        <div class="milestone-desc">皮肤水润度提升</div>
+      </div>
+      <div class="milestone" id="ms-14">
+        <div class="milestone-day">D14</div>
+        <div class="milestone-icon">✨</div>
+        <div class="milestone-name">光泽显现</div>
+        <div class="milestone-desc">肤色开始均匀</div>
+      </div>
+      <div class="milestone" id="ms-21">
+        <div class="milestone-day">D21</div>
+        <div class="milestone-icon">🌸</div>
+        <div class="milestone-name">焕颜蜕变</div>
+        <div class="milestone-desc">21天完整食养</div>
+      </div>
+    </div>
+
+    <div class="info-card fade-in">
+      <div class="card-title">📊 本周任务完成率</div>
+      <div id="task-breakdown" style="display:flex;flex-direction:column;gap:0.6rem;"></div>
+    </div>
+
+    <div class="info-card fade-in">
+      <div class="card-title">🏆 积分记录</div>
+      <div id="points-history" style="display:flex;flex-direction:column;gap:0.4rem;max-height:250px;overflow-y:auto;"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem;">
+      <a href="report.html" style="display:inline-block;padding:0.7rem 2rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;border-radius:var(--radius-full);font-size:0.9rem;font-weight:600;transition:all var(--transition);">📊 查看详细食养报告</a>
+    </div>
+
+    <div class="info-card fade-in" style="margin-top:1rem;">
+      <div class="card-title">🔔 提醒设置</div>
+      <div style="display:flex;flex-direction:column;gap:0.8rem;">
+        <label style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;">
+          <div><span style="font-weight:600;font-size:0.88rem;">⏰ 每日打卡提醒</span><br><span style="font-size:0.72rem;color:var(--color-warm-brown-light);">每天提醒你完成食养打卡</span></div>
+          <input type="checkbox" id="remindDaily" onchange="saveReminders()" style="width:18px;height:18px;accent-color:var(--color-primary-dark);">
+        </label>
+        <label style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;">
+          <div><span style="font-weight:600;font-size:0.88rem;">📅 周期提醒</span><br><span style="font-size:0.72rem;color:var(--color-warm-brown-light);">Day7/Day14/Day21 节点提醒</span></div>
+          <input type="checkbox" id="remindWeekly" onchange="saveReminders()" style="width:18px;height:18px;accent-color:var(--color-primary-dark);">
+        </label>
+        <label style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);cursor:pointer;">
+          <div><span style="font-weight:600;font-size:0.88rem;">🔥 断签提醒</span><br><span style="font-size:0.72rem;color:var(--color-warm-brown-light);">连续打卡中断时及时提醒</span></div>
+          <input type="checkbox" id="remindBreak" onchange="saveReminders()" style="width:18px;height:18px;accent-color:var(--color-primary-dark);">
+        </label>
+        <div style="font-size:0.75rem;color:var(--color-warm-brown-light);text-align:center;padding:0.5rem;">* 浏览器端提醒通过 Notification API 实现，需授权通知权限</div>
+        <button class="btn-checkin" style="padding:0.6rem;border-radius:var(--radius-full);font-size:0.85rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;" onclick="requestNotifPermission()">🔔 开启浏览器通知</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips (always visible) -->
+  <div class="info-card">
+    <div class="card-title">💡 今日食养贴士</div>
+    <div id="daily-tip" style="font-size:0.88rem;color:var(--color-warm-brown-light);line-height:1.8;background:var(--color-cream);padding:1rem;border-radius:var(--radius-sm);"></div>
+  </div>
+</div>
+
+<script>
+  const TIPS = [
+    '今日建议多吃富含维生素C的食物，如猕猴桃、橙子，与七白软糖协同提亮肤色 🍊',
+    '今日气候干燥，建议增加饮水量，目标10杯。皮肤水润从内而外开始 💧',
+    '早晨空腹喝一杯温水，再服用七白软糖效果更佳。记得做好防晒！ ☀️',
+    '建议在服用软糖1小时后适量运动，促进血液循环，有助于成分吸收 🏃‍♀️',
+    '今晚建议早睡！睡眠中皮肤自我修复，与食养成分协同作用，效果翻倍 😴',
+    '本周尝试减少精制糖和辛辣食物摄入，让七白配方发挥最大效果 🌿',
+    '今日可以拍一张自然光下的正面照片，作为食养前后的对比基准 📸',
+  ];
+
+  function showToast(msg) { const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
+
+  const user = JSON.parse(localStorage.getItem('qibai_user') || 'null');
+  let checkins = JSON.parse(localStorage.getItem('qibai_checkins') || '[]');
+  let waterData = JSON.parse(localStorage.getItem('qibai_water') || '{}');
+  let sleepData = JSON.parse(localStorage.getItem('qibai_sleep') || '{}');
+  let skinRecords = JSON.parse(localStorage.getItem('qibai_skin_records') || '[]');
+  let makeupCount = JSON.parse(localStorage.getItem('qibai_makeup_count') || '{"month":"","used":0}');
+  let selectedSkinState = '';
+  let selectedFactors = [];
+  let makeupSelectedDate = null;
+
+  const todayKey = new Date().toDateString();
+  let todayDone = checkins.some(c => c.date === todayKey);
+  let taskStates = JSON.parse(localStorage.getItem('qibai_today_tasks') || '{}');
+  if (taskStates.date !== todayKey) taskStates = { date: todayKey, eat:false, water:false, sleep:false, sunscreen:false };
+
+  let calYear = new Date().getFullYear();
+  let calMonth = new Date().getMonth();
+
+  // Section tabs
+  function switchSection(el, id) {
+    document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sec-panel').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    if (id === 'calendar') renderCalendar();
+    if (id === 'progress') renderProgress();
+    if (id === 'water') renderWater();
+    if (id === 'sleep') renderSleepPanel();
+    if (id === 'skin') renderSkinPanel();
+  }
+
+  function getStreak() {
+    const dates = checkins.map(c => c.date).sort().reverse();
+    if (!dates.length) return 0;
+    let streak = 0, d = new Date();
+    for (let i = 0; i < 21; i++) {
+      if (dates.includes(d.toDateString())) streak++;
+      else if (i > 0) break;
+      d.setDate(d.getDate() - 1);
+    }
+    return streak;
+  }
+
+  function renderStats() {
+    const streak = getStreak();
+    const total = checkins.length;
+    const planPts = checkins.reduce((s, c) => s + (c.pts || 5), 0);
+    document.getElementById('stat-streak').textContent = streak;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-points').textContent = planPts;
+    document.getElementById('streak-badge').textContent = `🔥 连续 ${streak} 天`;
+    const pct = Math.min(21, total);
+    const circ = 364.4;
+    document.getElementById('ring-fill').style.strokeDashoffset = circ - (circ * pct / 21);
+    document.getElementById('ring-day').textContent = pct;
+    document.getElementById('today-day-label').textContent = `第 ${total + 1} 天`;
+    const days = [1, 7, 14, 21];
+    days.forEach(d => {
+      const el = document.getElementById(`ms-${d}`);
+      if (!el) return;
+      el.classList.toggle('reached', total >= d);
+      if (total === d && !el.querySelector('.milestone-badge')) {
+        el.innerHTML += '<div class="milestone-badge">解锁!</div>';
+      }
+    });
+    updateMakeupCount();
+  }
+
+  function renderTodayDate() {
+    const d = new Date();
+    const months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+    document.getElementById('today-date').textContent = `${d.getFullYear()}年${months[d.getMonth()]} ${d.getDate()}日`;
+    const tipIdx = d.getDate() % TIPS.length;
+    document.getElementById('daily-tip').textContent = TIPS[tipIdx];
+    loadReminders();
+    checkBreakReminder();
+  }
+
+  // ===== Reminder Functions =====
+  function saveReminders() {
+    const settings = {
+      daily: document.getElementById('remindDaily').checked,
+      weekly: document.getElementById('remindWeekly').checked,
+      break: document.getElementById('remindBreak').checked
+    };
+    localStorage.setItem('qibai_reminders', JSON.stringify(settings));
+    showToast(settings.daily ? '已开启每日提醒' : '已关闭每日提醒');
+  }
+  function loadReminders() {
+    const settings = JSON.parse(localStorage.getItem('qibai_reminders') || '{"daily":false,"weekly":false,"break":false}');
+    document.getElementById('remindDaily').checked = settings.daily;
+    document.getElementById('remindWeekly').checked = settings.weekly;
+    document.getElementById('remindBreak').checked = settings.break;
+  }
+  function requestNotifPermission() {
+    if (!('Notification' in window)) { showToast('浏览器不支持通知功能'); return; }
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') { showToast('✅ 通知权限已开启，你将收到打卡提醒'); }
+      else { showToast('通知权限被拒绝，请在浏览器设置中开启'); }
+    });
+  }
+  function checkBreakReminder() {
+    const settings = JSON.parse(localStorage.getItem('qibai_reminders') || '{"daily":false,"weekly":false,"break":false}');
+    if (!settings.break) return;
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const ys = yesterday.toISOString().slice(0, 10);
+    const today = new Date().toISOString().slice(0, 10);
+    const yChecked = checkins.some(c => c.date === ys);
+    const tChecked = checkins.some(c => c.date === today);
+    if (!yChecked && !tChecked && 'Notification' in window && Notification.permission === 'granted') {
+      new Notification('🌸 七白润光提醒', { body: '你昨天没有打卡哦，连续记录中断了。坚持就是胜利！', icon: '🌸' });
+    }
+  }
+
+  function renderTasks() {
+    ['eat','water','sleep','sunscreen'].forEach(key => {
+      const item = document.getElementById(`task-${key}`);
+      const check = document.getElementById(`check-${key}`);
+      if (taskStates[key]) {
+        item.classList.add('done');
+        check.style.background = '#4CAF50';
+        check.style.borderColor = '#4CAF50';
+        check.style.color = 'white';
+      } else {
+        item.classList.remove('done');
+        check.style.background = '';
+        check.style.borderColor = '';
+        check.style.color = 'transparent';
+      }
+    });
+    if (todayDone) {
+      const btn = document.getElementById('btn-checkin');
+      btn.className = 'btn-checkin done-today';
+      btn.textContent = '✅ 今日已打卡';
+    }
+  }
+
+  function toggleTask(key) {
+    if (todayDone) return;
+    taskStates[key] = !taskStates[key];
+    localStorage.setItem('qibai_today_tasks', JSON.stringify(taskStates));
+    renderTasks();
+  }
+
+  function doCheckin() {
+    if (todayDone) { showToast('今天已经打卡啦！明天继续加油 🌸'); return; }
+    const doneTasks = ['eat','water','sleep','sunscreen'].filter(k => taskStates[k]);
+    if (doneTasks.length === 0) { showToast('请至少完成一项今日任务再打卡哦'); return; }
+    const earnPts = 5 + doneTasks.length * 2;
+    checkins.push({ date: todayKey, tasks: doneTasks, pts: earnPts, ts: Date.now() });
+    localStorage.setItem('qibai_checkins', JSON.stringify(checkins));
+    todayDone = true;
+    if (user) {
+      user.points = (user.points || 0) + earnPts;
+      localStorage.setItem('qibai_user', JSON.stringify(user));
+    }
+    showToast(`🎉 打卡成功！+${earnPts}积分`);
+    renderStats();
+    renderTasks();
+    renderCalendar();
+    document.getElementById('today-card').classList.add('pop');
+    setTimeout(() => document.getElementById('today-card').classList.remove('pop'), 400);
+  }
+
+  // ---- Water ----
+  function renderWater() {
+    const today = new Date().toDateString();
+    const cups = waterData[today] || { cups: 0, ml: 0 };
+    const totalMl = cups.ml || cups.cups * 250;
+    document.getElementById('water-total').textContent = totalMl + 'ml';
+    const pct = Math.min(100, Math.round(totalMl / 2000 * 100));
+    document.getElementById('water-progress').style.width = pct + '%';
+    const cupArr = [];
+    for (let i = 0; i < 8; i++) cupArr.push(i < cups.cups);
+    document.getElementById('water-cups').innerHTML = cupArr.map((filled, i) => `
+      <div class="water-cup ${filled ? 'filled' : ''}" onclick="toggleWaterCup(${i})">
+        <div class="cup-icon">${filled ? '🥤' : '🫗'}</div>
+        <div class="cup-label">${(i+1)*250}ml</div>
+      </div>
+    `).join('');
+  }
+
+  function toggleWaterCup(idx) {
+    const today = new Date().toDateString();
+    const d = waterData[today] || { cups: 0, ml: 0 };
+    if (idx + 1 <= d.cups) {
+      d.cups = idx;
+    } else {
+      d.cups = idx + 1;
+    }
+    d.ml = d.cups * 250;
+    waterData[today] = d;
+    localStorage.setItem('qibai_water', JSON.stringify(waterData));
+    renderWater();
+    // Auto check water task
+    if (d.ml >= 2000 && !taskStates.water && !todayDone) {
+      taskStates.water = true;
+      localStorage.setItem('qibai_today_tasks', JSON.stringify(taskStates));
+      renderTasks();
+      showToast('💧 饮水达标！已自动勾选饮水任务');
+    }
+  }
+
+  function addWaterCup() {
+    const today = new Date().toDateString();
+    const d = waterData[today] || { cups: 0, ml: 0 };
+    d.cups = Math.min(16, d.cups + 1);
+    d.ml = d.cups * 250;
+    waterData[today] = d;
+    localStorage.setItem('qibai_water', JSON.stringify(waterData));
+    renderWater();
+    if (d.ml >= 2000 && !taskStates.water && !todayDone) {
+      taskStates.water = true;
+      localStorage.setItem('qibai_today_tasks', JSON.stringify(taskStates));
+      renderTasks();
+      showToast('💧 饮水达标！已自动勾选饮水任务');
+    }
+  }
+
+  function addWaterCup500() {
+    const today = new Date().toDateString();
+    const d = waterData[today] || { cups: 0, ml: 0 };
+    d.cups = Math.min(16, d.cups + 2);
+    d.ml = d.cups * 250;
+    waterData[today] = d;
+    localStorage.setItem('qibai_water', JSON.stringify(waterData));
+    renderWater();
+    if (d.ml >= 2000 && !taskStates.water && !todayDone) {
+      taskStates.water = true;
+      localStorage.setItem('qibai_today_tasks', JSON.stringify(taskStates));
+      renderTasks();
+      showToast('💧 饮水达标！已自动勾选饮水任务');
+    }
+  }
+
+  function resetWater() {
+    const today = new Date().toDateString();
+    waterData[today] = { cups: 0, ml: 0 };
+    localStorage.setItem('qibai_water', JSON.stringify(waterData));
+    renderWater();
+    showToast('饮水记录已重置');
+  }
+
+  // ---- Sleep ----
+  function calcSleepDuration(sleepTime, wakeTime) {
+    const [sh, sm] = sleepTime.split(':').map(Number);
+    const [wh, wm] = wakeTime.split(':').map(Number);
+    let sleepMin = sh * 60 + sm;
+    let wakeMin = wh * 60 + wm;
+    if (wakeMin <= sleepMin) wakeMin += 24 * 60; // crossed midnight
+    return (wakeMin - sleepMin) / 60;
+  }
+
+  function renderSleepPanel() {
+    const sleepTime = document.getElementById('sleep-time').value;
+    const wakeTime = document.getElementById('wake-time').value;
+    const dur = calcSleepDuration(sleepTime, wakeTime);
+    document.getElementById('sleep-duration').textContent = dur.toFixed(1) + 'h';
+    let qText = '', qDesc = '';
+    if (dur >= 7 && dur <= 9) { qText = '睡眠质量：优秀'; qDesc = '7-9小时为最佳睡眠时长，继续保持！'; }
+    else if (dur >= 6 && dur < 7) { qText = '睡眠质量：良好'; qDesc = '接近理想时长，建议再早睡30分钟'; }
+    else if (dur > 9) { qText = '睡眠质量：偏多'; qDesc = '超过9小时可能影响精力，注意规律作息'; }
+    else { qText = '睡眠质量：不足'; qDesc = '睡眠不足会影响皮肤修复，建议调整作息'; }
+    document.getElementById('sleep-quality-text').textContent = qText;
+    document.getElementById('sleep-quality-desc').textContent = qDesc;
+
+    // History
+    const historyEl = document.getElementById('sleep-history');
+    const entries = Object.entries(sleepData).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 7);
+    if (!entries.length) {
+      historyEl.innerHTML = '<div style="font-size:0.82rem;color:var(--color-warm-brown-light);text-align:center;padding:1rem;">暂无作息记录，请记录今日睡眠时间</div>';
+      return;
+    }
+    historyEl.innerHTML = entries.map(([date, d]) => {
+      const dur = calcSleepDuration(d.sleep, d.wake);
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);font-size:0.82rem;">
+        <span style="color:var(--color-warm-brown-light);">${date}</span>
+        <span>🌙${d.sleep} → ☀️${d.wake}</span>
+        <span style="font-weight:700;color:${dur >= 7 ? '#4CAF50' : '#FF9800'};">${dur.toFixed(1)}h</span>
+      </div>`;
+    }).join('');
+
+    document.getElementById('sleep-time').onchange = () => renderSleepPanel();
+    document.getElementById('wake-time').onchange = () => renderSleepPanel();
+  }
+
+  function saveSleep() {
+    const sleepTime = document.getElementById('sleep-time').value;
+    const wakeTime = document.getElementById('wake-time').value;
+    const today = new Date().toDateString();
+    sleepData[today] = { sleep: sleepTime, wake: wakeTime, ts: Date.now() };
+    localStorage.setItem('qibai_sleep', JSON.stringify(sleepData));
+    const dur = calcSleepDuration(sleepTime, wakeTime);
+    if (dur >= 7 && !taskStates.sleep && !todayDone) {
+      taskStates.sleep = true;
+      localStorage.setItem('qibai_today_tasks', JSON.stringify(taskStates));
+      renderTasks();
+      showToast('😴 睡眠达标！已自动勾选睡眠任务');
+    } else {
+      showToast('作息记录已保存 ✅');
+    }
+    renderSleepPanel();
+  }
+
+  // ---- Skin diary ----
+  function renderSkinPanel() {
+    renderSkinHistory();
+  }
+
+  function selectSkinState(el) {
+    document.querySelectorAll('.skin-state').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedSkinState = el.dataset.state;
+  }
+
+  function toggleFactor(el) {
+    el.classList.toggle('selected');
+    const f = el.dataset.factor;
+    if (selectedFactors.includes(f)) selectedFactors = selectedFactors.filter(x => x !== f);
+    else selectedFactors.push(f);
+  }
+
+  function saveSkinRecord() {
+    if (!selectedSkinState) { showToast('请先选择今日肤质状态'); return; }
+    const today = new Date().toDateString();
+    const note = document.getElementById('skin-note').value.trim();
+    // Check if already recorded today
+    const existIdx = skinRecords.findIndex(r => r.date === today);
+    const record = { date: today, state: selectedSkinState, factors: [...selectedFactors], note, ts: Date.now() };
+    if (existIdx >= 0) skinRecords[existIdx] = record;
+    else skinRecords.push(record);
+    // Keep last 90 days
+    if (skinRecords.length > 90) skinRecords = skinRecords.slice(-90);
+    localStorage.setItem('qibai_skin_records', JSON.stringify(skinRecords));
+    showToast('肤质记录已保存 ✅');
+    renderSkinHistory();
+  }
+
+  function renderSkinHistory() {
+    const el = document.getElementById('skin-history');
+    if (!skinRecords.length) {
+      el.innerHTML = '<div style="text-align:center;padding:1.5rem;font-size:0.82rem;color:var(--color-warm-brown-light);">暂无肤质记录</div>';
+      return;
+    }
+    const stateEmoji = {'光泽感十足':'✨','水润嫩滑':'💧','状态一般':'😐','有些暗沉':'😶','偏油出痘':'😟','干燥起皮':'🏜️','敏感泛红':'🔴'};
+    el.innerHTML = skinRecords.slice().reverse().slice(0, 14).map((r, i) => `
+      <div class="skin-record-item">
+        <div class="sr-date">${r.date}</div>
+        <div class="sr-state">${stateEmoji[r.state] || '🌸'} ${r.state}</div>
+        <div class="sr-factors">${r.factors ? r.factors.join('、') : ''}</div>
+        <button class="sr-del" onclick="deleteSkinRecord(${skinRecords.length - 1 - i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function deleteSkinRecord(idx) {
+    skinRecords.splice(idx, 1);
+    localStorage.setItem('qibai_skin_records', JSON.stringify(skinRecords));
+    renderSkinHistory();
+    showToast('记录已删除');
+  }
+
+  // ---- Makeup ----
+  function getMakeupRemaining() {
+    const currentMonth = new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
+    if (makeupCount.month !== currentMonth) {
+      makeupCount = { month: currentMonth, used: 0 };
+      localStorage.setItem('qibai_makeup_count', JSON.stringify(makeupCount));
+    }
+    return 3 - makeupCount.used;
+  }
+
+  function updateMakeupCount() {
+    const rem = getMakeupRemaining();
+    const barEl = document.getElementById('makeup-bar-count');
+    if (barEl) barEl.textContent = rem;
+  }
+
+  function openMakeupModal() {
+    const rem = getMakeupRemaining();
+    if (rem <= 0) { showToast('本月补卡次数已用完，下月刷新'); return; }
+    document.getElementById('makeup-remaining-count').textContent = rem;
+    makeupSelectedDate = null;
+    const container = document.getElementById('makeup-dates');
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const checkinDates = checkins.map(c => c.date);
+    const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    let html = '';
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const date = new Date(year, month, d);
+      const dateKey = date.toDateString();
+      const isPast = date < new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const isChecked = checkinDates.includes(dateKey);
+      let cls = 'makeup-date';
+      if (isChecked) cls += ' has-checkin';
+      else if (isPast) cls += ' can-makeup';
+      html += `<div class="${cls}" data-date="${dateKey}" onclick="selectMakeupDate(this,'${dateKey}')">${d}</div>`;
+    }
+    container.innerHTML = `<div style="grid-column:1/-1;text-align:center;font-size:0.82rem;font-weight:600;margin-bottom:0.5rem;">${year}年${monthNames[month]}</div>` + html;
+    document.getElementById('makeup-modal').classList.add('open');
+  }
+
+  function selectMakeupDate(el, dateKey) {
+    if (el.classList.contains('has-checkin')) return;
+    document.querySelectorAll('.makeup-date').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    makeupSelectedDate = dateKey;
+  }
+
+  function confirmMakeup() {
+    if (!makeupSelectedDate) { showToast('请选择补卡日期'); return; }
+    const rem = getMakeupRemaining();
+    if (rem <= 0) { showToast('本月补卡次数已用完'); return; }
+    checkins.push({ date: makeupSelectedDate, tasks: ['eat'], makeup: true, pts: 3, ts: Date.now() });
+    localStorage.setItem('qibai_checkins', JSON.stringify(checkins));
+    makeupCount.used++;
+    localStorage.setItem('qibai_makeup_count', JSON.stringify(makeupCount));
+    closeMakeupModal();
+    showToast('补卡成功！✅');
+    renderStats();
+    renderCalendar();
+    renderProgress();
+  }
+
+  function closeMakeupModal() {
+    document.getElementById('makeup-modal').classList.remove('open');
+  }
+
+  // ---- Calendar ----
+  function renderCalendar() {
+    const container = document.getElementById('cal-days');
+    const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    document.getElementById('cal-month-label').textContent = `${calYear}年${months[calMonth]}`;
+    const checkinDates = {};
+    checkins.forEach(c => { checkinDates[c.date || new Date(c.ts).toDateString()] = c.makeup ? 'makeup' : 'normal'; });
+    const today = new Date();
+    const firstDay = new Date(calYear, calMonth, 1);
+    const lastDay = new Date(calYear, calMonth + 1, 0);
+    let html = '';
+    for (let i = 0; i < firstDay.getDay(); i++) html += `<div class="cal-day other-month"></div>`;
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const date = new Date(calYear, calMonth, d);
+      const isToday = date.toDateString() === today.toDateString();
+      const key = date.toDateString();
+      const type = checkinDates[key];
+      let cls = 'cal-day';
+      if (isToday) cls += ' today';
+      if (type === 'makeup') cls += ' makeup';
+      else if (type === 'normal') cls += ' checked';
+      html += `<div class="${cls}">${d}</div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function prevMonth() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+  function nextMonth() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+
+  // ---- Progress ----
+  function renderProgress() {
+    renderStats();
+    // Task breakdown (last 7 days)
+    const breakdownEl = document.getElementById('task-breakdown');
+    const tasks = ['eat','water','sleep','sunscreen'];
+    const taskLabels = { eat:'🍬 软糖服用', water:'💧 饮水达标', sleep:'😴 作息规律', sunscreen:'☀️ 防晒坚持' };
+    const d = new Date();
+    const last7 = [];
+    for (let i = 6; i >= 0; i--) {
+      const dd = new Date(d); dd.setDate(d.getDate() - i);
+      last7.push(dd.toDateString());
+    }
+    breakdownEl.innerHTML = tasks.map(key => {
+      const count = checkins.filter(c => last7.includes(c.date) && c.tasks && c.tasks.includes(key)).length;
+      const pct = Math.round(count / 7 * 100);
+      const color = pct >= 70 ? '#4CAF50' : pct >= 40 ? '#FF9800' : '#E53935';
+      return `<div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:0.3rem;">
+          <span>${taskLabels[key]}</span>
+          <span style="font-weight:600;color:${color};">${count}/7天</span>
+        </div>
+        <div style="height:8px;background:rgba(200,130,100,0.1);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${color};border-radius:4px;transition:width 0.5s;"></div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Points history
+    const ptsEl = document.getElementById('points-history');
+    const recent = checkins.slice().reverse().slice(0, 10);
+    if (!recent.length) {
+      ptsEl.innerHTML = '<div style="text-align:center;padding:1rem;font-size:0.82rem;color:var(--color-warm-brown-light);">暂无积分记录</div>';
+      return;
+    }
+    ptsEl.innerHTML = recent.map(c => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0.8rem;background:var(--color-cream);border-radius:var(--radius-sm);font-size:0.82rem;">
+        <span style="color:var(--color-warm-brown-light);">${c.date}${c.makeup ? ' (补卡)' : ''}</span>
+        <span style="font-weight:600;color:var(--color-gold-dark);">+${c.pts || 5}分</span>
+      </div>
+    `).join('');
+  }
+
+  // ---- Init ----
+  renderTodayDate();
+  renderStats();
+  renderTasks();
+  renderCalendar();
+  renderWater();
+  renderSleepPanel();
+  renderSkinPanel();
+  renderProgress();
+
+  // Close modal on overlay click
+  document.getElementById('makeup-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeMakeupModal();
+  });
+</script>
+</body>
+</html>

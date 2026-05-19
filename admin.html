@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 · 七白润光</title>
+  <style>
+    :root {
+      --color-primary: #E8B4C5; --color-primary-light: #F5D5E0; --color-primary-dark: #C985A0;
+      --color-gold: #C9A84C; --color-gold-light: #F0D080; --color-gold-dark: #A07830;
+      --color-ivory: #FDFAF5; --color-cream: #FEF6EC;
+      --color-warm-brown: #6B4226; --color-warm-brown-light: #A0704A;
+      --color-dark-bg: #1A1208; --color-dark-card: #231A0F;
+      --font-serif: 'Noto Serif SC','SimSun',Georgia,serif;
+      --font-sans: 'PingFang SC','Microsoft YaHei',sans-serif;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-full:9999px;
+      --shadow-sm: 0 2px 8px rgba(200,130,100,0.1);
+      --shadow-md: 0 8px 32px rgba(200,130,100,0.15);
+      --transition: 0.3s ease;
+      --success: #10b981; --warning: #f59e0b; --error: #ef4444; --info: #3b82f6;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-sans);background:#f5f0eb;color:var(--color-warm-brown);line-height:1.6;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:inherit;}
+
+    /* Admin Layout */
+    .admin-layout{display:flex;min-height:100vh;}
+    .sidebar{width:240px;background:var(--color-dark-bg);color:var(--color-ivory);padding:1.5rem 0;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;transition:transform 0.3s ease;}
+    .sidebar-brand{padding:0 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.6rem;}
+    .sidebar-brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .sidebar-brand-name{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;}
+    .sidebar-label{padding:0 1.5rem;margin-top:1rem;margin-bottom:0.5rem;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(253,250,245,0.35);font-weight:600;}
+    .sidebar-item{display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1.5rem;font-size:0.88rem;color:rgba(253,250,245,0.65);cursor:pointer;transition:all var(--transition);border-left:3px solid transparent;}
+    .sidebar-item:hover{background:rgba(255,255,255,0.05);color:var(--color-ivory);}
+    .sidebar-item.active{background:rgba(232,180,197,0.1);color:var(--color-gold-light);border-left-color:var(--color-gold);}
+    .sidebar-item .icon{width:20px;text-align:center;font-size:1rem;}
+    .sidebar-item .badge{margin-left:auto;background:var(--color-primary-dark);color:white;padding:0.1rem 0.5rem;border-radius:var(--radius-full);font-size:0.7rem;font-weight:600;}
+
+    .main-content{margin-left:240px;flex:1;min-height:100vh;}
+    .topbar{height:60px;background:white;border-bottom:1px solid rgba(201,168,76,0.1);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:50;}
+    .topbar-title{font-size:1rem;font-weight:600;color:var(--color-warm-brown);}
+    .topbar-actions{display:flex;align-items:center;gap:1rem;}
+    .topbar-btn{padding:0.5rem 1rem;border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);background:transparent;font-size:0.82rem;color:var(--color-warm-brown-light);transition:all var(--transition);}
+    .topbar-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--color-gold);}
+    .topbar-btn.primary{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;border-color:transparent;}
+    .topbar-btn.primary:hover{opacity:0.9;transform:translateY(-1px);}
+    .content-area{padding:2rem;}
+
+    /* Stats Cards */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+    @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+    .stat-card{background:white;border-radius:var(--radius-md);padding:1.2rem;border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);}
+    .stat-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;}
+    .stat-card-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .stat-card-icon.pink{background:rgba(232,180,197,0.2);}
+    .stat-card-icon.gold{background:rgba(201,168,76,0.15);}
+    .stat-card-icon.green{background:rgba(16,185,129,0.12);}
+    .stat-card-icon.blue{background:rgba(59,130,246,0.12);}
+    .stat-card-label{font-size:0.78rem;color:var(--color-warm-brown-light);}
+    .stat-card-value{font-family:var(--font-serif);font-size:1.8rem;font-weight:700;color:var(--color-warm-brown);}
+    .stat-card-change{font-size:0.72rem;margin-top:0.3rem;display:flex;align-items:center;gap:0.3rem;}
+    .stat-card-change.up{color:var(--success);}
+    .stat-card-change.down{color:var(--error);}
+
+    /* Panel */
+    .panel{background:white;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);box-shadow:var(--shadow-sm);margin-bottom:1.5rem;overflow:hidden;}
+    .panel-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(201,168,76,0.08);}
+    .panel-title{font-size:0.95rem;font-weight:600;}
+    .panel-body{padding:1.5rem;}
+    .panel-actions{display:flex;gap:0.5rem;}
+
+    /* Table */
+    .data-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+    .data-table th{text-align:left;padding:0.7rem 1rem;font-weight:600;font-size:0.78rem;color:var(--color-warm-brown-light);background:var(--color-ivory);border-bottom:1px solid rgba(201,168,76,0.1);}
+    .data-table td{padding:0.7rem 1rem;border-bottom:1px solid rgba(201,168,76,0.06);}
+    .data-table tr:last-child td{border-bottom:none;}
+    .data-table tr:hover td{background:rgba(201,168,76,0.02);}
+
+    /* Status badges */
+    .status{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;border-radius:var(--radius-full);font-size:0.72rem;font-weight:600;}
+    .status.success{background:rgba(16,185,129,0.1);color:var(--success);}
+    .status.warning{background:rgba(245,158,11,0.1);color:var(--warning);}
+    .status.error{background:rgba(239,68,68,0.1);color:var(--error);}
+    .status.info{background:rgba(59,130,246,0.1);color:var(--info);}
+    .status.neutral{background:rgba(107,66,38,0.08);color:var(--color-warm-brown-light);}
+
+    /* Form */
+    .form-group{margin-bottom:1rem;}
+    .form-label{display:block;font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.4rem;}
+    .form-input,.form-select,.form-textarea{width:100%;padding:0.6rem 0.8rem;border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);font-size:0.88rem;font-family:var(--font-sans);background:white;transition:border-color var(--transition);color:var(--color-warm-brown);}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--color-gold);box-shadow:0 0 0 3px rgba(201,168,76,0.1);}
+    .form-textarea{resize:vertical;min-height:80px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;border:none;border-radius:var(--radius-sm);font-size:0.82rem;font-weight:600;transition:all var(--transition);cursor:pointer;}
+    .btn-sm{padding:0.3rem 0.7rem;font-size:0.75rem;}
+    .btn-primary{background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;}
+    .btn-primary:hover{opacity:0.9;transform:translateY(-1px);}
+    .btn-success{background:var(--success);color:white;}
+    .btn-danger{background:var(--error);color:white;}
+    .btn-ghost{background:transparent;color:var(--color-warm-brown-light);border:1px solid rgba(201,168,76,0.2);}
+    .btn-ghost:hover{background:rgba(201,168,76,0.06);}
+
+    /* Compliance checker */
+    .compliance-result{padding:1rem;border-radius:var(--radius-sm);margin-top:0.5rem;font-size:0.85rem;line-height:1.7;}
+    .compliance-result.pass{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#065f46;}
+    .compliance-result.fail{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);color:#991b1b;}
+    .word-issue{display:inline-flex;align-items:center;gap:0.3rem;padding:0.15rem 0.5rem;background:rgba(239,68,68,0.1);border-radius:var(--radius-full);font-size:0.75rem;margin:0.2rem;color:var(--error);font-weight:500;}
+
+    /* Toast */
+    .toast-container{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:0.5rem;}
+    .toast{padding:0.8rem 1.2rem;border-radius:var(--radius-sm);background:white;box-shadow:var(--shadow-md);font-size:0.85rem;display:flex;align-items:center;gap:0.5rem;animation:slideIn 0.3s ease;min-width:250px;border-left:3px solid var(--color-gold);}
+    .toast.success{border-left-color:var(--success);}
+    .toast.error{border-left-color:var(--error);}
+    @keyframes slideIn{from{opacity:0;transform:translateX(100px);}to{opacity:1;transform:translateX(0);}}
+
+    /* Modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+    .modal-overlay.open{display:flex;}
+    .modal{background:white;border-radius:var(--radius-lg);width:90%;max-width:560px;max-height:80vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:fadeIn 0.2s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:scale(0.95);}to{opacity:1;transform:scale(1);}}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid rgba(201,168,76,0.1);}
+    .modal-header h3{font-size:1.05rem;font-weight:700;}
+    .modal-close{width:32px;height:32px;border:none;background:rgba(107,66,38,0.06);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;transition:background var(--transition);}
+    .modal-close:hover{background:rgba(239,68,68,0.1);}
+    .modal-body{padding:1.5rem;}
+    .modal-footer{display:flex;justify-content:flex-end;gap:0.5rem;padding:1rem 1.5rem;border-top:1px solid rgba(201,168,76,0.1);}
+
+    /* Tab content */
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+
+    /* Chart placeholder */
+    .chart-placeholder{height:200px;background:linear-gradient(135deg,var(--color-ivory),var(--color-cream));border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:0.85rem;color:var(--color-warm-brown-light);}
+
+    /* Responsive */
+    .mobile-toggle{display:none;position:fixed;top:0.7rem;left:0.7rem;z-index:150;width:40px;height:40px;border:none;background:var(--color-dark-bg);color:var(--color-ivory);border-radius:var(--radius-sm);font-size:1.2rem;align-items:center;justify-content:center;}
+    @media(max-width:768px){
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.open{transform:translateX(0);}
+      .main-content{margin-left:0;}
+      .mobile-toggle{display:flex;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+      .form-row{grid-template-columns:1fr;}
+    }
+    .empty-state{text-align:center;padding:3rem 1rem;color:var(--color-warm-brown-light);}
+    .empty-state .icon{font-size:3rem;margin-bottom:0.8rem;opacity:0.5;}
+    .empty-state p{font-size:0.9rem;}
+  </style>
+</head>
+<body>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Mobile Toggle -->
+  <button class="mobile-toggle" id="mobileToggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">🌸</div>
+        <div class="sidebar-brand-name">七白润光</div>
+      </div>
+      <div class="sidebar-label">数据概览</div>
+      <div class="sidebar-item active" data-tab="dashboard"><span class="icon">📊</span> 仪表盘</div>
+      <div class="sidebar-label">业务管理</div>
+      <div class="sidebar-item" data-tab="products"><span class="icon">🛍️</span> 商品管理 <span class="badge" id="productCount">3</span></div>
+      <div class="sidebar-item" data-tab="orders"><span class="icon">📦</span> 订单管理 <span class="badge" id="orderCount">0</span></div>
+      <div class="sidebar-item" data-tab="users"><span class="icon">👥</span> 用户管理 <span class="badge" id="userCount">0</span></div>
+      <div class="sidebar-item" data-tab="content"><span class="icon">📝</span> 内容管理 <span class="badge">12</span></div>
+      <div class="sidebar-item" data-tab="checkin"><span class="icon">📅</span> 打卡数据 <span class="badge" id="checkinCount">0</span></div>
+      <div class="sidebar-label">风控</div>
+      <div class="sidebar-item" data-tab="compliance"><span class="icon">🛡️</span> 合规审核</div>
+      <div style="padding:1rem 1.5rem;margin-top:auto;">
+        <a href="index.html" style="font-size:0.8rem;color:rgba(253,250,245,0.4);display:flex;align-items:center;gap:0.4rem;">← 返回前台</a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="topbar">
+        <div class="topbar-title" id="topbarTitle">📊 仪表盘</div>
+        <div class="topbar-actions">
+          <button class="topbar-btn" onclick="refreshData()">🔄 刷新数据</button>
+          <a href="index.html" class="topbar-btn">🌐 前台首页</a>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <!-- Dashboard -->
+        <div class="tab-content active" id="tab-dashboard">
+          <div class="stats-grid" id="dashStats"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">📦 最近订单</div></div>
+              <div class="panel-body" id="recentOrders" style="max-height:300px;overflow-y:auto;"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">📅 打卡统计（近7天）</div></div>
+              <div class="panel-body" id="checkinChart"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products -->
+        <div class="tab-content" id="tab-products">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">商品列表</div>
+              <button class="btn btn-primary btn-sm" onclick="openProductModal()">+ 新增商品</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>商品</th><th>规格</th><th>价格</th><th>库存</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody id="productTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="tab-content" id="tab-orders">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">订单列表</div>
+              <div class="panel-actions">
+                <select class="form-select" style="width:auto;padding:0.4rem 0.8rem;font-size:0.82rem;" id="orderFilter" onchange="renderOrders()">
+                  <option value="all">全部状态</option>
+                  <option value="paid">待发货</option>
+                  <option value="shipped">运输中</option>
+                  <option value="delivered">已收货</option>
+                  <option value="cancelled">已取消</option>
+                </select>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>订单号</th><th>商品</th><th>金额</th><th>状态</th><th>时间</th><th>操作</th></tr></thead>
+                <tbody id="orderTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users -->
+        <div class="tab-content" id="tab-users">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">用户列表</div></div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>头像</th><th>昵称</th><th>手机号</th><th>积分</th><th>等级</th><th>注册时间</th></tr></thead>
+                <tbody id="userTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="tab-content" id="tab-content">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">科普文章管理</div>
+              <button class="btn btn-primary btn-sm" onclick="openArticleModal()">+ 发布文章</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>标题</th><th>分类</th><th>阅读量</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody id="articleTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">Banner 配置</div></div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="form-label">首页主标题</label>
+                <input class="form-input" id="bannerTitle" value="以内养外 焕发肌肤原生光采" onchange="saveBannerConfig()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">首页副标题</label>
+                <input class="form-input" id="bannerSubtitle" value="源自东方食养智慧，融合现代营养科学" onchange="saveBannerConfig()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">按钮文案</label>
+                <div class="form-row">
+                  <input class="form-input" id="bannerBtn1" value="🌸 了解产品" onchange="saveBannerConfig()">
+                  <input class="form-input" id="bannerBtn2" value="📅 开启21天食养计划" onchange="saveBannerConfig()">
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="saveBannerConfig();showToast('Banner配置已保存','success')">💾 保存配置</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkin Data -->
+        <div class="tab-content" id="tab-checkin">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-header"><div class="stat-card-icon pink">📅</div><div class="stat-card-label">总打卡次数</div></div>
+              <div class="stat-card-value" id="totalCheckins">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header"><div class="stat-card-icon gold">🔥</div><div class="stat-card-label">当前最长连续</div></div>
+              <div class="stat-card-value" id="maxStreak">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header"><div class="stat-card-icon green">💧</div><div class="stat-card-label">平均饮水量</div></div>
+              <div class="stat-card-value" id="avgWater">0ml</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header"><div class="stat-card-icon blue">😴</div><div class="stat-card-label">平均睡眠时长</div></div>
+              <div class="stat-card-value" id="avgSleep">0h</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">打卡明细（近30天）</div></div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>日期</th><th>打卡</th><th>饮水</th><th>睡眠</th><th>肤质</th><th>积分</th></tr></thead>
+                <tbody id="checkinTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance -->
+        <div class="tab-content" id="tab-compliance">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">🛡️ 敏感词检查工具</div></div>
+            <div class="panel-body">
+              <p style="font-size:0.85rem;color:var(--color-warm-brown-light);margin-bottom:1rem;">输入需要审核的文案内容，系统将自动检测是否包含禁用词汇并提供替换建议。</p>
+              <div class="form-group">
+                <label class="form-label">待审核文案</label>
+                <textarea class="form-textarea" id="complianceInput" rows="5" placeholder="请输入需要审核的文案内容..."></textarea>
+              </div>
+              <button class="btn btn-primary" onclick="checkCompliance()">🔍 开始检测</button>
+              <div id="complianceResult" style="margin-top:1rem;"></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">敏感词词库（共14个）</div></div>
+            <div class="panel-body" id="wordList" style="display:flex;flex-wrap:wrap;gap:0.5rem;"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">替换对照表</div></div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>禁用词</th><th>建议替换</th><th>替换原因</th></tr></thead>
+                <tbody id="replaceTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <div class="modal-header"><h3 id="productModalTitle">新增商品</h3><button class="modal-close" onclick="closeModal('productModal')">×</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">商品名称</label><input class="form-input" id="pName"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">价格（元）</label><input class="form-input" type="number" id="pPrice"></div>
+          <div class="form-group"><label class="form-label">库存</label><input class="form-input" type="number" id="pStock"></div>
+        </div>
+        <div class="form-group"><label class="form-label">规格描述</label><input class="form-input" id="pSpec"></div>
+        <div class="form-group"><label class="form-label">商品描述</label><textarea class="form-textarea" id="pDesc"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('productModal')">取消</button>
+        <button class="btn btn-primary" onclick="saveProduct()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Modal -->
+  <div class="modal-overlay" id="articleModal">
+    <div class="modal">
+      <div class="modal-header"><h3>发布文章</h3><button class="modal-close" onclick="closeModal('articleModal')">×</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">文章标题</label><input class="form-input" id="aTitle"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">分类</label>
+            <select class="form-select" id="aCategory">
+              <option value="本草科普">本草科普</option>
+              <option value="食养方案">食养方案</option>
+              <option value="肌肤护理">肌肤护理</option>
+              <option value="合规专题">合规专题</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">状态</label>
+            <select class="form-select" id="aStatus"><option value="published">已发布</option><option value="draft">草稿</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">文章内容</label><textarea class="form-textarea" id="aContent" rows="6"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('articleModal')">取消</button>
+        <button class="btn btn-primary" onclick="saveArticle()">发布</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Constants =====
+    const PROHIBITED_WORDS = [
+      { word: '美白', replace: '食养养肤', reason: '普通食品禁止功效宣传' },
+      { word: '抗衰', replace: '养护肌肤活力', reason: '涉及医疗功效' },
+      { word: '抗衰老', replace: '养护肌肤活力', reason: '涉及医疗功效' },
+      { word: '治疗', replace: '养护', reason: '普通食品不能替代药物' },
+      { word: '祛斑', replace: '养护肌肤光泽', reason: '涉及医疗功效' },
+      { word: '根治', replace: '长期养护', reason: '普通食品不能承诺根治' },
+      { word: '药效', replace: '食养价值', reason: '普通食品不得宣称药效' },
+      { word: '疗效', replace: '食养体验', reason: '普通食品不得宣称疗效' },
+      { word: '治愈', replace: '养护', reason: '涉及医疗功效' },
+      { word: '见效', replace: '感受变化', reason: '暗示功效承诺' },
+      { word: '立即见效', replace: '持续养护', reason: '暗示功效承诺' },
+      { word: '百分之百', replace: '助力', reason: '绝对化用语' },
+      { word: '最', replace: '优质', reason: '极限用语' },
+      { word: '第一', replace: '优选', reason: '极限用语' }
+    ];
+
+    // ===== Default Products =====
+    const DEFAULT_PRODUCTS = [
+      { id: 'p1', name: '七白润光·玫瑰原味软糖', price: 128, stock: 999, spec: '单盒装（30粒）', desc: '古法食养配方，药食同源原料', status: 'active', flavor: '玫瑰原味', pkg: '单盒' },
+      { id: 'p2', name: '七白润光·玫瑰荔枝味软糖', price: 128, stock: 999, spec: '单盒装（30粒）', desc: '荔枝与玫瑰的清甜碰撞', status: 'active', flavor: '玫瑰荔枝', pkg: '单盒' },
+      { id: 'p3', name: '七白润光·玫瑰桂花味软糖', price: 128, stock: 999, spec: '单盒装（30粒）', desc: '桂花芬芳，秋日食养之选', status: 'active', flavor: '玫瑰桂花', pkg: '单盒' }
+    ];
+
+    // ===== Tab Switching =====
+    const tabTitles = { dashboard:'📊 仪表盘', products:'🛍️ 商品管理', orders:'📦 订单管理', users:'👥 用户管理', content:'📝 内容管理', checkin:'📅 打卡数据', compliance:'🛡️ 合规审核' };
+    document.querySelectorAll('.sidebar-item[data-tab]').forEach(item => {
+      item.addEventListener('click', function() {
+        const tab = this.dataset.tab;
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.getElementById('topbarTitle').textContent = tabTitles[tab] || tab;
+        document.querySelector('.sidebar').classList.remove('open');
+        if (tab === 'compliance') initCompliance();
+      });
+    });
+
+    // ===== Toast =====
+    function showToast(msg, type = '') {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.textContent = (type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ') + msg;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    // ===== Modal =====
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // ===== Get localStorage data =====
+    function getData(key, fallback = []) {
+      try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
+    }
+
+    // ===== Dashboard =====
+    function renderDashboard() {
+      const orders = getData('qibai_orders');
+      const user = getData('qibai_user', null);
+      const checkins = getData('qibai_checkins');
+      const cart = getData('qibai_cart');
+      const totalRevenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+
+      document.getElementById('dashStats').innerHTML = `
+        <div class="stat-card"><div class="stat-card-header"><div class="stat-card-icon pink">📦</div><div class="stat-card-label">总订单数</div></div><div class="stat-card-value">${orders.length}</div><div class="stat-card-change up">↑ 本站演示数据</div></div>
+        <div class="stat-card"><div class="stat-card-header"><div class="stat-card-icon gold">💰</div><div class="stat-card-label">总营收（元）</div></div><div class="stat-card-value">¥${totalRevenue.toFixed(0)}</div><div class="stat-card-change up">↑ 累计金额</div></div>
+        <div class="stat-card"><div class="stat-card-header"><div class="stat-card-icon green">👤</div><div class="stat-card-label">注册用户</div></div><div class="stat-card-value">${user ? 1 : 0}</div><div class="stat-card-change neutral">localStorage 数据</div></div>
+        <div class="stat-card"><div class="stat-card-header"><div class="stat-card-icon blue">📅</div><div class="stat-card-label">打卡记录</div></div><div class="stat-card-value">${checkins.length}</div><div class="stat-card-change up">↑ 累计打卡天数</div></div>
+      `;
+
+      // Recent orders
+      const recentEl = document.getElementById('recentOrders');
+      if (orders.length === 0) {
+        recentEl.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>暂无订单数据</p></div>';
+      } else {
+        recentEl.innerHTML = orders.slice(0, 5).map(o => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid rgba(201,168,76,0.06);">
+            <div><div style="font-weight:600;font-size:0.85rem;">${o.id}</div><div style="font-size:0.75rem;color:var(--color-warm-brown-light);">${o.createdAt || '-'}</div></div>
+            <div style="text-align:right;"><div style="font-weight:700;font-size:0.9rem;">¥${o.total || 0}</div><span class="status ${getStatusClass(o.status)}">${getStatusLabel(o.status)}</span></div>
+          </div>
+        `).join('');
+      }
+
+      // Checkin chart (simple SVG)
+      const last7 = [];
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today); d.setDate(d.getDate() - i);
+        const ds = d.toISOString().slice(0, 10);
+        const found = checkins.find(c => c.date === ds);
+        last7.push({ date: ds, checked: !!found });
+      }
+      const chartEl = document.getElementById('checkinChart');
+      chartEl.innerHTML = last7.map(d => `
+        <div style="display:flex;align-items:flex-end;gap:0.8rem;padding:0.4rem 0;">
+          <span style="font-size:0.75rem;color:var(--color-warm-brown-light);width:60px;">${d.date.slice(5)}</span>
+          <div style="flex:1;height:24px;border-radius:4px;background:${d.checked ? 'linear-gradient(135deg,var(--color-primary),var(--color-gold))' : 'rgba(201,168,76,0.1)'};display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:${d.checked ? 'white' : 'var(--color-warm-brown-light)'};">${d.checked ? '✓' : '—'}</div>
+        </div>
+      `).join('');
+
+      updateBadges(orders, user, checkins);
+    }
+
+    // ===== Products =====
+    function renderProducts() {
+      const products = getData('qibai_admin_products', DEFAULT_PRODUCTS);
+      const tbody = document.getElementById('productTableBody');
+      tbody.innerHTML = products.map(p => `
+        <tr>
+          <td><strong>${p.name}</strong><br><span style="font-size:0.75rem;color:var(--color-warm-brown-light);">${p.desc}</span></td>
+          <td>${p.spec}</td>
+          <td style="font-weight:700;">¥${p.price}</td>
+          <td>${p.stock}</td>
+          <td><span class="status ${p.status === 'active' ? 'success' : 'neutral'}">${p.status === 'active' ? '上架中' : '已下架'}</span></td>
+          <td>
+            <button class="btn btn-sm btn-ghost" onclick="editProduct('${p.id}')">编辑</button>
+            <button class="btn btn-sm ${p.status === 'active' ? 'btn-danger' : 'btn-success'}" onclick="toggleProduct('${p.id}')">${p.status === 'active' ? '下架' : '上架'}</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openProductModal(id) {
+      const products = getData('qibai_admin_products', DEFAULT_PRODUCTS);
+      const p = id ? products.find(x => x.id === id) : null;
+      document.getElementById('productModalTitle').textContent = p ? '编辑商品' : '新增商品';
+      document.getElementById('pName').value = p ? p.name : '';
+      document.getElementById('pPrice').value = p ? p.price : '';
+      document.getElementById('pStock').value = p ? p.stock : '';
+      document.getElementById('pSpec').value = p ? p.spec : '';
+      document.getElementById('pDesc').value = p ? p.desc : '';
+      document.getElementById('productModal').dataset.editId = id || '';
+      openModal('productModal');
+    }
+
+    function saveProduct() {
+      const products = getData('qibai_admin_products', DEFAULT_PRODUCTS);
+      const editId = document.getElementById('productModal').dataset.editId;
+      const data = {
+        id: editId || 'p' + Date.now(),
+        name: document.getElementById('pName').value,
+        price: parseInt(document.getElementById('pPrice').value) || 0,
+        stock: parseInt(document.getElementById('pStock').value) || 0,
+        spec: document.getElementById('pSpec').value,
+        desc: document.getElementById('pDesc').value,
+        status: 'active'
+      };
+      if (!data.name) { showToast('请填写商品名称', 'error'); return; }
+      if (editId) {
+        const idx = products.findIndex(p => p.id === editId);
+        if (idx >= 0) { data.status = products[idx].status; products[idx] = { ...products[idx], ...data }; }
+      } else {
+        products.push(data);
+      }
+      localStorage.setItem('qibai_admin_products', JSON.stringify(products));
+      closeModal('productModal');
+      renderProducts();
+      showToast(editId ? '商品已更新' : '商品已添加', 'success');
+    }
+
+    function editProduct(id) { openProductModal(id); }
+    function toggleProduct(id) {
+      const products = getData('qibai_admin_products', DEFAULT_PRODUCTS);
+      const p = products.find(x => x.id === id);
+      if (p) { p.status = p.status === 'active' ? 'inactive' : 'active'; localStorage.setItem('qibai_admin_products', JSON.stringify(products)); renderProducts(); showToast(p.status === 'active' ? '已上架' : '已下架', 'success'); }
+    }
+
+    // ===== Orders =====
+    function renderOrders() {
+      const orders = getData('qibai_orders');
+      const filter = document.getElementById('orderFilter').value;
+      const filtered = filter === 'all' ? orders : orders.filter(o => o.status === filter);
+      const tbody = document.getElementById('orderTableBody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--color-warm-brown-light);">暂无订单数据</td></tr>';
+        return;
+      }
+      tbody.innerHTML = filtered.map(o => `
+        <tr>
+          <td style="font-family:monospace;font-size:0.8rem;">${o.id}</td>
+          <td>${(o.items || []).map(i => i.name || '商品').join(', ')}</td>
+          <td style="font-weight:700;">¥${o.total || 0}</td>
+          <td><span class="status ${getStatusClass(o.status)}">${getStatusLabel(o.status)}</span></td>
+          <td style="font-size:0.8rem;color:var(--color-warm-brown-light);">${o.createdAt || '-'}</td>
+          <td>
+            ${o.status === 'paid' ? `<button class="btn btn-sm btn-success" onclick="updateOrderStatus('${o.id}','shipped')">发货</button>` : ''}
+            ${o.status === 'shipped' ? `<button class="btn btn-sm btn-primary" onclick="updateOrderStatus('${o.id}','delivered')">完成</button>` : ''}
+            ${o.status === 'paid' ? `<button class="btn btn-sm btn-danger" onclick="updateOrderStatus('${o.id}','cancelled')">取消</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateOrderStatus(id, status) {
+      const orders = getData('qibai_orders');
+      const o = orders.find(x => x.id === id);
+      if (o) { o.status = status; localStorage.setItem('qibai_orders', JSON.stringify(orders)); renderOrders(); renderDashboard(); showToast('订单状态已更新', 'success'); }
+    }
+
+    // ===== Users =====
+    function renderUsers() {
+      const user = getData('qibai_user', null);
+      const tbody = document.getElementById('userTableBody');
+      if (!user) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--color-warm-brown-light);">暂无注册用户（本站使用localStorage存储）</td></tr>';
+        return;
+      }
+      const levels = [['白芷会员',0],['茯苓会员',500],['白芍会员',2000],['七白贵宾',5000]];
+      const level = levels.reverse().find(l => (user.points || 0) >= l[1]);
+      tbody.innerHTML = `<tr>
+        <td style="font-size:1.5rem;">${user.avatar || '👤'}</td>
+        <td style="font-weight:600;">${user.nickname || '未知'}</td>
+        <td>${user.phone || '-'}</td>
+        <td style="font-weight:700;">${user.points || 0}</td>
+        <td><span class="status info">${level ? level[0] : '白芷会员'}</span></td>
+        <td style="font-size:0.8rem;color:var(--color-warm-brown-light);">-</td>
+      </tr>`;
+    }
+
+    // ===== Content =====
+    function renderArticles() {
+      const articles = getData('qibai_admin_articles', [
+        { id:1, title:'什么是药食同源？', category:'本草科普', views:2300, status:'published' },
+        { id:2, title:'低GI糖醇科普', category:'食养方案', views:1800, status:'published' },
+        { id:3, title:'普通食品与保健食品区别', category:'合规专题', views:3100, status:'published' },
+        { id:4, title:'玫瑰花：东方养肤之花', category:'本草科普', views:1500, status:'published' },
+        { id:5, title:'21天食养计划入门指南', category:'食养方案', views:4200, status:'published' },
+        { id:6, title:'日常防晒与食养协同', category:'肌肤护理', views:2800, status:'published' }
+      ]);
+      const tbody = document.getElementById('articleTableBody');
+      tbody.innerHTML = articles.map(a => `
+        <tr>
+          <td style="font-weight:600;">${a.title}</td>
+          <td><span class="status neutral">${a.category}</span></td>
+          <td>👁️ ${a.views || 0}</td>
+          <td><span class="status ${a.status === 'published' ? 'success' : 'warning'}">${a.status === 'published' ? '已发布' : '草稿'}</span></td>
+          <td>
+            <button class="btn btn-sm btn-ghost" onclick="showToast('编辑功能演示','')">编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteArticle(${a.id})">删除</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openArticleModal() { openModal('articleModal'); }
+    function saveArticle() {
+      const title = document.getElementById('aTitle').value;
+      if (!title) { showToast('请填写文章标题', 'error'); return; }
+      showToast('文章已保存（演示）', 'success');
+      closeModal('articleModal');
+    }
+    function deleteArticle(id) { showToast('文章已删除（演示）', 'success'); }
+
+    // ===== Checkin Data =====
+    function renderCheckinData() {
+      const checkins = getData('qibai_checkins');
+      document.getElementById('totalCheckins').textContent = checkins.length;
+
+      // Calculate streak
+      let streak = 0, maxStreak = 0;
+      const sorted = [...checkins].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      sorted.forEach((c, i) => { if (i === 0 || c.date !== sorted[i-1].date) streak++; else streak = Math.max(1, streak); maxStreak = Math.max(maxStreak, streak); });
+      // Simpler: count unique dates
+      const uniqueDates = [...new Set(checkins.map(c => c.date))];
+      document.getElementById('maxStreak').textContent = uniqueDates.length;
+
+      // Water avg
+      const waters = checkins.map(c => c.water || 0).filter(w => w > 0);
+      document.getElementById('avgWater').textContent = waters.length ? Math.round(waters.reduce((a,b) => a+b, 0) / waters.length) + 'ml' : '0ml';
+
+      // Sleep avg
+      const sleeps = checkins.map(c => c.sleepHours || 0).filter(s => s > 0);
+      document.getElementById('avgSleep').textContent = sleeps.length ? (sleeps.reduce((a,b) => a+b, 0) / sleeps.length).toFixed(1) + 'h' : '0h';
+
+      // Table
+      const tbody = document.getElementById('checkinTableBody');
+      const last30 = sorted.slice(-30).reverse();
+      if (last30.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--color-warm-brown-light);">暂无打卡数据</td></tr>';
+        return;
+      }
+      tbody.innerHTML = last30.map(c => `
+        <tr>
+          <td>${c.date || '-'}</td>
+          <td><span class="status success">✓ 已打卡</span></td>
+          <td>💧 ${c.water || 0}ml</td>
+          <td>😴 ${c.sleepHours || '-'}h</td>
+          <td>${c.skinStatus || '-'}</td>
+          <td style="font-weight:600;">+${c.points || 10}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ===== Compliance =====
+    function initCompliance() {
+      // Word list
+      document.getElementById('wordList').innerHTML = PROHIBITED_WORDS.map(w => `<span class="word-issue">🚫 ${w.word}</span>`).join('');
+      // Replace table
+      document.getElementById('replaceTableBody').innerHTML = PROHIBITED_WORDS.map(w => `
+        <tr>
+          <td style="color:var(--error);font-weight:600;">${w.word}</td>
+          <td style="color:var(--success);font-weight:500;">${w.replace}</td>
+          <td style="color:var(--color-warm-brown-light);font-size:0.8rem;">${w.reason}</td>
+        </tr>
+      `).join('');
+    }
+
+    function checkCompliance() {
+      const text = document.getElementById('complianceInput').value;
+      if (!text) { showToast('请输入待审核文案', 'error'); return; }
+      const result = document.getElementById('complianceResult');
+      const issues = [];
+      PROHIBITED_WORDS.forEach(w => {
+        if (text.includes(w.word)) issues.push(w);
+      });
+      if (issues.length === 0) {
+        result.innerHTML = '<div class="compliance-result pass">✅ <strong>检测通过！</strong><br>未发现禁用词汇，文案合规。</div>';
+      } else {
+        result.innerHTML = `<div class="compliance-result fail">❌ <strong>发现 ${issues.length} 个敏感词</strong><br><br>${issues.map(w => `<span class="word-issue">"${w.word}"</span> → 建议替换为 <strong style="color:var(--success);">"${w.replace}"</strong>（${w.reason}）`).join('<br>')}</div>`;
+      }
+      showToast(issues.length === 0 ? '文案合规' : `发现${issues.length}个敏感词`, issues.length === 0 ? 'success' : 'error');
+    }
+
+    // ===== Banner Config =====
+    function saveBannerConfig() {
+      const config = {
+        title: document.getElementById('bannerTitle').value,
+        subtitle: document.getElementById('bannerSubtitle').value,
+        btn1: document.getElementById('bannerBtn1').value,
+        btn2: document.getElementById('bannerBtn2').value
+      };
+      localStorage.setItem('qibai_banner_config', JSON.stringify(config));
+    }
+
+    // ===== Helpers =====
+    function getStatusClass(s) {
+      const map = { paid:'warning', shipped:'info', delivered:'success', cancelled:'error', pending:'neutral' };
+      return map[s] || 'neutral';
+    }
+    function getStatusLabel(s) {
+      const map = { paid:'待发货', shipped:'运输中', delivered:'已收货', cancelled:'已取消', pending:'待付款' };
+      return map[s] || s;
+    }
+    function updateBadges(orders, user, checkins) {
+      document.getElementById('orderCount').textContent = orders.length;
+      document.getElementById('userCount').textContent = user ? 1 : 0;
+      document.getElementById('checkinCount').textContent = checkins.length;
+      document.getElementById('productCount').textContent = getData('qibai_admin_products', DEFAULT_PRODUCTS).length;
+    }
+
+    // ===== Refresh All =====
+    function refreshData() {
+      renderDashboard();
+      renderProducts();
+      renderOrders();
+      renderUsers();
+      renderArticles();
+      renderCheckinData();
+      showToast('数据已刷新', 'success');
+    }
+
+    // ===== Init =====
+    refreshData();
+  </script>
+</body>
+</html>

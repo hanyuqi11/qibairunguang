@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>古法玫瑰软糖 · 七白润光</title>
+  <style>
+    :root {
+      --color-primary: #E8B4C5; --color-primary-light: #F5D5E0; --color-primary-dark: #C985A0;
+      --color-gold: #C9A84C; --color-gold-light: #F0D080; --color-gold-dark: #A07830;
+      --color-ivory: #FDFAF5; --color-cream: #FEF6EC;
+      --color-warm-brown: #6B4226; --color-warm-brown-light: #A0704A;
+      --color-dark-bg: #1A1208;
+      --font-serif: 'Noto Serif SC','SimSun',Georgia,serif;
+      --font-sans: 'PingFang SC','Microsoft YaHei',sans-serif;
+      --radius-sm:8px; --radius-md:16px; --radius-lg:24px; --radius-full:9999px;
+      --shadow-sm: 0 2px 8px rgba(200,130,100,0.1);
+      --shadow-md: 0 8px 32px rgba(200,130,100,0.15);
+      --shadow-lg: 0 20px 60px rgba(200,130,100,0.2);
+      --transition: 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font-sans);background:var(--color-ivory);color:var(--color-warm-brown);overflow-x:hidden;line-height:1.7;}
+    a{text-decoration:none;color:inherit;}
+    button{cursor:pointer;font-family:inherit;}
+
+    /* ===== Navbar ===== */
+    .navbar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      height:64px;padding:0 2rem;
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(253,250,245,0.95);backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(201,168,76,0.12);
+      box-shadow:0 2px 20px rgba(107,66,38,0.06);
+    }
+    .brand{display:flex;align-items:center;gap:0.5rem;}
+    .brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .brand-name{font-family:var(--font-serif);font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-actions{display:flex;align-items:center;gap:0.75rem;}
+    .nav-icon-btn{position:relative;width:40px;height:40px;border:none;background:transparent;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background var(--transition);text-decoration:none;}
+    .nav-icon-btn:hover{background:rgba(232,180,197,0.15);}
+    .cart-badge{position:absolute;top:4px;right:4px;width:16px;height:16px;background:var(--color-primary-dark);color:white;border-radius:50%;font-size:0.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+    /* ===== Page Wrap ===== */
+    .page-wrap{max-width:1200px;margin:0 auto;padding:88px 2rem 4rem;}
+    .breadcrumb{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--color-warm-brown-light);margin-bottom:1.5rem;}
+    .breadcrumb span{color:rgba(200,130,100,0.35);}
+
+    /* ===== Product Grid ===== */
+    .product-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+    @media(max-width:900px){.product-grid{grid-template-columns:1fr;gap:2rem;}}
+
+    /* ===== Gallery ===== */
+    .gallery{position:sticky;top:80px;}
+    .gallery-main{
+      border-radius:var(--radius-lg);overflow:hidden;
+      background:linear-gradient(135deg,#FEF2F8,#FFF8EE);
+      aspect-ratio:1;position:relative;cursor:zoom-in;
+      box-shadow:var(--shadow-md);transition:transform var(--transition);
+      border:1px solid rgba(201,168,76,0.1);
+    }
+    .gallery-main img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+    .gallery-main:hover{transform:scale(1.01);}
+    .gallery-badge{position:absolute;top:14px;left:14px;padding:0.35rem 0.75rem;background:linear-gradient(135deg,var(--color-primary-dark),var(--color-gold));color:white;border-radius:var(--radius-full);font-size:0.72rem;font-weight:700;letter-spacing:0.05em;z-index:2;}
+    .gallery-thumbs{display:flex;gap:0.75rem;margin-top:1rem;}
+    .gallery-thumb{
+      width:80px;height:80px;border-radius:var(--radius-sm);
+      object-fit:cover;cursor:pointer;border:2px solid transparent;
+      transition:all var(--transition);flex-shrink:0;
+      box-shadow:var(--shadow-sm);
+    }
+    .gallery-thumb.active{border-color:var(--color-primary-dark);box-shadow:0 0 0 3px rgba(201,133,160,0.2);}
+    .gallery-thumb:hover{transform:scale(1.05);}
+
+    /* ===== Product Info ===== */
+    .product-info{display:flex;flex-direction:column;gap:1.25rem;}
+    .product-category{font-size:0.78rem;color:var(--color-gold-dark);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
+    .product-title{font-family:var(--font-serif);font-size:1.7rem;font-weight:700;line-height:1.3;color:var(--color-warm-brown);}
+    .product-tagline{font-size:0.9rem;color:var(--color-warm-brown-light);}
+
+    /* Rating */
+    .product-rating{display:flex;align-items:center;gap:0.75rem;}
+    .stars{color:#F59E0B;letter-spacing:2px;font-size:0.95rem;}
+    .rating-count{font-size:0.82rem;color:var(--color-warm-brown-light);}
+    .rating-sold{font-size:0.82rem;color:var(--color-warm-brown-light);padding-left:0.75rem;border-left:1px solid rgba(201,168,76,0.2);}
+
+    /* Price */
+    .price-block{display:flex;align-items:baseline;gap:1rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(232,180,197,0.08),rgba(201,168,76,0.05));border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.12);}
+    .price-current{font-size:2rem;font-weight:700;color:var(--color-primary-dark);font-family:var(--font-serif);}
+    .price-unit{font-size:1rem;font-weight:400;color:var(--color-warm-brown-light);margin-left:0.15rem;}
+    .price-original{font-size:0.9rem;color:rgba(107,66,38,0.45);text-decoration:line-through;}
+    .price-save{font-size:0.78rem;padding:0.2rem 0.6rem;background:rgba(201,133,160,0.15);color:var(--color-primary-dark);border-radius:var(--radius-full);font-weight:600;}
+
+    /* Spec / Flavor Select */
+    .spec-label{font-size:0.85rem;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.6rem;}
+    .spec-options{display:flex;flex-wrap:wrap;gap:0.6rem;}
+    .spec-btn{
+      padding:0.45rem 1.1rem;border-radius:var(--radius-full);
+      border:1.5px solid rgba(201,168,76,0.25);
+      background:white;font-size:0.84rem;font-weight:500;
+      color:var(--color-warm-brown-light);
+      transition:all var(--transition);
+    }
+    .spec-btn:hover{border-color:var(--color-primary);color:var(--color-primary-dark);background:rgba(232,180,197,0.08);}
+    .spec-btn.active{border-color:var(--color-primary-dark);background:linear-gradient(135deg,rgba(232,180,197,0.15),rgba(201,168,76,0.08));color:var(--color-primary-dark);font-weight:600;}
+    .spec-btn.disabled{opacity:0.4;pointer-events:none;text-decoration:line-through;}
+
+    /* Qty */
+    .qty-row{display:flex;align-items:center;gap:1.5rem;}
+    .qty-control{display:flex;align-items:center;border:1.5px solid rgba(201,168,76,0.25);border-radius:var(--radius-full);overflow:hidden;}
+    .qty-btn{width:36px;height:36px;border:none;background:transparent;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--transition);}
+    .qty-btn:hover{background:rgba(232,180,197,0.15);}
+    .qty-num{width:48px;text-align:center;font-size:0.95rem;font-weight:600;border:none;outline:none;background:transparent;color:var(--color-warm-brown);}
+    .qty-stock{font-size:0.82rem;color:var(--color-warm-brown-light);}
+    .qty-stock.low{color:#E53E3E;}
+
+    /* Action Buttons */
+    .action-btns{display:flex;gap:0.75rem;flex-wrap:wrap;}
+    .btn-buy{
+      flex:1;min-width:140px;padding:0.9rem 1.5rem;
+      background:linear-gradient(135deg,var(--color-primary-dark),var(--color-primary),var(--color-gold));
+      color:white;border:none;border-radius:var(--radius-full);
+      font-size:1rem;font-weight:700;letter-spacing:0.05em;
+      transition:all var(--transition);
+      box-shadow:0 6px 25px rgba(201,133,160,0.35);
+    }
+    .btn-buy:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(201,133,160,0.45);}
+    .btn-cart{
+      flex:1;min-width:140px;padding:0.9rem 1.5rem;
+      background:transparent;border:1.5px solid rgba(201,168,76,0.45);
+      color:var(--color-warm-brown);border-radius:var(--radius-full);
+      font-size:1rem;font-weight:600;
+      transition:all var(--transition);
+    }
+    .btn-cart:hover{background:rgba(201,168,76,0.08);border-color:var(--color-gold);transform:translateY(-1px);}
+    .btn-favor{
+      width:48px;height:48px;border:1.5px solid rgba(201,168,76,0.25);
+      background:white;border-radius:50%;font-size:1.2rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all var(--transition);flex-shrink:0;
+    }
+    .btn-favor:hover,.btn-favor.active{background:rgba(232,180,197,0.12);border-color:var(--color-primary);color:var(--color-primary-dark);}
+
+    /* Guarantee Tags */
+    .guarantee-tags{display:flex;flex-wrap:wrap;gap:0.5rem;}
+    .gtag{display:inline-flex;align-items:center;gap:0.3rem;padding:0.3rem 0.75rem;background:rgba(72,187,120,0.08);border:1px solid rgba(72,187,120,0.2);border-radius:var(--radius-full);font-size:0.76rem;color:#276749;font-weight:500;}
+
+    /* Toast */
+    .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;padding:0.85rem 1.5rem;background:var(--color-dark-bg);color:white;border-radius:var(--radius-md);font-size:0.88rem;font-weight:500;box-shadow:var(--shadow-lg);transform:translateY(100px);opacity:0;transition:all 0.3s ease;pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+
+    /* ===== Product Detail Tabs ===== */
+    .detail-section{margin-top:3rem;}
+    .detail-tabs{display:flex;gap:0;border-bottom:2px solid rgba(201,168,76,0.15);margin-bottom:2rem;overflow-x:auto;}
+    .detail-tab{
+      padding:0.9rem 1.5rem;border:none;background:transparent;
+      font-size:0.92rem;font-weight:500;color:var(--color-warm-brown-light);
+      cursor:pointer;white-space:nowrap;
+      border-bottom:2px solid transparent;margin-bottom:-2px;
+      transition:all var(--transition);
+    }
+    .detail-tab.active{color:var(--color-warm-brown);border-bottom-color:var(--color-primary-dark);font-weight:600;}
+    .detail-tab:hover{color:var(--color-warm-brown);}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+
+    /* Ingredients Tab */
+    .ingredient-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+    .ingredient-card{
+      padding:1.5rem;border-radius:var(--radius-md);
+      border:1px solid rgba(201,168,76,0.12);
+      background:white;transition:all var(--transition);
+    }
+    .ingredient-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .ing-icon{font-size:2rem;margin-bottom:0.75rem;}
+    .ing-name{font-family:var(--font-serif);font-weight:700;font-size:1rem;color:var(--color-warm-brown);margin-bottom:0.3rem;}
+    .ing-tag{font-size:0.74rem;padding:0.15rem 0.6rem;background:rgba(232,180,197,0.15);border:1px solid rgba(232,180,197,0.3);border-radius:var(--radius-full);color:var(--color-primary-dark);font-weight:500;display:inline-block;margin-bottom:0.6rem;}
+    .ing-desc{font-size:0.83rem;color:var(--color-warm-brown-light);line-height:1.7;}
+
+    /* How to use */
+    .usage-steps{display:flex;flex-direction:column;gap:1rem;}
+    .usage-step{display:flex;align-items:flex-start;gap:1rem;padding:1.25rem;background:white;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);}
+    .step-num{width:36px;height:36px;flex-shrink:0;background:linear-gradient(135deg,var(--color-primary),var(--color-gold));color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;}
+    .step-content strong{display:block;font-weight:600;color:var(--color-warm-brown);margin-bottom:0.3rem;font-size:0.92rem;}
+    .step-content p{font-size:0.84rem;color:var(--color-warm-brown-light);line-height:1.7;}
+
+    /* Suitable Scenes */
+    .scene-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;}
+    .scene-card{padding:1.25rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.12);background:white;text-align:center;transition:all var(--transition);}
+    .scene-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .scene-icon{font-size:2rem;margin-bottom:0.75rem;}
+    .scene-name{font-weight:600;font-size:0.9rem;color:var(--color-warm-brown);margin-bottom:0.3rem;}
+    .scene-desc{font-size:0.78rem;color:var(--color-warm-brown-light);line-height:1.6;}
+
+    /* FAQ */
+    .faq-list{display:flex;flex-direction:column;gap:0.75rem;}
+    .faq-item{border:1px solid rgba(201,168,76,0.12);border-radius:var(--radius-md);overflow:hidden;background:white;}
+    .faq-q{padding:1.1rem 1.25rem;font-weight:600;font-size:0.9rem;color:var(--color-warm-brown);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background var(--transition);}
+    .faq-q:hover{background:rgba(232,180,197,0.06);}
+    .faq-q .faq-arrow{font-size:0.75rem;transition:transform var(--transition);flex-shrink:0;color:var(--color-warm-brown-light);}
+    .faq-q.open .faq-arrow{transform:rotate(180deg);}
+    .faq-a{padding:0 1.25rem;max-height:0;overflow:hidden;font-size:0.85rem;color:var(--color-warm-brown-light);line-height:1.8;transition:all var(--transition);}
+    .faq-a.open{max-height:200px;padding:0 1.25rem 1.1rem;}
+
+    /* Reviews */
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+    .review-card{padding:1.5rem;border-radius:var(--radius-md);border:1px solid rgba(201,168,76,0.1);background:white;}
+    .review-stars{color:#F59E0B;font-size:0.85rem;margin-bottom:0.6rem;}
+    .review-text{font-size:0.86rem;color:var(--color-warm-brown-light);line-height:1.7;margin-bottom:1rem;}
+    .review-author{display:flex;align-items:center;gap:0.6rem;}
+    .review-avatar{width:32px;height:32px;background:linear-gradient(135deg,rgba(232,180,197,0.3),rgba(201,168,76,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .review-name{font-size:0.82rem;font-weight:600;color:var(--color-warm-brown);}
+    .review-days{font-size:0.75rem;color:var(--color-warm-brown-light);}
+
+    /* Compliance Notice */
+    .compliance-notice{
+      margin-top:2rem;padding:1.25rem 1.5rem;
+      background:linear-gradient(135deg,rgba(107,66,38,0.05),rgba(160,120,48,0.05));
+      border:1px solid rgba(201,168,76,0.2);
+      border-radius:var(--radius-md);border-left:4px solid var(--color-gold);
+    }
+    .compliance-title{font-weight:700;font-size:0.85rem;color:var(--color-warm-brown);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.4rem;}
+    .compliance-text{font-size:0.8rem;color:var(--color-warm-brown-light);line-height:1.8;}
+
+    /* Sticky Bottom (Mobile) */
+    .sticky-buy{
+      display:none;position:fixed;bottom:0;left:0;right:0;z-index:90;
+      padding:0.85rem 1.25rem;background:rgba(253,250,245,0.97);
+      backdrop-filter:blur(20px);border-top:1px solid rgba(201,168,76,0.12);
+      box-shadow:0 -4px 20px rgba(107,66,38,0.08);
+    }
+    @media(max-width:768px){.sticky-buy{display:flex;gap:0.75rem;}}
+    .sticky-buy .btn-cart,.sticky-buy .btn-buy{flex:1;padding:0.8rem;font-size:0.9rem;}
+
+    /* Image Zoom Overlay */
+    .zoom-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(10px);}
+    .zoom-overlay.open{opacity:1;pointer-events:auto;}
+    .zoom-overlay .zoom-img{max-width:85vw;max-height:85vh;border-radius:var(--radius-lg);animation:zoomIn 0.3s ease;object-fit:contain;}
+    .zoom-overlay .zoom-close{position:absolute;top:1.5rem;right:1.5rem;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;color:white;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.3s;}
+    .zoom-overlay .zoom-close:hover{background:rgba(255,255,255,0.3);}
+    @keyframes zoomIn{from{transform:scale(0.7);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+    /* Share Button */
+    .btn-share{width:48px;height:48px;border:1.5px solid rgba(201,168,76,0.25);background:white;border-radius:50%;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all var(--transition);flex-shrink:0;}
+    .btn-share:hover{background:rgba(201,168,76,0.08);border-color:var(--color-gold);transform:translateY(-1px);}
+
+    /* Footer */
+    .site-footer{margin-top:4rem;padding:2.5rem 2rem 1.5rem;background:linear-gradient(160deg,var(--color-cream),var(--color-ivory));border-top:1px solid rgba(201,168,76,0.12);text-align:center;}
+    .footer-brand{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;background:linear-gradient(135deg,var(--color-warm-brown),var(--color-gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin:0.75rem 0;}
+    .footer-links a{font-size:0.78rem;color:var(--color-warm-brown-light);transition:color var(--transition);}
+    .footer-links a:hover{color:var(--color-warm-brown);}
+    .footer-copy{font-size:0.72rem;color:rgba(160,112,74,0.5);margin-top:0.5rem;}
+
+    @media(max-width:768px){
+      .page-wrap{padding:80px 1rem 5rem;}
+      .product-title{font-size:1.4rem;}
+      .gallery-thumb{width:64px;height:64px;font-size:1.4rem;}
+      .zoom-overlay .zoom-img{max-width:90vw;max-height:80vh;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🌸</div>
+      <span class="brand-name">七白润光</span>
+    </a>
+    <div class="nav-actions">
+      <a href="tech.html" class="nav-icon-btn" title="研发工艺" style="font-size:0.75rem;">🔬</a>
+      <a href="cart.html" class="nav-icon-btn" title="购物车">
+        🛒<span class="cart-badge" id="cartBadge" style="display:none">0</span>
+      </a>
+      <a href="member.html" class="nav-icon-btn" id="userBtn" title="会员中心">👤</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html">🏠 首页</a>
+      <span>/</span>
+      <span>七白润光·古法玫瑰软糖</span>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="gallery-main" id="galleryMain">
+          <img id="galleryImg" src="images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png" alt="七白润光·古法玫瑰软糖">
+          <div class="gallery-badge">爆款推荐</div>
+        </div>
+        <div class="gallery-thumbs">
+          <img class="gallery-thumb active" data-img="images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png" src="images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png" alt="正面展示">
+          <img class="gallery-thumb" data-img="images/Traditional_Chinese_medicine_h_2026-05-18T15-58-05.png" src="images/Traditional_Chinese_medicine_h_2026-05-18T15-58-05.png" alt="本草成分">
+          <img class="gallery-thumb" data-img="images/Elegant_gift_box_packaging_for_2026-05-18T15-58-48.png" src="images/Elegant_gift_box_packaging_for_2026-05-18T15-58-48.png" alt="精美包装">
+          <img class="gallery-thumb" data-img="images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png" src="images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png" alt="食用场景">
+          <img class="gallery-thumb" data-img="images/Traditional_Chinese_medicine_h_2026-05-18T15-58-05.png" src="images/Traditional_Chinese_medicine_h_2026-05-18T15-58-05.png" alt="工艺细节">
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <div class="product-category">药食同源 · 普通食品</div>
+        <h1 class="product-title">七白润光·古法玫瑰软糖</h1>
+        <p class="product-tagline">古方食养 · 低GI糖醇 · 每日一颗 · 21天习惯养成</p>
+
+        <!-- Rating -->
+        <div class="product-rating">
+          <span class="stars">★★★★★</span>
+          <span class="rating-count">4.9分（328条评价）</span>
+          <span class="rating-sold">已售 2,156 件</span>
+        </div>
+
+        <!-- Price -->
+        <div class="price-block">
+          <div>
+            <span class="price-current">¥128</span>
+            <span class="price-unit">/ 盒（30颗×21天）</span>
+          </div>
+          <span class="price-original">¥168</span>
+          <span class="price-save">省¥40</span>
+        </div>
+
+        <!-- Flavor Select -->
+        <div>
+          <div class="spec-label">口味选择</div>
+          <div class="spec-options" id="flavorOptions">
+            <button class="spec-btn active" data-flavor="玫瑰原味">🌸 玫瑰原味</button>
+            <button class="spec-btn" data-flavor="玫瑰荔枝">🍈 玫瑰荔枝</button>
+            <button class="spec-btn" data-flavor="玫瑰桂花">🌼 玫瑰桂花</button>
+          </div>
+        </div>
+
+        <!-- Package Select -->
+        <div>
+          <div class="spec-label">套餐规格</div>
+          <div class="spec-options" id="packageOptions">
+            <button class="spec-btn active" data-pkg="单盒装" data-price="128">单盒装（21天）¥128</button>
+            <button class="spec-btn" data-pkg="三盒装" data-price="328">三盒装（63天）¥328</button>
+            <button class="spec-btn" data-pkg="六盒装" data-price="588">六盒装（126天）¥588</button>
+          </div>
+        </div>
+
+        <!-- Qty -->
+        <div class="qty-row">
+          <div>
+            <div class="spec-label">购买数量</div>
+            <div class="qty-control">
+              <button class="qty-btn" id="qtyMinus">−</button>
+              <input type="number" class="qty-num" id="qtyNum" value="1" min="1" max="99" readonly>
+              <button class="qty-btn" id="qtyPlus">+</button>
+            </div>
+          </div>
+          <div class="qty-stock" id="stockLabel">库存充足</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-btns">
+          <button class="btn-buy" id="btnBuy">立即购买</button>
+          <button class="btn-cart" id="btnCart">加入购物车</button>
+          <button class="btn-favor" id="btnFavor" title="收藏">🤍</button>
+          <button class="btn-share" id="btnShare" title="分享">📤</button>
+        </div>
+
+        <!-- Guarantee Tags -->
+        <div class="guarantee-tags">
+          <span class="gtag">✅ 正品保障</span>
+          <span class="gtag">🚚 顺丰速运</span>
+          <span class="gtag">💰 7天无忧退</span>
+          <span class="gtag">🔒 安全支付</span>
+          <span class="gtag">🎁 满减优惠</span>
+        </div>
+
+        <!-- Compliance Notice (product info side) -->
+        <div class="compliance-notice">
+          <div class="compliance-title">⚠️ 合规提示</div>
+          <div class="compliance-text">
+            本产品为<strong>普通食品</strong>，不具有疾病预防、诊断、治疗功能，不能代替药物。内容仅为食养知识科普。如有健康问题请咨询专业医生。
+            <a href="compliance.html" style="color:var(--color-gold-dark);font-weight:600;">查看完整合规说明 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Detail Tabs ===== -->
+    <div class="detail-section">
+      <div class="detail-tabs" id="detailTabs">
+        <button class="detail-tab active" data-tab="ingredients">🌿 成分说明</button>
+        <button class="detail-tab" data-tab="usage">📋 食用方式</button>
+        <button class="detail-tab" data-tab="scenes">🌟 适用场景</button>
+        <button class="detail-tab" data-tab="faq">❓ 常见问题</button>
+        <button class="detail-tab" data-tab="reviews">💬 用户评价</button>
+        <button class="detail-tab" data-tab="compliance">⚖️ 合规说明</button>
+      </div>
+
+      <!-- 成分说明 -->
+      <div class="tab-panel active" id="tab-ingredients">
+        <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.25rem;color:var(--color-warm-brown);">核心成分一览</h3>
+        <div class="ingredient-grid">
+          <div class="ingredient-card">
+            <div class="ing-icon">🌸</div>
+            <div class="ing-name">玫瑰花</div>
+            <div class="ing-tag">药食同源原料</div>
+            <div class="ing-desc">国家认定药食同源原料，用于东方食养文化表达，清芬雅致，为产品注入东方美学气息，兼顾日常食养体验。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🍄</div>
+            <div class="ing-name">茯苓</div>
+            <div class="ing-tag">药食同源原料</div>
+            <div class="ing-desc">经典药食同源原料之一，历史悠久，安全温和，常用于东方传统食养体系中，是"七白饮"配方的核心组成。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🌿</div>
+            <div class="ing-name">山药</div>
+            <div class="ing-tag">药食同源原料</div>
+            <div class="ing-desc">温和调理的代表食材，属国家药食同源目录原料，适合日常长期食用，是东方食养中不可缺少的滋补食材。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🌾</div>
+            <div class="ing-name">白芷</div>
+            <div class="ing-tag">药食同源原料</div>
+            <div class="ing-desc">古方"七白饮"核心原料，历代东方食养文献均有记载，作为普通食品成分合规使用，安全有据可查。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🍊</div>
+            <div class="ing-name">维生素C</div>
+            <div class="ing-tag">GB 14880合规添加</div>
+            <div class="ing-desc">依据《食品营养强化剂使用标准》(GB 14880)合规添加，剂量符合标准范围，是现代营养复配方案的重要组成。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">💎</div>
+            <div class="ing-name">谷胱甘肽</div>
+            <div class="ing-tag">食品级成分</div>
+            <div class="ing-desc">食品级成分，在现代营养食品中广泛应用，与维生素C形成黄金复配，构建完整的日常食养营养方案。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🔮</div>
+            <div class="ing-name">低GI糖醇</div>
+            <div class="ing-tag">功能性甜味剂</div>
+            <div class="ing-desc">以麦芽糖醇、赤藓糖醇等低GI甜味剂替代蔗糖，降低产品升糖负荷，适合关注血糖管理的人群日常食用。</div>
+          </div>
+          <div class="ingredient-card">
+            <div class="ing-icon">🧪</div>
+            <div class="ing-name">胶体基质</div>
+            <div class="ing-tag">食品添加剂</div>
+            <div class="ing-desc">果胶与卡拉胶复配而成的植物基质软糖载体，无动物源成分，口感细腻，确保活性成分稳定包封。</div>
+          </div>
+        </div>
+        <div class="compliance-notice" style="margin-top:1.5rem;">
+          <div class="compliance-title">📋 原料合规声明</div>
+          <div class="compliance-text">以上所有成分均符合GB 2760《食品安全国家标准 食品添加剂使用标准》及相关规定，药食同源原料均列于国家卫健委发布的《既是食品又是中药材的物质目录》。</div>
+        </div>
+      </div>
+
+      <!-- 食用方式 -->
+      <div class="tab-panel" id="tab-usage">
+        <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.25rem;color:var(--color-warm-brown);">食用建议</h3>
+        <div class="usage-steps">
+          <div class="usage-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>食用时机</strong>
+              <p>建议随餐或餐后食用，每日1-2颗。随餐食用有助于减少空腹时的肠胃刺激，与饮食一同摄入有助于营养吸收。</p>
+            </div>
+          </div>
+          <div class="usage-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>建议用量</strong>
+              <p>每日推荐食用量：1-2颗（每颗约5g）。不建议超量食用。请参照产品包装标签上的具体说明。</p>
+            </div>
+          </div>
+          <div class="usage-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>搭配建议</strong>
+              <p>食用时可同饮适量温水（建议200ml以上），同时保持均衡饮食，多摄入蔬果。软糖是日常饮食的补充，不能替代正餐。</p>
+            </div>
+          </div>
+          <div class="usage-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>坚持周期</strong>
+              <p>建议配合21天食养打卡计划坚持食用，养成规律补充习惯。日常食养需要时间积累，不宜期待快速立竿见影的效果。</p>
+            </div>
+          </div>
+          <div class="usage-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <strong>储存方式</strong>
+              <p>请存放于阴凉、干燥、避光处，开封后尽快食用。避免高温、潮湿环境。保质期以包装标签为准。</p>
+            </div>
+          </div>
+        </div>
+        <div class="compliance-notice" style="margin-top:1.5rem;">
+          <div class="compliance-title">⚠️ 注意事项</div>
+          <div class="compliance-text">本产品含有糖醇类成分，过量食用可能引起轻微腹泻，请严格按推荐用量食用。对任何配料成分过敏者请勿食用。食用后如出现不适，请立即停止并就医。</div>
+        </div>
+      </div>
+
+      <!-- 适用场景 -->
+      <div class="tab-panel" id="tab-scenes">
+        <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.25rem;color:var(--color-warm-brown);">适合哪些生活场景</h3>
+        <div class="scene-grid">
+          <div class="scene-card">
+            <div class="scene-icon">💼</div>
+            <div class="scene-name">职场通勤族</div>
+            <div class="scene-desc">忙碌工作中随时补充，软糖形式便于携带，不影响日常节奏</div>
+          </div>
+          <div class="scene-card">
+            <div class="scene-icon">📱</div>
+            <div class="scene-name">数码久坐人群</div>
+            <div class="scene-desc">长期面对屏幕、户外活动少、容易忽视饮食均衡的人群</div>
+          </div>
+          <div class="scene-card">
+            <div class="scene-icon">🌙</div>
+            <div class="scene-name">晚睡熬夜族</div>
+            <div class="scene-desc">生活作息不规律，希望通过日常食养方式维护身体状态</div>
+          </div>
+          <div class="scene-card">
+            <div class="scene-icon">🌿</div>
+            <div class="scene-name">食养爱好者</div>
+            <div class="scene-desc">喜好东方食养文化，追求顺应自然节律的生活方式</div>
+          </div>
+          <div class="scene-card">
+            <div class="scene-icon">✈️</div>
+            <div class="scene-name">旅行出差人群</div>
+            <div class="scene-desc">独立包装便于携带，在外出行也能维持日常食养习惯</div>
+          </div>
+          <div class="scene-card">
+            <div class="scene-icon">🎁</div>
+            <div class="scene-name">节日礼赠</div>
+            <div class="scene-desc">精美包装设计，适合作为节日礼品送给注重生活品质的朋友</div>
+          </div>
+        </div>
+        <div class="compliance-notice" style="margin-top:1.5rem;">
+          <div class="compliance-title">ℹ️ 提示</div>
+          <div class="compliance-text">本产品适用于18岁以上健康成年人作为日常食品食用。特殊健康状况者请在医师指导下决定是否食用。</div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="tab-panel" id="tab-faq">
+        <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.25rem;color:var(--color-warm-brown);">常见问题解答</h3>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">这款产品是保健品吗？有没有蓝帽子？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">不是保健食品。七白润光玫瑰软糖是<strong>普通食品</strong>，不属于保健食品（蓝帽子），不具有保健食品的功效声明权限。我们依据普通食品相关标准生产，所有原料均合规。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">孕妇可以吃吗？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">孕妇及哺乳期女性建议<strong>在咨询妇产科医生后再决定</strong>是否食用。我们未针对孕哺人群进行专项安全评估，为保障安全，请先寻求专业医学建议。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">低GI软糖，糖尿病患者能吃吗？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">本产品使用糖醇类甜味剂（麦芽糖醇、赤藓糖醇），相比蔗糖GI值较低。但糖尿病属于医疗状况，患者是否可以食用请<strong>务必先咨询主治医师</strong>，不可自行判断。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">每天吃几颗？什么时候吃最好？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">推荐每日1-2颗，建议随餐或餐后食用，与200ml以上温水同服。请勿超量食用——糖醇摄入过多可能引起腹泻。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">可以和其他保健品一起吃吗？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">如同时服用其他保健品、营养补充剂或药物，需注意维生素C等成分的总摄入量，避免过量。如有疑虑，请咨询医师或营养师。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">打卡21天之后一定能看到效果吗？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">食品效果因人而异，我们<strong>不承诺任何特定效果</strong>。21天食养计划的目的是帮助您建立规律食养习惯，日常养护需要时间积累，同时建议配合均衡饮食和健康生活方式。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">产品过了保质期还能吃吗？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">不建议食用过期食品。请以包装标签上的保质期为准，过期后请丢弃。储存于阴凉干燥处，开封后应尽快食用。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">如何申请退换货？<span class="faq-arrow">▼</span></div>
+            <div class="faq-a">收货后如发现产品质量问题（如变质、包装损坏等），请在72小时内联系客服并提供照片凭证，我们将为您处理退换货事宜。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="tab-panel" id="tab-reviews">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+          <h3 style="font-family:var(--font-serif);font-size:1.1rem;color:var(--color-warm-brown);">用户真实评价（328条）</h3>
+          <div style="display:flex;align-items:center;gap:0.75rem;">
+            <span style="font-size:2rem;font-weight:700;color:var(--color-primary-dark);font-family:var(--font-serif);">4.9</span>
+            <div>
+              <div style="color:#F59E0B;font-size:0.9rem;">★★★★★</div>
+              <div style="font-size:0.75rem;color:var(--color-warm-brown-light);">综合评分</div>
+            </div>
+          </div>
+        </div>
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <div class="review-text">口感很好，玫瑰味道清淡不腻，软糖形式让我第一次坚持了21天。打卡系统很有意思，每天都期待打卡！</div>
+            <div class="review-author">
+              <div class="review-avatar">🌸</div>
+              <div><div class="review-name">小雅同学</div><div class="review-days">已坚持21天</div></div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <div class="review-text">相比传统冲泡类产品，这个软糖真的方便太多了，放包里随时带走，上班族太友好。包装很精致，送礼也不错。</div>
+            <div class="review-author">
+              <div class="review-avatar">💼</div>
+              <div><div class="review-name">职场美人小林</div><div class="review-days">已坚持14天</div></div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★☆</div>
+            <div class="review-text">低糖的口感其实没想象中难吃，荔枝口味特别推荐！用了21天感觉作息和饮食都更规律了，这个计划体系做得挺好。</div>
+            <div class="review-author">
+              <div class="review-avatar">🌙</div>
+              <div><div class="review-name">晚晚养肤</div><div class="review-days">已坚持21天</div></div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <div class="review-text">配方很透明，每个成分都能查到来源，不像其他产品含糊其辞。客服解答也很专业，有问必答。</div>
+            <div class="review-author">
+              <div class="review-avatar">🔬</div>
+              <div><div class="review-name">成分党阿清</div><div class="review-days">已坚持30天</div></div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <div class="review-text">包装很有质感，独立封装很卫生。不夸大宣传这点很加分，科普文章写得很认真，能感受到品牌的真诚。</div>
+            <div class="review-author">
+              <div class="review-avatar">📚</div>
+              <div><div class="review-name">认真消费者</div><div class="review-days">已坚持7天</div></div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★☆</div>
+            <div class="review-text">买了三盒装划算很多，物流很快顺丰隔日到。整体体验不错，期待后续出更多口味～</div>
+            <div class="review-author">
+              <div class="review-avatar">🚚</div>
+              <div><div class="review-name">快递控小明</div><div class="review-days">回购用户</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Detail -->
+      <div class="tab-panel" id="tab-compliance">
+        <h3 style="font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.25rem;color:var(--color-warm-brown);">产品合规说明</h3>
+        <div class="compliance-notice" style="margin-bottom:1rem;">
+          <div class="compliance-title">🏷️ 产品属性</div>
+          <div class="compliance-text">本产品为<strong>普通食品</strong>，非保健食品，非药品。依据《食品安全法》相关标准生产，在具备SC食品生产许可的工厂制造。</div>
+        </div>
+        <div class="compliance-notice" style="margin-bottom:1rem;">
+          <div class="compliance-title">🚫 功效边界说明</div>
+          <div class="compliance-text">本产品不具有、也不宣称任何疾病预防、诊断、缓解、治疗功能。页面中所有涉及"食养"、"调理"的表述均为传统食养文化表达，非医疗功效声明。个体食用体验因人而异。</div>
+        </div>
+        <div class="compliance-notice" style="margin-bottom:1rem;">
+          <div class="compliance-title">🌿 原料合规</div>
+          <div class="compliance-text">玫瑰花、茯苓、山药、白芷等均列于国家卫健委《既是食品又是中药材的物质目录》，作为普通食品原料合规使用。维生素C按GB 14880合规添加。</div>
+        </div>
+        <div class="compliance-notice">
+          <div class="compliance-title">📋 查阅完整说明</div>
+          <div class="compliance-text">更多合规信息，包括禁用词说明、适用人群、隐私政策、用户协议等，请访问<a href="compliance.html" style="color:var(--color-gold-dark);font-weight:600;">完整合规说明页面</a>。</div>
+        </div>
+      </div>
+
+    </div><!-- /detail-section -->
+  </div><!-- /page-wrap -->
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-brand">🌸 七白润光</div>
+    <p style="font-size:0.78rem;color:var(--color-warm-brown-light);">东方食养 · 古法传承 · 现代焕肤</p>
+    <div class="footer-links">
+      <a href="index.html">首页</a>
+      <a href="tech.html">研发工艺</a>
+      <a href="article.html">科普中心</a>
+      <a href="compliance.html">合规说明</a>
+      <a href="member.html">会员中心</a>
+    </div>
+    <div class="footer-copy">© 2026 七白润光 · 普通食品 · 仅供演示</div>
+  </footer>
+
+  <!-- Image Zoom Overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <button class="zoom-close" onclick="closeZoom()">✕</button>
+    <div class="zoom-img" id="zoomImg"><img src="" alt="商品大图" style="max-width:85vw;max-height:85vh;border-radius:var(--radius-lg);object-fit:contain;"></div>
+  </div>
+
+  <!-- Sticky Mobile Buy Bar -->
+  <div class="sticky-buy">
+    <button class="btn-cart" id="stickyCart">🛒 加购物车</button>
+    <button class="btn-buy" id="stickyBuy">立即购买</button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===== State =====
+    let selectedFlavor = '玫瑰原味';
+    let selectedPackage = '单盒装';
+    let selectedPrice = 128;
+    let qty = 1;
+    let isFavored = false;
+
+    // ===== Gallery =====
+    document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('galleryImg').src = this.dataset.img;
+      });
+    });
+
+    // ===== Flavor =====
+    document.querySelectorAll('#flavorOptions .spec-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#flavorOptions .spec-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedFlavor = this.dataset.flavor;
+      });
+    });
+
+    // ===== Package =====
+    document.querySelectorAll('#packageOptions .spec-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#packageOptions .spec-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedPackage = this.dataset.pkg;
+        selectedPrice = parseInt(this.dataset.price);
+        document.querySelector('.price-current').textContent = '¥' + selectedPrice;
+      });
+    });
+
+    // ===== Qty =====
+    document.getElementById('qtyMinus').addEventListener('click', () => {
+      if (qty > 1) { qty--; document.getElementById('qtyNum').value = qty; }
+    });
+    document.getElementById('qtyPlus').addEventListener('click', () => {
+      if (qty < 99) { qty++; document.getElementById('qtyNum').value = qty; }
+    });
+
+    // ===== Favorite =====
+    document.getElementById('btnFavor').addEventListener('click', function() {
+      isFavored = !isFavored;
+      this.textContent = isFavored ? '❤️' : '🤍';
+      this.classList.toggle('active', isFavored);
+      // Save to favorites
+      const favs = JSON.parse(localStorage.getItem('qibai_favorites') || '[]');
+      const idx = favs.findIndex(f => f.id === 'qibai_rose_candy');
+      if (isFavored) {
+        if (idx < 0) favs.push({ id: 'qibai_rose_candy', name: '七白润光·古法玫瑰软糖', price: selectedPrice, image: 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png' });
+      } else {
+        if (idx >= 0) favs.splice(idx, 1);
+      }
+      localStorage.setItem('qibai_favorites', JSON.stringify(favs));
+      showToast(isFavored ? '❤️ 已加入收藏' : '已取消收藏');
+    });
+
+    // ===== Add to Cart =====
+    function addToCart() {
+      const cart = JSON.parse(localStorage.getItem('qibai_cart') || '[]');
+      const key = `qibai_rose_candy_${selectedFlavor}_${selectedPackage}`;
+      const idx = cart.findIndex(i => i.id === key);
+      if (idx >= 0) {
+        cart[idx].qty += qty;
+      } else {
+        cart.push({
+          id: key, name: '七白润光·古法玫瑰软糖',
+          flavor: selectedFlavor, pkg: selectedPackage,
+          price: selectedPrice, qty: qty, image: 'images/A_premium_rose_flavored_gummy__2026-05-18T15-57-19.png', checked: true
+        });
+      }
+      localStorage.setItem('qibai_cart', JSON.stringify(cart));
+      updateCartBadge();
+      showToast('🛒 已加入购物车！');
+    }
+
+    document.getElementById('btnCart').addEventListener('click', addToCart);
+    document.getElementById('stickyCart').addEventListener('click', addToCart);
+
+    // ===== Buy Now =====
+    function buyNow() {
+      addToCart();
+      setTimeout(() => { window.location.href = 'cart.html'; }, 300);
+    }
+    document.getElementById('btnBuy').addEventListener('click', buyNow);
+    document.getElementById('stickyBuy').addEventListener('click', buyNow);
+
+    // ===== Cart Badge =====
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('qibai_cart') || '[]');
+      const total = cart.reduce((s, i) => s + (i.qty || 1), 0);
+      const badge = document.getElementById('cartBadge');
+      badge.textContent = total;
+      badge.style.display = total > 0 ? 'flex' : 'none';
+    }
+    updateCartBadge();
+
+    // ===== Detail Tabs =====
+    document.querySelectorAll('.detail-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ===== FAQ =====
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', function() {
+        const ans = this.nextElementSibling;
+        const isOpen = ans.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-q').forEach(fq => fq.classList.remove('open'));
+        document.querySelectorAll('.faq-a').forEach(fa => fa.classList.remove('open'));
+        if (!isOpen) {
+          this.classList.add('open');
+          ans.classList.add('open');
+        }
+      });
+    });
+
+    // ===== Gallery Zoom =====
+    document.querySelector('.gallery-main').addEventListener('click', function() {
+      document.querySelector('#zoomImg img').src = document.getElementById('galleryImg').src;
+      document.getElementById('zoomOverlay').classList.add('open');
+    });
+    function closeZoom() { document.getElementById('zoomOverlay').classList.remove('open'); }
+    document.getElementById('zoomOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeZoom();
+    });
+
+    // ===== Share =====
+    document.getElementById('btnShare').addEventListener('click', function() {
+      if (navigator.share) {
+        navigator.share({ title: '七白润光·古法玫瑰软糖', text: '古方食养 · 低GI糖醇 · 每日一颗 · 21天习惯养成', url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => showToast('🔗 链接已复制到剪贴板'));
+      }
+    });
+
+    // ===== Toast =====
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ===== Check login =====
+    function checkLogin() {
+      const user = JSON.parse(localStorage.getItem('qibai_user') || 'null');
+      const btn = document.getElementById('userBtn');
+      if (btn && user) { btn.textContent = user.avatar || '👤'; btn.title = '我的'; }
+    }
+    checkLogin();
+  </script>
+</body>
+</html>
